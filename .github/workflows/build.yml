@@ -41,6 +41,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: asia-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/backend-main:latest
+          tags: asia-northeast3-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/backend-main:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
