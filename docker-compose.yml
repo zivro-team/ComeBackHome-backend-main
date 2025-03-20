@@ -6,7 +6,7 @@ services:
     container_name: mysql-container
     restart: unless-stopped
     ports:
-      - "3307:3306"
+      - "3306:3306"  # 기본 포트 유지 (필요시 3307 사용 가능)
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: Comebackhome
@@ -16,6 +16,11 @@ services:
       - mysql_data:/var/lib/mysql  # 명명된 볼륨 추가
     networks:
       - app-network
+    healthcheck:  # DB가 완전히 실행되었는지 확인
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   minio:
     image: minio/minio:latest
@@ -44,7 +49,7 @@ services:
     networks:
       - app-network
 
-  backend:  # pring Boot API 서버 추가
+  backend:
     build: .
     container_name: backend-container
     restart: unless-stopped
@@ -53,8 +58,14 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: dev
     depends_on:
-      - mysql
-      - mongodb
+      mysql:
+        condition: service_healthy  # mysql이 완전히 실행된 후 시작
+      mongodb:
+        condition: service_started  # mongodb 실행 후 시작
+      minio:
+        condition: service_started  # minio 실행 후 시작
+    volumes:
+      - ./build/libs:/app/build/libs  # JAR 파일을 마운트
     networks:
       - app-network
 
