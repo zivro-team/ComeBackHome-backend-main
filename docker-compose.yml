@@ -61,13 +61,14 @@ services:
       mysql:
         condition: service_healthy  # mysql이 완전히 실행된 후 시작
       mongodb:
-        condition: service_started  # mongodb 실행 후 시작
+        condition: service_started
       minio:
-        condition: service_started  # minio 실행 후 시작
+        condition: service_started
     volumes:
-      - ./build/libs:/app/build/libs  # JAR 파일을 마운트
+      - ./build/libs:/app/build/libs
     networks:
       - app-network
+
 
 volumes:
   mysql_data:
