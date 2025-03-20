@@ -1,59 +1,6 @@
-version: '3.8'  # 버전 명시 (권장)
+version: '3.8'
 
 services:
-  mysql:
-    image: mysql:8.0
-    container_name: mysql-container
-    restart: unless-stopped
-    ports:
-      - "3307:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: Comebackhome
-    volumes:
-      - mysql_data:/var/lib/mysql  
-    networks:
-      - app-network
-    healthcheck:  # MySQL이 준비될 때까지 대기
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 10s
-      retries: 5
-      start_period: 30s
-      timeout: 5s
-
-  minio:
-    image: minio/minio:latest
-    container_name: minio-container
-    restart: unless-stopped
-    ports:
-      - "9000:9000"
-      - "9001:9001"
-    environment:
-      MINIO_ROOT_USER: minioadmin
-      MINIO_ROOT_PASSWORD: minioadmin123
-    volumes:
-      - minio_data:/data
-    command: server /data --console-address ":9001"
-    networks:
-      - app-network
-
-  mongodb:
-    image: mongo:latest
-    container_name: mongodb-container
-    restart: unless-stopped
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo_data:/data/db  
-    networks:
-      - app-network
-    healthcheck:  # MongoDB가 완전히 실행될 때까지 대기
-      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
-      interval: 10s
-      retries: 5
-      start_period: 60s
-      timeout: 5s
-
   backend:
     build:
       context: .
@@ -64,25 +11,12 @@ services:
       - "8080:8080"
     environment:
       SPRING_PROFILES_ACTIVE: dev
-    depends_on:
-      mysql:
-        condition: service_healthy  # MySQL이 완전히 실행된 후 시작
-      mongodb:
-        condition: service_healthy  # MongoDB도 healthcheck 기반으로 대기
-      minio:
-        condition: service_started
+      GOOGLE_APPLICATION_CREDENTIALS: /path/to/your/service-account-key.json  # GCS 인증
     volumes:
-      - ./build/libs:/build/libs  
+      - ./build/libs:/build/libs
+      - ./path/to/your/service-account-key.json:/path/to/your/service-account-key.json  # 서비스 계정 키 파일 매핑
     networks:
       - app-network
-
-volumes:
-  mysql_data:
-    driver: local
-  minio_data:
-    driver: local
-  mongo_data:
-    driver: local
 
 networks:
   app-network:
