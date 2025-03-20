@@ -32,12 +32,12 @@ jobs:
       - name: Configure Docker for GCP
         uses: google-github-actions/docker@v0
         with:
-          project_id: YOUR_PROJECT_ID  # GCP 프로젝트 ID
+          project_id: ${{ secrets.GCP_PROJECT_ID }}  # GCP 프로젝트 ID
 
       - name: Build Docker Image
         run: |
-          docker build -t gcr.io/YOUR_PROJECT_ID/api-server .
+          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/api-server .
           
       - name: Push Docker Image to GCP Artifact Registry
         run: |
-          docker push gcr.io/YOUR_PROJECT_ID/api-server
+          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/api-server
