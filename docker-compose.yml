@@ -44,6 +44,20 @@ services:
     networks:
       - app-network
 
+  backend:  # pring Boot API 서버 추가
+    build: .
+    container_name: backend-container
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+    depends_on:
+      - mysql
+      - mongodb
+    networks:
+      - app-network
+
 volumes:
   mysql_data:
     driver: local
