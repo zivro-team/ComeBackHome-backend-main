@@ -6,21 +6,22 @@ services:
     container_name: mysql-container
     restart: unless-stopped
     ports:
-      - "3306:3306"  # 기본 포트 유지 (필요시 3307 사용 가능)
+      - "3307:3306"
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: Comebackhome
       MYSQL_USER: root
       MYSQL_PASSWORD: root
     volumes:
-      - mysql_data:/var/lib/mysql  # 명명된 볼륨 추가
+      - mysql_data:/var/lib/mysql  
     networks:
       - app-network
-    healthcheck:  # DB가 완전히 실행되었는지 확인
+    healthcheck:  # MySQL이 준비될 때까지 대기
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
-      timeout: 5s
       retries: 5
+      start_period: 30s
+      timeout: 5s
 
   minio:
     image: minio/minio:latest
@@ -43,14 +44,22 @@ services:
     container_name: mongodb-container
     restart: unless-stopped
     ports:
-      - "27017:27017"  # 기본 포트 명시
+      - "27017:27017"
     volumes:
-      - mongo_data:/data/db  # 명명된 볼륨 추가
+      - mongo_data:/data/db  
     networks:
       - app-network
+    healthcheck:  # MongoDB가 완전히 실행될 때까지 대기
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 5s
 
   backend:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: backend-container
     restart: unless-stopped
     ports:
@@ -59,16 +68,15 @@ services:
       SPRING_PROFILES_ACTIVE: dev
     depends_on:
       mysql:
-        condition: service_healthy  # mysql이 완전히 실행된 후 시작
+        condition: service_healthy  # MySQL이 완전히 실행된 후 시작
       mongodb:
-        condition: service_started
+        condition: service_healthy  # MongoDB도 healthcheck 기반으로 대기
       minio:
         condition: service_started
     volumes:
-      - ./build/libs:/app/build/libs
+      - ./build/libs:/build/libs  
     networks:
       - app-network
-
 
 volumes:
   mysql_data:
