@@ -21,5 +21,11 @@ public class SecurityConfig {
                         ADMIN > USER"""
         );
     }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return web -> web.ignoring()
+                .requestMatchers("/error", "/favicon.ico");
+    }
 }
 
