@@ -37,15 +37,20 @@ public class SecurityConfig {
 
         //oauth2
         http
-                .oauth2Login((oauth2) -> oauth2
-                        .userInfoEndpoint((userInfoEndpointConfig -> userInfoEndpointConfig
-                                .userService(customOAuth2Service))));
+                .oauth2Login(oauth2 -> oauth2// 커스텀 로그인 페이지
+                        .defaultSuccessUrl("/home", true)    // 성공 시 리다이렉트
+                        .failureUrl("/login?error=true")     // 실패 시 리다이렉트
+                        .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig
+                                .userService(customOAuth2Service)) // 커스텀 OAuth2UserService 설정
+                );
+
 
         //경로별 인가 작업
         http
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/oauth/**").permitAll()
+                        .requestMatchers("/login").permitAll()
                         .anyRequest().authenticated());
 
         //세션 설정 : STATELESS
