@@ -1,9 +1,7 @@
-### dev 파이프라인 생성
-
-name : gcp-main
+name: gcp-main
 
 env:
-  CONTAINER_NAME : ${{github.ref_name}}
+  CONTAINER_NAME: comebackhome-backend-main
 
 on:
   pull_request:
@@ -71,11 +69,11 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./${{env.CONTAINER_NAME}}/Dockerfile
+          file: ./Dockerfile
           platforms: linux/amd64
           push: true
           tags: |
-            ${{ secrets.DOCKER_ID }}/${{ env.CONTAINER_NAME }}:latest
+            ${{ secrets.DOCKER_ID }}/comebackhome-backend-main:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -86,8 +84,7 @@ jobs:
           username: ${{ secrets.GCP_USERNAME }}
           key: ${{ secrets.GCP_SSH_KEY }}
           script: |
-            sudo docker-compose stop ${{env.CONTAINER_NAME}}
-            sudo docker-compose rm ${{env.CONTAINER_NAME}}
-            sudo docker-compose -f docker-compose.yml up --build -d ${{env.CONTAINER_NAME}}
+            sudo docker-compose down
+            sudo docker-compose pull
+            sudo docker-compose up -d
             sudo docker-compose ps
-
