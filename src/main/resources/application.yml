@@ -8,7 +8,7 @@ spring:
         registration:
           kakao:
             client-id: "3334a32d79042089a1ea0feb2369d322"  # REST API 키
-            client-secret: "djlkasjdknwoi1u2309213uejdisadsakl"  # 보안 강화
+            client-secret: "O0qeGm3rbOJH7H3t2PwrxrY4yhLeBnyP"  # 보안 강화
             authorization-grant-type: authorization_code
             redirect-uri: "http://localhost:8085"  # 리다이렉트 URI
             scope:
