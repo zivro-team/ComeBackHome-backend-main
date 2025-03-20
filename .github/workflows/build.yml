@@ -37,6 +37,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: asia.gcr.io/${{ secrets.GCP_PROJECT_ID }}/backend-main:latest .
+          tags: asia.gcr.io/${{ secrets.GCP_PROJECT_ID }}/backend-main:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
