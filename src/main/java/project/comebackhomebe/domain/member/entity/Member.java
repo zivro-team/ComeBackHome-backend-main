@@ -23,4 +23,12 @@ public class Member {
 
     @Column(nullable = false)
     private String kakao_id;
+
+    public static Member from (String username, Role role, String kakao_id) {
+        return Member.builder()
+                .username(username)
+                .role(role)
+                .kakao_id(kakao_id)
+                .build();
+    }
 }
