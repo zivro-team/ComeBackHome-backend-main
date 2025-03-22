@@ -16,4 +16,12 @@ public record MemberInfo(
                 member.getKakao_id()
         );
     }
+
+    public static MemberInfo to(String username, Role role, String kakao_id) {
+        return new MemberInfo(
+                username,
+                role,
+                kakao_id
+        );
+    }
 }
