@@ -1,5 +1,6 @@
 package project.comebackhomebe.global.config.security.config;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,10 +13,14 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 import project.comebackhomebe.global.config.security.filter.JWTFilter;
 import project.comebackhomebe.global.config.security.handler.SuccessHandler;
 import project.comebackhomebe.global.config.security.jwt.JwtUtil;
 import project.comebackhomebe.global.config.security.service.CustomOAuth2Service;
+
+import java.util.Collections;
 
 @Configuration
 @RequiredArgsConstructor
@@ -44,7 +49,7 @@ public class SecurityConfig {
         //oauth2
         http
                 .oauth2Login(oauth2 -> oauth2// 커스텀 로그인 페이지
-                        .defaultSuccessUrl("/home", true)    // 성공 시 리다이렉트
+                        .defaultSuccessUrl("/main", true)    // 성공 시 리다이렉트
                         .failureUrl("/login?error=true")     // 실패 시 리다이렉트
                         .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig
                                 .userService(customOAuth2Service)) // 커스텀 OAuth2UserService 설정
@@ -67,6 +72,27 @@ public class SecurityConfig {
         http
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+        http
+                .cors(corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
+
+                    @Override
+                    public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+
+                        CorsConfiguration configuration = new CorsConfiguration();
+
+                        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
+                        configuration.setAllowedMethods(Collections.singletonList("*"));
+                        configuration.setAllowCredentials(true);
+                        configuration.setAllowedHeaders(Collections.singletonList("*"));
+                        configuration.setMaxAge(3600L);
+
+                        configuration.setExposedHeaders(Collections.singletonList("Set-Cookie"));
+                        configuration.setExposedHeaders(Collections.singletonList("Authorization"));
+
+                        return configuration;
+                    }
+                }));
 
         return http.build();
     }
