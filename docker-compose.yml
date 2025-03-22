@@ -1,56 +1,22 @@
-version: '3.8'  # 버전 명시 (권장)
+version: '3.8'
 
 services:
-  mysql:
-    image: mysql:8.0
-    container_name: mysql-container
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: backend-container
     restart: unless-stopped
     ports:
-      - "3307:3306"
+      - "8080:8080"
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: Comebackhome
-      MYSQL_USER: root
-      MYSQL_PASSWORD: root
+      SPRING_PROFILES_ACTIVE: dev
+      GOOGLE_APPLICATION_CREDENTIALS: /path/to/your/service-account-key.json  # GCS 인증
     volumes:
-      - mysql_data:/var/lib/mysql  # 명명된 볼륨 추가
+      - ./build/libs:/build/libs
+      - ./path/to/your/service-account-key.json:/path/to/your/service-account-key.json  # 서비스 계정 키 파일 매핑
     networks:
       - app-network
-
-  minio:
-    image: minio/minio:latest
-    container_name: minio-container
-    restart: unless-stopped
-    ports:
-      - "9000:9000"
-      - "9001:9001"
-    environment:
-      MINIO_ROOT_USER: minioadmin
-      MINIO_ROOT_PASSWORD: minioadmin123
-    volumes:
-      - minio_data:/data
-    command: server /data --console-address ":9001"
-    networks:
-      - app-network
-
-  mongodb:
-    image: mongo:latest
-    container_name: mongodb-container
-    restart: unless-stopped
-    ports:
-      - "27017:27017"  # 기본 포트 명시
-    volumes:
-      - mongo_data:/data/db  # 명명된 볼륨 추가
-    networks:
-      - app-network
-
-volumes:
-  mysql_data:
-    driver: local
-  minio_data:
-    driver: local
-  mongo_data:
-    driver: local
 
 networks:
   app-network:
