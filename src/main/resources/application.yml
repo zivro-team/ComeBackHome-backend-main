@@ -1,3 +1,55 @@
 server:
   port: 8085
 
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: "3334a32d79042089a1ea0feb2369d322"  # REST API 키
+            client-secret: "O0qeGm3rbOJH7H3t2PwrxrY4yhLeBnyP"  # 보안 강화
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/kakao"  # 리다이렉트 URI
+            scope:
+              - profile_nickname  # 닉네임
+              - account_email     # 이메일
+            client-authentication-method: client_secret_post
+            client-name: Kakao
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize  # 인증 요청 URL
+            token-uri: https://kauth.kakao.com/oauth/token          # 토큰 발급 URL
+            user-info-uri: https://kapi.kakao.com/v2/user/me        # 사용자 정보 조회 URL
+            user-name-attribute: id                                 # 사용자 식별 필드
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/Comebackhome?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    properties:
+      hibernate:
+        format_sql: true
+        highlight_sql: true
+        use_sql_comments: true
+
+  jwt:
+    secret: jdklasjdlknqewoiqe120392ijkdnqmdcsajkldalskdmlaksdj1o3u9120jidksa
+
+
+  logging:
+    level:
+      project.studyproject.domain: DEBUG
+      org.hibernate.SQL: DEBUG
+      org.hibernate.orm.jdbc.bind: TRACE
+      org.hibernate.orm.jdbc.extract: TRACE
+      org.springframework.transaction.interceptor: TRACE

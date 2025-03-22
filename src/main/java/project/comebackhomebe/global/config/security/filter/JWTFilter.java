@@ -1,0 +1,54 @@
+package project.comebackhomebe.global.config.security.filter;
+
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.filter.OncePerRequestFilter;
+import project.comebackhomebe.global.config.security.jwt.JwtUtil;
+
+import java.io.IOException;
+
+@RequiredArgsConstructor
+@Slf4j
+public class JWTFilter extends OncePerRequestFilter {
+
+    private final JwtUtil jwtUtil;
+
+    // 접근 제한자
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+
+        // 토큰 추출
+        String accessToken = jwtUtil.resolveToken(request);
+        log.info("[JWTFilter] Extracted token: {}", accessToken);
+
+        // 토큰이 없으면 다음 필터로 진행
+        if (accessToken == null || jwtUtil.isExpired(accessToken)) {
+            log.warn("[JWTFilter] No valid token found, proceeding without authentication.");
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+
+
+        // 토큰 유효성 확인 ( OAuth2 와 Local을 분리해아함)
+        log.info("[JWTFilter] Token validation started.");
+        Authentication authentication = jwtUtil.getAuthentication(accessToken);
+
+
+
+        // 토큰 유효할 경우 User의 권한을 발급
+        if (authentication != null) {
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            log.info("[JWTFilter] Token validation successful. User authenticated: {}", authentication.getName());
+        }
+
+        filterChain.doFilter(request, response);
+
+    }
+}
