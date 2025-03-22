@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import project.comebackhomebe.global.config.security.handler.SuccessHandler;
 import project.comebackhomebe.global.config.security.service.CustomOAuth2Service;
 
 @Configuration
@@ -19,6 +20,7 @@ import project.comebackhomebe.global.config.security.service.CustomOAuth2Service
 public class SecurityConfig {
 
     private final CustomOAuth2Service customOAuth2Service;
+    private final SuccessHandler successHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -42,6 +44,7 @@ public class SecurityConfig {
                         .failureUrl("/login?error=true")     // 실패 시 리다이렉트
                         .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig
                                 .userService(customOAuth2Service)) // 커스텀 OAuth2UserService 설정
+                        .successHandler(successHandler)
                 );
 
 
