@@ -1,17 +1,14 @@
 package project.comebackhomebe.global.config.security.jwt;
 
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import project.comebackhomebe.domain.member.dto.MemberInfo;
 import project.comebackhomebe.domain.member.dto.OAuth2Info;
-import project.comebackhomebe.domain.member.entity.Member;
 import project.comebackhomebe.domain.member.entity.Role;
 
 import javax.crypto.SecretKey;
@@ -40,7 +37,8 @@ public class JwtUtil {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("kakaoId", String.class);
     }
 
-    public Authentication getAuthentication(String token){
+    public Authentication getAuthentication(String token) {
+        log.info("[getAuthentication] 인증 절차 시작");
         if (token == null || isExpired(token)) {
             log.error("token expired");
         }
@@ -53,6 +51,8 @@ public class JwtUtil {
         MemberInfo memberInfo = MemberInfo.to(username, role, kakaoId);
 
         OAuth2Info oAuth2Info = new OAuth2Info(memberInfo);
+        log.info("[getAuthentication] 인증 객체 : {}", oAuth2Info.toString());
+        log.info("[getAuthentication] 인증 절차 완료");
 
         return new UsernamePasswordAuthenticationToken(oAuth2Info, null, oAuth2Info.getAuthorities());
 
@@ -74,8 +74,10 @@ public class JwtUtil {
     }
 
     public String resolveToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader("access");
+        String bearerToken = request.getHeader("Authorization");
+        log.info("[resolveToken] 토큰 추출 : {}", bearerToken);
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            log.info("[resolveToken]  bearer 토큰 추출 : {}", bearerToken.substring(7));
             return bearerToken.substring(7); // "Bearer " 이후의 토큰 값만 가져옴
         }
         return null;

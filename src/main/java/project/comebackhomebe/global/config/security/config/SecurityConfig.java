@@ -2,6 +2,7 @@ package project.comebackhomebe.global.config.security.config;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
@@ -11,8 +12,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import project.comebackhomebe.global.config.security.filter.JWTFilter;
@@ -25,6 +28,7 @@ import java.util.Collections;
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity // Spring Security에 대한 디버깅 모드를 사용하기 위한 어노테이션 (default : false)
+@Slf4j
 public class SecurityConfig {
 
     private final CustomOAuth2Service customOAuth2Service;
@@ -35,8 +39,8 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         //csrf disable
-        http
-                .csrf((auth) -> auth.disable());
+//        http
+//                .csrf((auth) -> auth.disable());
 
         //From 로그인 방식 disable
         http
@@ -49,7 +53,6 @@ public class SecurityConfig {
         //oauth2
         http
                 .oauth2Login(oauth2 -> oauth2// 커스텀 로그인 페이지
-                        .defaultSuccessUrl("/main", true)    // 성공 시 리다이렉트
                         .failureUrl("/login?error=true")     // 실패 시 리다이렉트
                         .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig
                                 .userService(customOAuth2Service)) // 커스텀 OAuth2UserService 설정
@@ -57,7 +60,8 @@ public class SecurityConfig {
                 );
 
         http
-                .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(new JWTFilter(jwtUtil), OAuth2LoginAuthenticationFilter.class);
 
 
         //경로별 인가 작업
@@ -66,12 +70,22 @@ public class SecurityConfig {
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/oauth/**").permitAll()
                         .requestMatchers("/login").permitAll()
-                        .anyRequest().authenticated());
+                        .requestMatchers("/oauth2/**").access((authentication, context) -> {
+                            log.info("Path: {}, Authenticated: {}", context.getRequest().getRequestURI(),
+                                    authentication != null && authentication.get().isAuthenticated());
+                            return null;
+                        })
+                        .anyRequest().authenticated()
+                );
 
         //세션 설정 : STATELESS
         http
                 .sessionManagement((session) -> session
+
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        http
+                .csrf(csrf -> csrf
+                .ignoringRequestMatchers("/login/oauth2/code/*")); // CSRF 특정 경로만 비활성화
 
         http
                 .cors(corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
