@@ -11,7 +11,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import project.comebackhomebe.global.config.security.filter.JWTFilter;
 import project.comebackhomebe.global.config.security.handler.SuccessHandler;
+import project.comebackhomebe.global.config.security.jwt.JwtUtil;
 import project.comebackhomebe.global.config.security.service.CustomOAuth2Service;
 
 @Configuration
@@ -21,6 +24,7 @@ public class SecurityConfig {
 
     private final CustomOAuth2Service customOAuth2Service;
     private final SuccessHandler successHandler;
+    private final JwtUtil jwtUtil;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -46,6 +50,9 @@ public class SecurityConfig {
                                 .userService(customOAuth2Service)) // 커스텀 OAuth2UserService 설정
                         .successHandler(successHandler)
                 );
+
+        http
+                .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
 
         //경로별 인가 작업
