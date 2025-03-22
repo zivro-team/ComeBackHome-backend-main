@@ -1,21 +1,10 @@
 package project.comebackhomebe.domain.member.dto;
 
-import lombok.Getter;
-
 import java.util.Map;
 
-@Getter
-public class KakaoResponse {
+public record KakaoResponse(String attribute) {
 
-    public KakaoResponse(Map<String, Object> attributes) {
+    public static KakaoResponse nameFrom(Map<String, Object> attribute) {
+        return new KakaoResponse( (String) attribute.get("nickname"));
     }
-
-    String provider;
-
-    String providerId;
-
-    String email;
-
-    String name;
-
 }

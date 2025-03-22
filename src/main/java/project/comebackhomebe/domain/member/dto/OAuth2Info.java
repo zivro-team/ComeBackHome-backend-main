@@ -15,7 +15,10 @@ public class OAuth2Info implements OAuth2User {
 
     @Override
     public Map<String, Object> getAttributes() {
-        return Map.of();
+        return Map.of(
+                "id", memberInfo.kakao_id(),
+                "username", memberInfo.username()
+        );
     }
 
     @Override
