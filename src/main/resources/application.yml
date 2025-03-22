@@ -42,6 +42,10 @@ spring:
         highlight_sql: true
         use_sql_comments: true
 
+  jwt:
+    secret: jdklasjdlknqewoiqe120392ijkdnqmdcsajkldalskdmlaksdj1o3u9120jidksa
+
+
   logging:
     level:
       project.studyproject.domain: DEBUG
