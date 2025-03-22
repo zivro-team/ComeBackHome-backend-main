@@ -36,9 +36,8 @@ public class SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         String accessToken = jwtUtil.generateToken(username, role, kakaoId, 10 * 60 * 1000L);
         String refreshToken = jwtUtil.generateToken(username, role, kakaoId, 60 * 60 * 1000L);
 
-        response.setHeader("access", accessToken);
+        response.setHeader("Authorization", accessToken);
         response.addCookie(tokenResponseUtil.createCookie("refresh", refreshToken));
-        response.sendRedirect("http://localhost:8085/main");
 
         log.info("Access Token: {}", accessToken);
         log.info("Refresh Token: {}", refreshToken);
