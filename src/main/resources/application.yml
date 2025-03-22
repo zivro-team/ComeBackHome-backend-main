@@ -23,9 +23,17 @@ spring:
             user-info-uri: https://kapi.kakao.com/v2/user/me        # 사용자 정보 조회 URL
             user-name-attribute: id                                 # 사용자 식별 필드
 
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: //localhost:3306/Comebackhome?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+
   jpa:
     hibernate:
       ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     show-sql: true
     database-platform: org.hibernate.dialect.MySQL8Dialect
     properties:
