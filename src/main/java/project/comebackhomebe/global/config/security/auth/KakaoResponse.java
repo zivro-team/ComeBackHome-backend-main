@@ -1,4 +1,4 @@
-package project.comebackhomebe.domain.member.dto;
+package project.comebackhomebe.global.config.security.auth;
 
 import java.util.Map;
 

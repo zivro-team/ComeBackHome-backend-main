@@ -2,14 +2,18 @@ package project.comebackhomebe.global.config.security.jwt;
 
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.stereotype.Component;
 import project.comebackhomebe.domain.member.dto.MemberInfo;
 import project.comebackhomebe.domain.member.dto.OAuth2Info;
 import project.comebackhomebe.domain.member.entity.Role;
+import project.comebackhomebe.global.config.security.handler.TokenResponseUtil;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -37,6 +41,10 @@ public class JwtUtil {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("kakaoId", String.class);
     }
 
+    public String getCategory(String token) {
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("category", String.class);
+    }
+
     public Authentication getAuthentication(String token) {
         log.info("[getAuthentication] 인증 절차 시작");
         if (token == null || isExpired(token)) {
@@ -62,17 +70,6 @@ public class JwtUtil {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
     }
 
-    public String generateToken(String username, Role role, String kakaoId, Long expiredMs) {
-        return Jwts.builder()
-                .claim("username", username)
-                .claim("Role", role)
-                .claim("kakaoId", kakaoId)
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + expiredMs))
-                .signWith(secretKey)
-                .compact();
-    }
-
     public String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
         log.info("[resolveToken] 토큰 추출 : {}", bearerToken);
@@ -81,6 +78,19 @@ public class JwtUtil {
             return bearerToken.substring(7); // "Bearer " 이후의 토큰 값만 가져옴
         }
         return null;
+    }
+
+
+    public String generateToken(String category, String username, Role role, String kakaoId, Long expiredMs) {
+        return Jwts.builder()
+                .claim("category", category)
+                .claim("username", username)
+                .claim("Role", role)
+                .claim("kakaoId", kakaoId)
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + expiredMs))
+                .signWith(secretKey)
+                .compact();
     }
 
 }
