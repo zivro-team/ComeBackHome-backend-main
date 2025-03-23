@@ -34,7 +34,14 @@ public class JWTFilter extends OncePerRequestFilter {
             return;
         }
 
-        // 토큰 유효성 확인 ( OAuth2 와 Local을 분리해아함)
+        // 여기서 refresh 와 access 나눠야함
+        String category = jwtUtil.getCategory(accessToken);
+        if (category == null || category.equals("refresh")) {
+            log.info("[JWTFilter] No valid category found, proceeding without authentication.");
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         log.info("[JWTFilter] Token validation started.");
         Authentication authentication = jwtUtil.getAuthentication(accessToken);
 

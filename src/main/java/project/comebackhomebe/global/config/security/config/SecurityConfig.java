@@ -37,8 +37,8 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         //csrf disable
-//        http
-//                .csrf((auth) -> auth.disable());
+        http
+                .csrf((auth) -> auth.disable());
 
         //From 로그인 방식 disable
         http
@@ -68,7 +68,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/oauth/**").permitAll()
+                        .requestMatchers("/oauth2/**").permitAll()
                         .requestMatchers("/login").permitAll()
+                        .requestMatchers("/refresh").permitAll()
                         .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated()
                 );
@@ -78,9 +80,6 @@ public class SecurityConfig {
                 .sessionManagement((session) -> session
 
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        http
-                .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/login/oauth2/code/*")); // CSRF 특정 경로만 비활성화
 
         http
                 .cors(corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
@@ -90,7 +89,7 @@ public class SecurityConfig {
 
                         CorsConfiguration configuration = new CorsConfiguration();
 
-                        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
+                        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:8085"));
                         configuration.setAllowedMethods(Collections.singletonList("*"));
                         configuration.setAllowCredentials(true);
                         configuration.setAllowedHeaders(Collections.singletonList("*"));
