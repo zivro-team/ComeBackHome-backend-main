@@ -33,10 +33,10 @@ public class SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
         String kakaoId = oAuth2Info.getId();
 
-        String accessToken = jwtUtil.generateToken(username, role, kakaoId, 10 * 60 * 1000L);
-        String refreshToken = jwtUtil.generateToken(username, role, kakaoId, 60 * 60 * 1000L);
+        String accessToken = jwtUtil.generateToken("access", username, role, kakaoId, 10 * 60 * 1000L);
+        String refreshToken = jwtUtil.generateToken("refresh", username, role, kakaoId, 60 * 60 * 1000L);
 
-        response.setHeader("Authorization", accessToken);
+        response.setHeader("access", accessToken);
         response.addCookie(tokenResponseUtil.createCookie("refresh", refreshToken));
 
         log.info("Access Token: {}", accessToken);

@@ -37,6 +37,10 @@ public class JwtUtil {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("kakaoId", String.class);
     }
 
+    public String getCategory(String token) {
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("category", String.class);
+    }
+
     public Authentication getAuthentication(String token) {
         log.info("[getAuthentication] 인증 절차 시작");
         if (token == null || isExpired(token)) {
@@ -62,8 +66,9 @@ public class JwtUtil {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
     }
 
-    public String generateToken(String username, Role role, String kakaoId, Long expiredMs) {
+    public String generateToken(String category, String username, Role role, String kakaoId, Long expiredMs) {
         return Jwts.builder()
+                .claim("category", category)
                 .claim("username", username)
                 .claim("Role", role)
                 .claim("kakaoId", kakaoId)
