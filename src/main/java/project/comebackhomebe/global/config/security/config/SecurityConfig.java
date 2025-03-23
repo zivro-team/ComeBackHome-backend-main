@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -15,7 +14,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import project.comebackhomebe.global.config.security.filter.JWTFilter;
@@ -72,11 +70,6 @@ public class SecurityConfig {
                         .requestMatchers("/oauth/**").permitAll()
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**").permitAll()
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs").access((authentication, context) -> {
-                            log.info("Path: {}, Authenticated: {}", context.getRequest().getRequestURI(),
-                                    authentication != null && authentication.get().isAuthenticated());
-                            return null;
-                        })
                         .anyRequest().authenticated()
                 );
 
@@ -87,7 +80,7 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http
                 .csrf(csrf -> csrf
-                .ignoringRequestMatchers("/login/oauth2/code/*")); // CSRF 특정 경로만 비활성화
+                        .ignoringRequestMatchers("/login/oauth2/code/*")); // CSRF 특정 경로만 비활성화
 
         http
                 .cors(corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
