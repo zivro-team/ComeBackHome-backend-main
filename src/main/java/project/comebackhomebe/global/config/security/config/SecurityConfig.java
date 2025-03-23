@@ -65,12 +65,14 @@ public class SecurityConfig {
 
 
         //경로별 인가 작업
+
         http
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/oauth/**").permitAll()
                         .requestMatchers("/login").permitAll()
-                        .requestMatchers("/oauth2/**").access((authentication, context) -> {
+                        .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs").access((authentication, context) -> {
                             log.info("Path: {}, Authenticated: {}", context.getRequest().getRequestURI(),
                                     authentication != null && authentication.get().isAuthenticated());
                             return null;
