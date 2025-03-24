@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import project.comebackhomebe.domain.member.entity.Role;
+import org.springframework.transaction.annotation.Transactional;
 import project.comebackhomebe.global.config.security.jwt.JwtUtil;
 
 @Service
@@ -18,39 +18,50 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     @Override
     public void saveRefreshToken(String id, String accessToken, String refreshToken) {
         RefreshToken token = RefreshToken.from(id, accessToken, refreshToken);
+
         refreshTokenRepository.save(token);
     }
 
+    @Transactional
     @Override
-    public String findRefreshToken(HttpServletRequest request) {
-        String access = jwtUtil.resolveToken(request);
-        log.info("[findRefreshToken] access token: {}", access);
+    public void updateRefreshToken(String refreshToken, String newToken) {
+        String kakaoId = jwtUtil.getId(refreshToken);
 
-        String id = jwtUtil.getId(access);
+        RefreshToken token = refreshTokenRepository.findById(kakaoId).get();
 
-        String refreshToken = refreshTokenRepository.findById(id).get().getRefreshToken();
-        log.info("[findRefreshToken] refresh token: {}", refreshToken);
-        return refreshToken;
-    }
-
-    @Override
-    public void newCreateAccessToken(HttpServletRequest request, HttpServletResponse response) {
-        String refreshToken = findRefreshToken(request);
-        String newToken = jwtUtil.newGenerateToken(refreshToken);
-        log.info("[newCreateAccessToken] refresh token: {}", refreshToken);
-        response.setHeader("Authorization", newToken);
-
-        String id = jwtUtil.getId(refreshToken);
-        RefreshToken token = refreshTokenRepository.findById(id).get();
         RefreshToken updatedToken = RefreshToken.update(token, newToken);
-        log.info("[newCreateAccessToken] update token: {}", updatedToken);
+
         refreshTokenRepository.save(updatedToken);
     }
 
     @Override
+    public String findRefreshToken(HttpServletRequest request) {
+        String accessToken = jwtUtil.resolveToken(request);
+
+        String kakaoId = jwtUtil.getId(accessToken);
+
+        return refreshTokenRepository.findById(kakaoId).get().getRefreshToken();
+    }
+
+    @Transactional
+    @Override
+    public void reissueAccessToken(HttpServletRequest request, HttpServletResponse response) {
+        String refreshToken = findRefreshToken(request);
+
+        String newToken = jwtUtil.newGenerateToken(refreshToken);
+        log.info("[newCreateAccessToken] New Access Token: {}", newToken);
+
+        response.setHeader("Authorization", newToken);
+
+        updateRefreshToken(refreshToken, newToken);
+    }
+
+    @Override
     public void deleteRefreshToken(HttpServletRequest request) {
-        String token = jwtUtil.resolveToken(request);
-        String id = jwtUtil.getId(token);
+        String refreshToken = findRefreshToken(request);
+
+        String id = jwtUtil.getId(refreshToken);
+
         refreshTokenRepository.deleteById(id);
     }
 }

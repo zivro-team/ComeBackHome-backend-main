@@ -22,7 +22,7 @@ public class RefreshToken implements Serializable {
 
     private String refreshToken; // Refresh 토큰
 
-    public static RefreshToken from(String id, String accessToken ,String refreshToken) {
+    public static RefreshToken from(String id, String accessToken, String refreshToken) {
         return RefreshToken.builder()
                 .id(id)
                 .accessToken(accessToken)
@@ -30,7 +30,7 @@ public class RefreshToken implements Serializable {
                 .build();
     }
 
-    public static RefreshToken update (RefreshToken refreshToken, String accessToken) {
+    public static RefreshToken update(RefreshToken refreshToken, String accessToken) {
         return RefreshToken.builder()
                 .id(refreshToken.id)
                 .accessToken(accessToken)

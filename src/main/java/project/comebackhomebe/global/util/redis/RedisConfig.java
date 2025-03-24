@@ -37,6 +37,8 @@ public class RedisConfig {
          */
         redisTemplate.setConnectionFactory(redisConnectionFactory());
 
+        redisTemplate.setEnableTransactionSupport(true);
+
         return redisTemplate;
     }
 }
