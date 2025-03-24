@@ -1,4 +1,4 @@
-package project.comebackhomebe.global.util.redis;
+package project.comebackhomebe.global.redis.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;

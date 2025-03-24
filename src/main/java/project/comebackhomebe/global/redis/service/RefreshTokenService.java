@@ -1,4 +1,4 @@
-package project.comebackhomebe.global.util.redis;
+package project.comebackhomebe.global.redis.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

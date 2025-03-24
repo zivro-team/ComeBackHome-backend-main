@@ -1,4 +1,4 @@
-package project.comebackhomebe.global.util.redis;
+package project.comebackhomebe.global.redis.service.impl;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -7,6 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.comebackhomebe.global.config.security.jwt.JwtUtil;
+import project.comebackhomebe.global.redis.repository.RefreshTokenRepository;
+import project.comebackhomebe.global.redis.domain.RefreshToken;
+import project.comebackhomebe.global.redis.service.RefreshTokenService;
 
 @Service
 @RequiredArgsConstructor

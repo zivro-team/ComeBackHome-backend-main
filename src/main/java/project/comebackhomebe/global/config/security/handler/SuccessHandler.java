@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import project.comebackhomebe.domain.member.dto.OAuth2Info;
 import project.comebackhomebe.domain.member.entity.Role;
 import project.comebackhomebe.global.config.security.jwt.JwtUtil;
-import project.comebackhomebe.global.util.redis.RefreshTokenService;
+import project.comebackhomebe.global.redis.service.RefreshTokenService;
 
 import java.io.IOException;
 

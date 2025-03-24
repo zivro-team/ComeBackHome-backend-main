@@ -1,4 +1,4 @@
-package project.comebackhomebe.global.util.redis;
+package project.comebackhomebe.global.redis.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
