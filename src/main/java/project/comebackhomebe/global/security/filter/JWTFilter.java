@@ -1,4 +1,4 @@
-package project.comebackhomebe.global.config.security.filter;
+package project.comebackhomebe.global.security.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
-import project.comebackhomebe.global.config.security.jwt.JwtUtil;
+import project.comebackhomebe.global.security.jwt.JwtUtil;
 
 import java.io.IOException;
 
@@ -37,12 +37,11 @@ public class JWTFilter extends OncePerRequestFilter {
         // 여기서 refresh 와 access 나눠야함
         String category = jwtUtil.getCategory(accessToken);
         if (category == null || category.equals("refresh")) {
-            log.info("[JWTFilter] No valid category found, proceeding without authentication.");
+            log.warn("[JWTFilter] No valid category found, proceeding without authentication.");
             filterChain.doFilter(request, response);
             return;
         }
 
-        log.info("[JWTFilter] Token validation started.");
         Authentication authentication = jwtUtil.getAuthentication(accessToken);
 
         // 토큰 유효할 경우 User의 권한을 발급

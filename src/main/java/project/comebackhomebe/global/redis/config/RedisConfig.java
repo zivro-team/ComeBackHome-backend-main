@@ -1,4 +1,4 @@
-package project.comebackhomebe.global.util.redis;
+package project.comebackhomebe.global.redis.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
@@ -36,6 +36,8 @@ public class RedisConfig {
          * redis-cli 을 통해 직접 데이터를 조회 시 알아볼 수 없는 형태로 출력되는 것을 방지
          */
         redisTemplate.setConnectionFactory(redisConnectionFactory());
+
+        redisTemplate.setEnableTransactionSupport(true);
 
         return redisTemplate;
     }

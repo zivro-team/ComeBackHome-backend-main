@@ -1,20 +1,15 @@
-package project.comebackhomebe.global.config.security.jwt;
+package project.comebackhomebe.global.security.jwt;
 
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.stereotype.Component;
 import project.comebackhomebe.domain.member.dto.MemberInfo;
 import project.comebackhomebe.domain.member.dto.OAuth2Info;
 import project.comebackhomebe.domain.member.entity.Role;
-import project.comebackhomebe.global.config.security.handler.TokenResponseUtil;
-import project.comebackhomebe.global.util.redis.RefreshTokenService;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -46,10 +41,15 @@ public class JwtUtil {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("category", String.class);
     }
 
+    public Boolean isExpired(String token) {
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
+    }
+
     public Authentication getAuthentication(String token) {
         log.info("[getAuthentication] 인증 절차 시작");
         if (token == null || isExpired(token)) {
             log.error("token expired");
+            return null;
         }
 
         // 토큰에서 값 추출
@@ -60,15 +60,9 @@ public class JwtUtil {
         MemberInfo memberInfo = MemberInfo.to(username, role, kakaoId);
 
         OAuth2Info oAuth2Info = new OAuth2Info(memberInfo);
-        log.info("[getAuthentication] 인증 객체 : {}", oAuth2Info.toString());
         log.info("[getAuthentication] 인증 절차 완료");
 
         return new UsernamePasswordAuthenticationToken(oAuth2Info, null, oAuth2Info.getAuthorities());
-
-    }
-
-    public Boolean isExpired(String token) {
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
     }
 
     public String resolveToken(HttpServletRequest request) {
@@ -80,7 +74,6 @@ public class JwtUtil {
         }
         return null;
     }
-
 
     public String generateToken(String category, String username, Role role, String kakaoId, Long expiredMs) {
         return Jwts.builder()
@@ -94,11 +87,11 @@ public class JwtUtil {
                 .compact();
     }
 
-    public String newGenerateToken (String refreshToken) {
+    public String newGenerateToken(String refreshToken) {
         String username = getUsername(refreshToken);
         Role role = getRole(refreshToken);
         String kakaoId = getId(refreshToken);
 
-        return generateToken("access", username, role, kakaoId, 10*60*1000L);
+        return generateToken("access", username, role, kakaoId, 10 * 60 * 1000L);
     }
 }
