@@ -14,6 +14,7 @@ import project.comebackhomebe.domain.member.dto.MemberInfo;
 import project.comebackhomebe.domain.member.dto.OAuth2Info;
 import project.comebackhomebe.domain.member.entity.Role;
 import project.comebackhomebe.global.config.security.handler.TokenResponseUtil;
+import project.comebackhomebe.global.util.redis.RefreshTokenService;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -93,4 +94,11 @@ public class JwtUtil {
                 .compact();
     }
 
+    public String newGenerateToken (String refreshToken) {
+        String username = getUsername(refreshToken);
+        Role role = getRole(refreshToken);
+        String kakaoId = getId(refreshToken);
+
+        return generateToken("access", username, role, kakaoId, 10*60*1000L);
+    }
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import project.comebackhomebe.domain.member.dto.OAuth2Info;
 import project.comebackhomebe.domain.member.entity.Role;
 import project.comebackhomebe.global.config.security.jwt.JwtUtil;
+import project.comebackhomebe.global.util.redis.RefreshTokenService;
 
 import java.io.IOException;
 
@@ -20,6 +21,7 @@ import java.io.IOException;
 public class SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final JwtUtil jwtUtil;
     private final TokenResponseUtil tokenResponseUtil;
+    private final RefreshTokenService refreshTokenService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -37,7 +39,7 @@ public class SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         String refreshToken = jwtUtil.generateToken("refresh", username, role, kakaoId, 60 * 60 * 1000L);
 
         response.setHeader("Authorization", accessToken);
-        response.addCookie(tokenResponseUtil.createCookie("refresh", refreshToken));
+        refreshTokenService.saveRefreshToken(kakaoId, accessToken, refreshToken);
 
         log.info("Access Token: {}", accessToken);
         log.info("Refresh Token: {}", refreshToken);

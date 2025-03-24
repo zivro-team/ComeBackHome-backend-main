@@ -1,4 +1,4 @@
-package project.comebackhomebe.global.util;
+package project.comebackhomebe.global.util.baseTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
