@@ -10,8 +10,8 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.stereotype.Component;
 import project.comebackhomebe.domain.member.dto.OAuth2Info;
 import project.comebackhomebe.domain.member.entity.Role;
-import project.comebackhomebe.global.security.jwt.JwtUtil;
 import project.comebackhomebe.global.redis.service.RefreshTokenService;
+import project.comebackhomebe.global.security.jwt.JwtUtil;
 
 import java.io.IOException;
 
@@ -20,7 +20,6 @@ import java.io.IOException;
 @Slf4j
 public class SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final JwtUtil jwtUtil;
-    private final TokenResponseUtil tokenResponseUtil;
     private final RefreshTokenService refreshTokenService;
 
     @Override
