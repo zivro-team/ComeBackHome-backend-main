@@ -49,7 +49,8 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
     @Override
     public void deleteRefreshToken(HttpServletRequest request) {
-        String id = jwtUtil.getId(request.getHeader("Authorization"));
+        String token = jwtUtil.resolveToken(request);
+        String id = jwtUtil.getId(token);
         refreshTokenRepository.deleteById(id);
     }
 }
