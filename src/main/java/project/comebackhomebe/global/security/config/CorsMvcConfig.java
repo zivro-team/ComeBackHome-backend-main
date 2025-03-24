@@ -1,4 +1,4 @@
-package project.comebackhomebe.global.config.security.config;
+package project.comebackhomebe.global.security.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

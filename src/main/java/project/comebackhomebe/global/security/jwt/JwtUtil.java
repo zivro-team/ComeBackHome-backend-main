@@ -1,4 +1,4 @@
-package project.comebackhomebe.global.config.security.jwt;
+package project.comebackhomebe.global.security.jwt;
 
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpServletRequest;

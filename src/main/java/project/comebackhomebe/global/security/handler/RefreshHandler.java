@@ -1,13 +1,12 @@
-package project.comebackhomebe.global.config.security.handler;
+package project.comebackhomebe.global.security.handler;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.antlr.v4.runtime.Token;
 import org.springframework.stereotype.Service;
 import project.comebackhomebe.domain.member.entity.Role;
-import project.comebackhomebe.global.config.security.jwt.JwtUtil;
+import project.comebackhomebe.global.security.jwt.JwtUtil;
 
 @RequiredArgsConstructor
 @Slf4j

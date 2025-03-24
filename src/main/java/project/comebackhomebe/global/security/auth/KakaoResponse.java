@@ -1,4 +1,4 @@
-package project.comebackhomebe.global.config.security.auth;
+package project.comebackhomebe.global.security.auth;
 
 import java.util.Map;
 

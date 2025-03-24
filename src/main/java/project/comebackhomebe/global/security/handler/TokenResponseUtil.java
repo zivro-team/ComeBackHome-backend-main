@@ -1,4 +1,4 @@
-package project.comebackhomebe.global.config.security.handler;
+package project.comebackhomebe.global.security.handler;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;

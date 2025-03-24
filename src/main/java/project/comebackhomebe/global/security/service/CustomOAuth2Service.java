@@ -1,4 +1,4 @@
-package project.comebackhomebe.global.config.security.service;
+package project.comebackhomebe.global.security.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -7,7 +7,7 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-import project.comebackhomebe.global.config.security.auth.KakaoResponse;
+import project.comebackhomebe.global.security.auth.KakaoResponse;
 import project.comebackhomebe.domain.member.dto.MemberInfo;
 import project.comebackhomebe.domain.member.dto.OAuth2Info;
 import project.comebackhomebe.domain.member.entity.Member;

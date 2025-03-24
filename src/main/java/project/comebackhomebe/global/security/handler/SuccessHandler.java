@@ -1,4 +1,4 @@
-package project.comebackhomebe.global.config.security.handler;
+package project.comebackhomebe.global.security.handler;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,7 +10,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.stereotype.Component;
 import project.comebackhomebe.domain.member.dto.OAuth2Info;
 import project.comebackhomebe.domain.member.entity.Role;
-import project.comebackhomebe.global.config.security.jwt.JwtUtil;
+import project.comebackhomebe.global.security.jwt.JwtUtil;
 import project.comebackhomebe.global.redis.service.RefreshTokenService;
 
 import java.io.IOException;

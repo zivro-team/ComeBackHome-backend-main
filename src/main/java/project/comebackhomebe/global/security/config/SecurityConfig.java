@@ -1,4 +1,4 @@
-package project.comebackhomebe.global.config.security.config;
+package project.comebackhomebe.global.security.config;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -16,10 +16,10 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
-import project.comebackhomebe.global.config.security.filter.JWTFilter;
-import project.comebackhomebe.global.config.security.handler.SuccessHandler;
-import project.comebackhomebe.global.config.security.jwt.JwtUtil;
-import project.comebackhomebe.global.config.security.service.CustomOAuth2Service;
+import project.comebackhomebe.global.security.filter.JWTFilter;
+import project.comebackhomebe.global.security.handler.SuccessHandler;
+import project.comebackhomebe.global.security.jwt.JwtUtil;
+import project.comebackhomebe.global.security.service.CustomOAuth2Service;
 
 import java.util.Collections;
 
