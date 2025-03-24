@@ -8,12 +8,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import project.comebackhomebe.domain.member.service.MemberService;
 import project.comebackhomebe.global.config.security.handler.RefreshHandler;
+import project.comebackhomebe.global.config.security.jwt.JwtUtil;
+import project.comebackhomebe.global.util.redis.RefreshTokenService;
 
 @RestController
 @RequestMapping
@@ -23,6 +22,8 @@ public class ApiV1MemberController {
 
     private final MemberService memberService;
     private final RefreshHandler refreshHandler;
+    private final RefreshTokenService refreshTokenService;
+    private final JwtUtil jwtUtil;
 
     @GetMapping("/main")
     public String main(){
@@ -33,6 +34,19 @@ public class ApiV1MemberController {
     public ResponseEntity<?> refresh(HttpServletRequest request, HttpServletResponse response) {
         refreshHandler.refreshHandler(request, response);
         return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @PostMapping("/reissue")
+    public ResponseEntity<?> reissue(HttpServletRequest request, HttpServletResponse response) {
+        String refresh = refreshTokenService.findRefreshToken(request);
+        response.setHeader("Authorization", jwtUtil.newGenerateToken(refresh));
+        log.info(jwtUtil.newGenerateToken(refresh));
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/logout")
+    public void logout(HttpServletRequest request) {
+        refreshTokenService.deleteRefreshToken(request);
     }
 
 }

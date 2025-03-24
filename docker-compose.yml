@@ -8,7 +8,7 @@ services:
     container_name: backend-container
     restart: unless-stopped
     ports:
-      - "8080:8080"
+      - "8085:8085"
     environment:
       SPRING_PROFILES_ACTIVE: dev
       GOOGLE_APPLICATION_CREDENTIALS: /path/to/your/service-account-key.json  # GCS 인증
@@ -18,15 +18,39 @@ services:
     networks:
       - app-network
 
-  redis-refresh-token:
+  redis-service:
     image: redis:alpine
-    command: redis-server /usr/local/etc/redis-refresh-token/redis.conf --requirepass {1234}
+    command: redis-server /usr/local/etc/redis/redis.conf --requirepass 1234
+    container_name: redis-refresh-token
     ports:
       - "6379:6379"
     volumes:
       - ./data/refresh-token-data:/data
-      - ./data/refresh-token-data/redis.conf:/usr/local/etc/redis-refresh-token/redis.conf
+      - ./data/refresh-token-data/redis.conf:/usr/local/etc/redis/redis.conf
+    networks:
+      - app-network
+
+  mysql-service:
+    image: mysql:8.0
+    container_name: mysql-container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: Comebackhome
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 1234
+    ports:
+      - "33306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - app-network
 
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  mysql-data:
+  refresh-token-data:
+
