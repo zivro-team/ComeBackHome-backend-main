@@ -18,6 +18,15 @@ services:
     networks:
       - app-network
 
+  redis-refresh-token:
+    image: redis:alpine
+    command: redis-server /usr/local/etc/redis-refresh-token/redis.conf --requirepass {1234}
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./data/refresh-token-data:/data
+      - ./data/refresh-token-data/redis.conf:/usr/local/etc/redis-refresh-token/redis.conf
+
 networks:
   app-network:
     driver: bridge
