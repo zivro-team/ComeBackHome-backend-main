@@ -25,7 +25,6 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         refreshTokenRepository.save(token);
     }
 
-    @Transactional
     @Override
     public void updateRefreshToken(String refreshToken, String newToken) {
         String kakaoId = jwtUtil.getId(refreshToken);
@@ -46,7 +45,6 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         return refreshTokenRepository.findById(kakaoId).get().getRefreshToken();
     }
 
-    @Transactional
     @Override
     public void reissueAccessToken(HttpServletRequest request, HttpServletResponse response) {
         String refreshToken = findRefreshToken(request);
@@ -64,6 +62,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         String refreshToken = findRefreshToken(request);
 
         String id = jwtUtil.getId(refreshToken);
+        log.info("[deleteRefreshToken] Refresh Token: {}", id);
 
         refreshTokenRepository.deleteById(id);
     }

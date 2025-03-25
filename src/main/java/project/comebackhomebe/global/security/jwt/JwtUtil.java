@@ -67,7 +67,6 @@ public class JwtUtil {
 
     public String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
-        log.info("[resolveToken] 토큰 추출 : {}", bearerToken);
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             log.info("[resolveToken]  bearer 토큰 추출 : {}", bearerToken.substring(7));
             return bearerToken.substring(7); // "Bearer " 이후의 토큰 값만 가져옴
