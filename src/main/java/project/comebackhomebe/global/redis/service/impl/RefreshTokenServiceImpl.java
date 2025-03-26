@@ -25,12 +25,11 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         refreshTokenRepository.save(token);
     }
 
-    @Transactional
     @Override
     public void updateRefreshToken(String refreshToken, String newToken) {
-        String kakaoId = jwtUtil.getId(refreshToken);
+        String verifyKey = jwtUtil.getVerifyKey(refreshToken);
 
-        RefreshToken token = refreshTokenRepository.findById(kakaoId).get();
+        RefreshToken token = refreshTokenRepository.findByVerifyKey(verifyKey);
 
         RefreshToken updatedToken = RefreshToken.update(token, newToken);
 
@@ -41,12 +40,11 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     public String findRefreshToken(HttpServletRequest request) {
         String accessToken = jwtUtil.resolveToken(request);
 
-        String kakaoId = jwtUtil.getId(accessToken);
+        String verifyKey = jwtUtil.getVerifyKey(accessToken);
 
-        return refreshTokenRepository.findById(kakaoId).get().getRefreshToken();
+        return refreshTokenRepository.findByVerifyKey(verifyKey).getRefreshToken();
     }
 
-    @Transactional
     @Override
     public void reissueAccessToken(HttpServletRequest request, HttpServletResponse response) {
         String refreshToken = findRefreshToken(request);
@@ -63,8 +61,9 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     public void deleteRefreshToken(HttpServletRequest request) {
         String refreshToken = findRefreshToken(request);
 
-        String id = jwtUtil.getId(refreshToken);
+        String verifyKey = jwtUtil.getVerifyKey(refreshToken);
+        log.info("[deleteRefreshToken] Refresh Token: {}", refreshToken);
 
-        refreshTokenRepository.deleteById(id);
+        refreshTokenRepository.deleteById(verifyKey);
     }
 }

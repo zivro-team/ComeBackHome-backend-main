@@ -4,24 +4,27 @@ import project.comebackhomebe.domain.member.entity.Member;
 import project.comebackhomebe.domain.member.entity.Role;
 
 public record MemberInfo(
+        String verifyKey,
         String username,
-        Role role,
-        String kakao_id
+        String email,
+        Role role
 
 ) {
     public static MemberInfo of(Member member) {
         return new MemberInfo(
+                member.getVerifyKey(),
                 member.getUsername(),
-                member.getRole(),
-                member.getKakao_id()
+                member.getEmail(),
+                member.getRole()
         );
     }
 
-    public static MemberInfo to(String username, Role role, String kakao_id) {
+    public static MemberInfo to(String verifyKey, String username, String email, Role role) {
         return new MemberInfo(
+                verifyKey,
                 username,
-                role,
-                kakao_id
+                email,
+                role
         );
     }
 }

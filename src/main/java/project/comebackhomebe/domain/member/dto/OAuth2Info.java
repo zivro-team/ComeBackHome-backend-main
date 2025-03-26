@@ -16,8 +16,8 @@ public class OAuth2Info implements OAuth2User {
     @Override
     public Map<String, Object> getAttributes() {
         return Map.of(
-                "id", memberInfo.kakao_id(),
-                "username", memberInfo.username()
+                "username", memberInfo.username(),
+                "email", memberInfo.email()
         );
     }
 
@@ -27,15 +27,13 @@ public class OAuth2Info implements OAuth2User {
     }
 
     @Override
-    public String getName() {
-        return memberInfo.username();
-    }
+    public String getName() { return memberInfo.username(); }
+
+    public String getVerifyKey() { return memberInfo.verifyKey(); }
+
+    public String getEmail(){ return memberInfo.email(); }
 
     public Role getRole() {
         return memberInfo.role();
-    }
-
-    public String getId() {
-        return memberInfo.kakao_id();
     }
 }

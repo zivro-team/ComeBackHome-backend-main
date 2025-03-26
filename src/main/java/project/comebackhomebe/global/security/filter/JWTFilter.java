@@ -25,7 +25,6 @@ public class JWTFilter extends OncePerRequestFilter {
 
         // 토큰 추출
         String accessToken = jwtUtil.resolveToken(request);
-        log.info("[JWTFilter] Extracted token: {}", accessToken);
 
         // 토큰이 없으면 다음 필터로 진행
         if (accessToken == null || jwtUtil.isExpired(accessToken)) {

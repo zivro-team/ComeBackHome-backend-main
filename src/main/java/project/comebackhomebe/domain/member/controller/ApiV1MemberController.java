@@ -4,19 +4,22 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import project.comebackhomebe.global.redis.service.RefreshTokenService;
 
 @RestController
-@RequestMapping
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 @Slf4j
 public class ApiV1MemberController {
 
     private final RefreshTokenService refreshTokenService;
+
+    @GetMapping
+    public String main (){
+        return "Hello World!";
+    }
+
 
     // access 토큰 재발급
     @PostMapping("/reissue")
