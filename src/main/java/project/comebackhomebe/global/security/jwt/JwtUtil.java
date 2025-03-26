@@ -25,16 +25,20 @@ public class JwtUtil {
         secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
     }
 
+    public String getVerifyKey(String token) {
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("verifyKey", String.class);
+    }
+
     public String getUsername(String token) {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("username", String.class);
     }
 
-    public Role getRole(String token) {
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("role", Role.class);
+    public String getEmail(String token) {
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("email", String.class);
     }
 
-    public String getId(String token) {
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("kakaoId", String.class);
+    public Role getRole(String token) {
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("role", Role.class);
     }
 
     public String getCategory(String token) {
@@ -53,11 +57,12 @@ public class JwtUtil {
         }
 
         // 토큰에서 값 추출
+        String verifyKey = getVerifyKey(token);
         String username = getUsername(token);
+        String email = getEmail(token);
         Role role = getRole(token);
-        String kakaoId = getId(token);
 
-        MemberInfo memberInfo = MemberInfo.to(username, role, kakaoId);
+        MemberInfo memberInfo = MemberInfo.to(verifyKey, username, email, role);
 
         OAuth2Info oAuth2Info = new OAuth2Info(memberInfo);
         log.info("[getAuthentication] 인증 절차 완료");
@@ -74,12 +79,13 @@ public class JwtUtil {
         return null;
     }
 
-    public String generateToken(String category, String username, Role role, String kakaoId, Long expiredMs) {
+    public String generateToken(String category, String verifyKey, String username, String email, Role role, Long expiredMs) {
         return Jwts.builder()
                 .claim("category", category)
+                .claim("verifyKey", verifyKey)
                 .claim("username", username)
+                .claim("email", email)
                 .claim("Role", role)
-                .claim("kakaoId", kakaoId)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expiredMs))
                 .signWith(secretKey)
@@ -87,10 +93,11 @@ public class JwtUtil {
     }
 
     public String newGenerateToken(String refreshToken) {
+        String verifyKey = getVerifyKey(refreshToken);
         String username = getUsername(refreshToken);
+        String email = getEmail(refreshToken);
         Role role = getRole(refreshToken);
-        String kakaoId = getId(refreshToken);
 
-        return generateToken("access", username, role, kakaoId, 10 * 60 * 1000L);
+        return generateToken("access", verifyKey, username, email, role, 10 * 60 * 1000L);
     }
 }

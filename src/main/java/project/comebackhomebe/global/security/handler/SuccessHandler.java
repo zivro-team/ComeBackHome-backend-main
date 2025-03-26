@@ -28,17 +28,17 @@ public class SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         // 여기서 OAUth2Info가 MemverInfo 로 케스팅함
         OAuth2Info oAuth2Info = (OAuth2Info) authentication.getPrincipal();
 
+        // 유저 정보 추출
+        String verifyKey = oAuth2Info.getVerifyKey();
         String username = oAuth2Info.getName();
-
+        String email = oAuth2Info.getEmail();
         Role role = oAuth2Info.getRole();
 
-        String kakaoId = oAuth2Info.getId();
-
-        String accessToken = jwtUtil.generateToken("access", username, role, kakaoId, 10 * 60 * 1000L);
-        String refreshToken = jwtUtil.generateToken("refresh", username, role, kakaoId, 60 * 60 * 1000L);
+        String accessToken = jwtUtil.generateToken("access", verifyKey, username, email, role, 10 * 60 * 1000L);
+        String refreshToken = jwtUtil.generateToken("refresh", verifyKey, username, email, role, 60 * 60 * 1000L);
 
         response.setHeader("Authorization", accessToken);
-        refreshTokenService.saveRefreshToken(kakaoId, accessToken, refreshToken);
+        refreshTokenService.saveRefreshToken(verifyKey, accessToken, refreshToken);
 
         log.info("Access Token: {}", accessToken);
         log.info("Refresh Token: {}", refreshToken);

@@ -30,6 +30,6 @@ public record KakaoResponse(Map<String, Object> attributes) implements OAuth2Res
 
     @Override
     public String getName() {
-        return getProperties().get("name").toString();
+        return getProperties().get("nickname").toString();
     }
 }

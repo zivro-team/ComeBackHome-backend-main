@@ -1,5 +1,6 @@
 package project.comebackhomebe.global.redis.domain;
 
+import org.springframework.data.annotation.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,18 +14,19 @@ import java.io.Serializable;
 @Getter
 @AllArgsConstructor
 @Builder
-@RedisHash(value = "jwtToken", timeToLive = 60 * 60 * 24 * 14)
+@RedisHash(value = "Token", timeToLive = 60 * 60 * 24 * 14)
 public class RefreshToken implements Serializable {
 
-    private String id; // 카카오 ID
+    @Id
+    private String verifyKey; // 카카오 ID
 
     private String accessToken; // Access 토큰
 
     private String refreshToken; // Refresh 토큰
 
-    public static RefreshToken from(String id, String accessToken, String refreshToken) {
+    public static RefreshToken from(String verifyKey, String accessToken, String refreshToken) {
         return RefreshToken.builder()
-                .id(id)
+                .verifyKey(verifyKey)
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
@@ -32,7 +34,7 @@ public class RefreshToken implements Serializable {
 
     public static RefreshToken update(RefreshToken refreshToken, String accessToken) {
         return RefreshToken.builder()
-                .id(refreshToken.id)
+                .verifyKey(refreshToken.verifyKey)
                 .accessToken(accessToken)
                 .refreshToken(refreshToken.refreshToken)
                 .build();

@@ -32,6 +32,7 @@ public class SecurityConfig {
     private final CustomOAuth2Service customOAuth2Service;
     private final SuccessHandler successHandler;
     private final JwtUtil jwtUtil;
+    private final CustomClientRegistrationRepo customClientRegistrationRepo;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -55,6 +56,9 @@ public class SecurityConfig {
                         .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig
                                 .userService(customOAuth2Service)) // 커스텀 OAuth2UserService 설정
                         .successHandler(successHandler)
+                        .clientRegistrationRepository(customClientRegistrationRepo.clientRegistrationRepository()) // yml 파일에 두지 않고 커스텀 형태로 만듬 + 인메모리 형식으로 저장
+                        .redirectionEndpoint(redirection -> redirection.baseUri("/login/oauth2/code/{registrationId}"))
+                        .permitAll()
                 );
 
         http

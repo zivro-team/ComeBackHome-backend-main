@@ -12,7 +12,12 @@ import project.comebackhomebe.domain.member.dto.OAuth2Info;
 import project.comebackhomebe.domain.member.entity.Member;
 import project.comebackhomebe.domain.member.entity.Role;
 import project.comebackhomebe.domain.member.repository.MemberRepository;
+import project.comebackhomebe.global.redis.repository.RefreshTokenRepository;
+import project.comebackhomebe.global.redis.service.RefreshTokenService;
+import project.comebackhomebe.global.security.auth.GoogleResponse;
 import project.comebackhomebe.global.security.auth.KakaoResponse;
+import project.comebackhomebe.global.security.auth.NaverResponse;
+import project.comebackhomebe.global.security.auth.OAuth2Response;
 
 import java.util.Map;
 
@@ -27,26 +32,42 @@ public class CustomOAuth2Service extends DefaultOAuth2UserService {
         // OAuth2User 값 받아오기
         OAuth2User oAuth2User = super.loadUser(request);
 
-        // ID 값 가져오기
-        String kakaoId = String.valueOf(oAuth2User.getAttributes().get("id"));
+        String registrationId = request.getClientRegistration().getRegistrationId();
 
-        // 카카오 반환 데이터 형태 중 닉네임을 얻기 위해 설정
-        Map<String, Object> properties = (Map<String, Object>) oAuth2User.getAttributes().get("properties");
+        OAuth2Response oAuth2Response = null;
 
-        // 닉네임 얻기
-        KakaoResponse response = KakaoResponse.nameFrom(properties);
+        if (registrationId.equals("kakao")) {
+            oAuth2Response = new KakaoResponse(oAuth2User.getAttributes());
+        } else if (registrationId.equals("google")) {
+            oAuth2Response = new GoogleResponse(oAuth2User.getAttributes());
+        } else if (registrationId.equals("naver")) {
+            oAuth2Response = new NaverResponse(oAuth2User.getAttributes());
+        }
 
-        // 닉네임 얻고
-        String username = response.attribute();
+        String verifyKey = oAuth2Response.getProvider() + " " + oAuth2Response.getProviderId();
 
-        // 엔티티 저장
-        Member member = Member.from(username, Role.USER, kakaoId);
-        memberRepository.save(member);
+        String username = oAuth2Response.getName();
 
-        // DTO 넘기기
-        MemberInfo memberInfo = MemberInfo.of(member);
+        String email = oAuth2Response.getEmail();
 
-        return new OAuth2Info(memberInfo);
+        Member existData = memberRepository.findByVerifyKey(verifyKey);
+
+        // 새로 받은 카카오 id 가 이미 DB에 존재하면 그냥 로그인?
+        if (existData == null) {
+            // 엔티티 저장
+            Member member = Member.from(verifyKey, username, email, Role.USER);
+            memberRepository.save(member);
+
+            // DTO 넘기기
+            MemberInfo memberInfo = MemberInfo.of(member);
+
+            return new OAuth2Info(memberInfo);
+
+        } else {
+            MemberInfo memberInfo = MemberInfo.of(existData);
+
+            return new OAuth2Info(memberInfo);
+        }
     }
 
 }
