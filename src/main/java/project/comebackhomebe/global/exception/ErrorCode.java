@@ -12,11 +12,6 @@ public enum ErrorCode {
     // 사용자
 
 
-
-
-
-
-
     private final int errorCode;
     private final String message;
 }
