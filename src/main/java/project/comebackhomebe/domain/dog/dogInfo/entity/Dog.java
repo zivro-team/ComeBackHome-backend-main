@@ -1,10 +1,10 @@
 package project.comebackhomebe.domain.dog.dogInfo.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import project.comebackhomebe.domain.dog.dogImage.entity.Image;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -39,27 +39,33 @@ public class Dog {
 
     private String height; // 크기
 
-    public static Dog createDiscover (String breed, Gender gender, String height) {
+    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "Dog")
+    @ToString.Exclude
+    private List<Image> imageUrls; // 이미지들
+
+    public static Dog createDiscover(String breed, Gender gender, String height, List<Image> imageUrls) {
         return Dog.builder()
                 .type(Type.DISCOVER)
                 .status(Status.FIND)
                 .breed(breed)
                 .gender(gender)
                 .height(height)
+                .imageUrls(imageUrls)
                 .build();
     }
 
-    public static Dog createLost (String breed, Gender gender, String height) {
+    public static Dog createLost(String breed, Gender gender, String height, List<Image> imageUrls) {
         return Dog.builder()
                 .type(Type.LOST)
                 .status(Status.FIND)
                 .breed(breed)
                 .gender(gender)
                 .height(height)
+                .imageUrls(imageUrls)
                 .build();
     }
 
-    public static Dog updateDiscover (Dog dog) {
+    public static Dog updateDiscover(Dog dog) {
         return Dog.builder()
                 .type(Type.DISCOVER)
                 .status(Status.FOUND)
@@ -69,7 +75,7 @@ public class Dog {
                 .build();
     }
 
-    public static Dog updateLost (Dog dog) {
+    public static Dog updateLost(Dog dog) {
         return Dog.builder()
                 .type(Type.LOST)
                 .status(Status.FOUND)
