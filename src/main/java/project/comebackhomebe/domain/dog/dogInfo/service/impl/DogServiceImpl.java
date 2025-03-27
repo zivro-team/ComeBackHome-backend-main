@@ -1,10 +1,10 @@
-package project.comebackhomebe.domain.dog.service.impl;
+package project.comebackhomebe.domain.dog.dogInfo.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.comebackhomebe.domain.dog.repository.DogRepository;
-import project.comebackhomebe.domain.dog.service.DogService;
+import project.comebackhomebe.domain.dog.dogInfo.repository.DogRepository;
+import project.comebackhomebe.domain.dog.dogInfo.service.DogService;
 
 @RequiredArgsConstructor
 @Service

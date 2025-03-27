@@ -1,4 +1,4 @@
-package project.comebackhomebe.domain.dog.exception;
+package project.comebackhomebe.domain.dog.dogInfo.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
