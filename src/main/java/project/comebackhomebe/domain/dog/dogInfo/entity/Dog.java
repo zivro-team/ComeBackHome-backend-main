@@ -19,28 +19,63 @@ public class Dog {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Type type; // Lost, Found
+    private Type type; // Lost, Discover
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private Status status; // Found, Find
 
-    @Column(nullable = false)
     private String name; // 실종견 이름
 
     private int age; // 실종견 나이
 
-    @Column(nullable = false)
-    private String gender;
+    private String breed; // 종
 
     @Column(nullable = false)
-    private int weight; //kg 단위로 해주세요
+    @Enumerated(EnumType.STRING)
+    private Gender gender; // 성별
 
-    // 이거 Enum 타입 할지 모르겠음
-    // AI 쪽 파트랑 협의 필요
-    @Column(nullable = false)
-    private String breed;
+    private int weight; // 무게
 
-    @Column(nullable = false)
-    private int height;
+    private String height; // 크기
+
+    public static Dog createDiscover (String breed, Gender gender, String height) {
+        return Dog.builder()
+                .type(Type.DISCOVER)
+                .status(Status.FIND)
+                .breed(breed)
+                .gender(gender)
+                .height(height)
+                .build();
+    }
+
+    public static Dog createLost (String breed, Gender gender, String height) {
+        return Dog.builder()
+                .type(Type.LOST)
+                .status(Status.FIND)
+                .breed(breed)
+                .gender(gender)
+                .height(height)
+                .build();
+    }
+
+    public static Dog updateDiscover (Dog dog) {
+        return Dog.builder()
+                .type(Type.DISCOVER)
+                .status(Status.FOUND)
+                .breed(dog.breed)
+                .gender(dog.gender)
+                .height(dog.height)
+                .build();
+    }
+
+    public static Dog updateLost (Dog dog) {
+        return Dog.builder()
+                .type(Type.LOST)
+                .status(Status.FOUND)
+                .breed(dog.breed)
+                .gender(dog.gender)
+                .height(dog.height)
+                .build();
+    }
 }
