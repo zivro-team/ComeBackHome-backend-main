@@ -39,7 +39,7 @@ public class Dog {
 
     private String height; // 크기
 
-    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "Dog")
+    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "dog")
     @ToString.Exclude
     private List<Image> imageUrls; // 이미지들
 
@@ -84,4 +84,5 @@ public class Dog {
                 .height(dog.height)
                 .build();
     }
+
 }
