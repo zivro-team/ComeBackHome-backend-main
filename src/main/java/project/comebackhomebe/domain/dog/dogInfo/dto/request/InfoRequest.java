@@ -1,13 +1,10 @@
 package project.comebackhomebe.domain.dog.dogInfo.dto.request;
 
-import org.springframework.web.multipart.MultipartFile;
-import project.comebackhomebe.domain.dog.dogInfo.entity.Dog;
-
-import java.util.List;
+import project.comebackhomebe.domain.dog.dogInfo.entity.Gender;
 
 public record InfoRequest(
         String breed,
         String height,
-        List<MultipartFile> images
+        Gender gender
 ) {
 }

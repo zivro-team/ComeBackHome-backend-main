@@ -89,11 +89,13 @@ dependencies {
 
     // JSON
     implementation 'org.json:json:20231013'
+
     // Redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
 
-    
+    // GCS
+    implementation 'com.google.cloud:google-cloud-storage:2.30.0'
 
 }
 

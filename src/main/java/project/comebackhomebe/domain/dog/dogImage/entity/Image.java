@@ -1,8 +1,8 @@
 package project.comebackhomebe.domain.dog.dogImage.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+import project.comebackhomebe.domain.dog.dogInfo.entity.Dog;
 
 @Entity
 @Getter
@@ -13,9 +13,14 @@ import lombok.*;
 public class Image {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
     private String imageUrl;
+
+    @ManyToOne
+    @JoinColumn(name = "dog_id")
+    private Dog dog;
 
     public static Image from (String imageUrl) {
         return Image.builder().imageUrl(imageUrl).build();
