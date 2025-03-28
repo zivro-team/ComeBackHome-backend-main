@@ -16,6 +16,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import project.comebackhomebe.domain.member.service.MemberService;
 import project.comebackhomebe.global.security.filter.JWTFilter;
 import project.comebackhomebe.global.security.handler.SuccessHandler;
 import project.comebackhomebe.global.security.jwt.JwtUtil;
@@ -30,6 +31,7 @@ import java.util.Collections;
 public class SecurityConfig {
 
     private final CustomOAuth2Service customOAuth2Service;
+    private final MemberService memberService;
     private final SuccessHandler successHandler;
     private final JwtUtil jwtUtil;
     private final CustomClientRegistrationRepo customClientRegistrationRepo;
@@ -75,6 +77,7 @@ public class SecurityConfig {
                         .requestMatchers("/oauth2/**").permitAll()
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/refresh").permitAll()
+                        .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/v1/dogInfo").permitAll()
                         .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated()
