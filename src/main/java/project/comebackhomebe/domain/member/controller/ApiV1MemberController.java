@@ -12,7 +12,7 @@ import project.comebackhomebe.domain.member.service.MemberService;
 import project.comebackhomebe.global.redis.service.RefreshTokenService;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 @Slf4j
 public class ApiV1MemberController {

@@ -3,7 +3,6 @@ package project.comebackhomebe.domain.member.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.security.core.Authentication;
 import project.comebackhomebe.domain.member.dto.OAuth2Info;
 import project.comebackhomebe.global.security.auth.OAuth2Response;
 
