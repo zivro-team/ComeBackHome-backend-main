@@ -32,7 +32,7 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public static Member from (String verifyKey, String username, String email ,Role role){
+    public static Member from(String verifyKey, String username, String email, Role role) {
         return Member.builder()
                 .verifyKey(verifyKey)
                 .username(username)

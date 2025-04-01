@@ -5,8 +5,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import project.comebackhomebe.global.security.auth.KakaoResponse;
 
-import java.util.Map;
-
 public interface RestTemplateService {
     // 유효성 검증 (카카오)
     KakaoResponse verifyKakaoToken(HttpServletRequest request) throws JsonProcessingException;
