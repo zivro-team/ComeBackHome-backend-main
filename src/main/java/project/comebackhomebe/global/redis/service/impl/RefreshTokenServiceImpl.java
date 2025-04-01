@@ -5,11 +5,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import project.comebackhomebe.global.security.jwt.JwtUtil;
-import project.comebackhomebe.global.redis.repository.RefreshTokenRepository;
 import project.comebackhomebe.global.redis.domain.RefreshToken;
+import project.comebackhomebe.global.redis.repository.RefreshTokenRepository;
 import project.comebackhomebe.global.redis.service.RefreshTokenService;
+import project.comebackhomebe.global.security.jwt.JwtUtil;
 
 @Service
 @RequiredArgsConstructor

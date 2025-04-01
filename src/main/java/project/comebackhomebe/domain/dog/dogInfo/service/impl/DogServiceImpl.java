@@ -2,7 +2,6 @@ package project.comebackhomebe.domain.dog.dogInfo.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import project.comebackhomebe.domain.dog.dogImage.entity.Image;
 import project.comebackhomebe.domain.dog.dogImage.service.ImageService;

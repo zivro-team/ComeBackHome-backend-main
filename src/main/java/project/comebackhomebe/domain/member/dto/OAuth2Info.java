@@ -27,11 +27,17 @@ public class OAuth2Info implements OAuth2User {
     }
 
     @Override
-    public String getName() { return memberInfo.username(); }
+    public String getName() {
+        return memberInfo.username();
+    }
 
-    public String getVerifyKey() { return memberInfo.verifyKey(); }
+    public String getVerifyKey() {
+        return memberInfo.verifyKey();
+    }
 
-    public String getEmail(){ return memberInfo.email(); }
+    public String getEmail() {
+        return memberInfo.email();
+    }
 
     public Role getRole() {
         return memberInfo.role();

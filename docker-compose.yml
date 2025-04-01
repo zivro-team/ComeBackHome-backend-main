@@ -30,22 +30,6 @@ services:
     networks:
       - app-network
 
-  mysql-service:
-    image: mysql:8.0
-    container_name: mysql-container
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: Comebackhome
-      MYSQL_USER: root
-      MYSQL_PASSWORD: 1234
-    ports:
-      - "33306:3306"
-    volumes:
-      - mysql-data:/var/lib/mysql
-    networks:
-      - app-network
-
 networks:
   app-network:
     driver: bridge

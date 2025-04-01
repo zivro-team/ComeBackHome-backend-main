@@ -12,14 +12,10 @@ import project.comebackhomebe.domain.member.dto.OAuth2Info;
 import project.comebackhomebe.domain.member.entity.Member;
 import project.comebackhomebe.domain.member.entity.Role;
 import project.comebackhomebe.domain.member.repository.MemberRepository;
-import project.comebackhomebe.global.redis.repository.RefreshTokenRepository;
-import project.comebackhomebe.global.redis.service.RefreshTokenService;
 import project.comebackhomebe.global.security.auth.GoogleResponse;
 import project.comebackhomebe.global.security.auth.KakaoResponse;
 import project.comebackhomebe.global.security.auth.NaverResponse;
 import project.comebackhomebe.global.security.auth.OAuth2Response;
-
-import java.util.Map;
 
 @Service
 @Slf4j
