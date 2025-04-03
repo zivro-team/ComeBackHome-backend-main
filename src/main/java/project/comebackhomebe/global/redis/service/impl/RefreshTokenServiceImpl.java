@@ -20,6 +20,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     @Override
     public void saveRefreshToken(String id, String accessToken, String refreshToken) {
         RefreshToken token = RefreshToken.from(id, accessToken, refreshToken);
+        log.info("Saving refresh token: {}", token);
 
         refreshTokenRepository.save(token);
     }

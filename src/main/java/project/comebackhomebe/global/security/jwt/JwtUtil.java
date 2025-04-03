@@ -25,6 +25,14 @@ public class JwtUtil {
         secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
     }
 
+    public boolean isValidJwt(String token) {
+        if (token == null || token.isEmpty()) {
+            return false;
+        }
+        // JWT는 점(.)으로 구분된 3개 부분이어야 함
+        return token.split("\\.").length == 3;
+    }
+
     public String getVerifyKey(String token) {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("verifyKey", String.class);
     }
@@ -46,7 +54,20 @@ public class JwtUtil {
     }
 
     public Boolean isExpired(String token) {
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
+        try {
+            if (!isValidJwt(token)) {
+                return true; // 유효하지 않은 토큰은 만료된 것으로 간주
+            }
+            return Jwts.parser()
+                    .verifyWith(secretKey)
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload()
+                    .getExpiration()
+                    .before(new Date());
+        } catch (Exception e) {
+            return true; // 파싱 실패 시 만료로 간주
+        }
     }
 
     public Authentication getAuthentication(String token) {
