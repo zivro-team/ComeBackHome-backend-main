@@ -12,9 +12,9 @@ import project.comebackhomebe.domain.member.dto.OAuth2Info;
 import project.comebackhomebe.domain.member.entity.Member;
 import project.comebackhomebe.domain.member.entity.Role;
 import project.comebackhomebe.domain.member.repository.MemberRepository;
-import project.comebackhomebe.global.security.auth.GoogleResponse;
-import project.comebackhomebe.global.security.auth.KakaoResponse;
-import project.comebackhomebe.global.security.auth.NaverResponse;
+import project.comebackhomebe.global.security.auth.web.GoogleResponse;
+import project.comebackhomebe.global.security.auth.web.KakaoResponse;
+import project.comebackhomebe.global.security.auth.web.NaverResponse;
 import project.comebackhomebe.global.security.auth.OAuth2Response;
 
 @Service

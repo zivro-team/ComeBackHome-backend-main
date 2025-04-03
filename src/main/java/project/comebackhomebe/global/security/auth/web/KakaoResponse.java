@@ -1,8 +1,21 @@
-package project.comebackhomebe.global.security.auth;
+package project.comebackhomebe.global.security.auth.web;
 
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import project.comebackhomebe.global.security.auth.OAuth2Response;
+
+import java.util.HashMap;
 import java.util.Map;
 
 public record KakaoResponse(Map<String, Object> attributes) implements OAuth2Response {
+
+    public KakaoResponse() {
+        this(new HashMap<>());  // 기본 생성자 추가
+    }
+
+    @JsonAnySetter
+    public void setAttribute(String key, Object value) {
+        attributes.put(key, value);
+    }
 
     private Map<String, Object> getProperties() {
         return (Map<String, Object>) attributes.get("properties");
