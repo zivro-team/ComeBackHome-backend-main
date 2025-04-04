@@ -17,6 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import project.comebackhomebe.domain.member.service.MemberService;
+import project.comebackhomebe.global.redis.service.RefreshTokenService;
 import project.comebackhomebe.global.security.filter.JWTFilter;
 import project.comebackhomebe.global.security.handler.SuccessHandler;
 import project.comebackhomebe.global.security.jwt.JwtUtil;
@@ -35,6 +36,7 @@ public class SecurityConfig {
     private final SuccessHandler successHandler;
     private final JwtUtil jwtUtil;
     private final CustomClientRegistrationRepo customClientRegistrationRepo;
+    private final RefreshTokenService refreshTokenService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -64,8 +66,8 @@ public class SecurityConfig {
                 );
 
         http
-                .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
-                .addFilterAfter(new JWTFilter(jwtUtil), OAuth2LoginAuthenticationFilter.class);
+                .addFilterBefore(new JWTFilter(jwtUtil, refreshTokenService), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(new JWTFilter(jwtUtil, refreshTokenService), OAuth2LoginAuthenticationFilter.class);
 
 
         //경로별 인가 작업

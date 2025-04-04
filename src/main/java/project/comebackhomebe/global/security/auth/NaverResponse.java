@@ -1,8 +1,10 @@
 package project.comebackhomebe.global.security.auth;
 
-import java.util.HashMap;
+import lombok.NoArgsConstructor;
+
 import java.util.Map;
 
+@NoArgsConstructor
 public class NaverResponse implements OAuth2Response {
 
     private Map<String, Object> getResponse;

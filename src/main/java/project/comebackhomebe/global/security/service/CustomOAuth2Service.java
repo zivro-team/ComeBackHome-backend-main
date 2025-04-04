@@ -47,7 +47,6 @@ public class CustomOAuth2Service extends DefaultOAuth2UserService {
 
         Member existData = memberRepository.findByVerifyKey(verifyKey);
 
-        // 새로 받은 카카오 id 가 이미 DB에 존재하면 그냥 로그인?
         if (existData == null) {
             // 엔티티 저장
             Member member = Member.from(verifyKey, username, email, Role.USER);

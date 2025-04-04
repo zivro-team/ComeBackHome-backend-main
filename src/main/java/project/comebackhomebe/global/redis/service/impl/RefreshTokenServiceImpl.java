@@ -54,6 +54,8 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
         response.setHeader("Authorization", newToken);
 
+        request.setAttribute("Authorization", newToken);
+
         updateRefreshToken(refreshToken, newToken);
     }
 
