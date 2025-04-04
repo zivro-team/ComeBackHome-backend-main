@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
+import project.comebackhomebe.global.redis.service.RefreshTokenService;
 import project.comebackhomebe.global.security.jwt.JwtUtil;
 
 import java.io.IOException;
@@ -18,6 +19,7 @@ import java.io.IOException;
 public class JWTFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
+    private final RefreshTokenService refreshTokenService;
 
     // 접근 제한자
     @Override
@@ -33,8 +35,16 @@ public class JWTFilter extends OncePerRequestFilter {
         }
 
         // 토큰이 없으면 다음 필터로 진행
-        if (accessToken == null || jwtUtil.isExpired(accessToken)) {
+        if (accessToken == null) {
             log.warn("[JWTFilter] No valid token found, proceeding without authentication.");
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        // 토큰 만료시
+        if (jwtUtil.isExpired(accessToken)){
+            log.warn("[JwtFilter] Token is Expired, proceeding reissue.");
+            refreshTokenService.reissueAccessToken(request, response);
             filterChain.doFilter(request, response);
             return;
         }

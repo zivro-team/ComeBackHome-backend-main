@@ -1,7 +1,10 @@
 package project.comebackhomebe.global.security.auth;
 
+import lombok.NoArgsConstructor;
+
 import java.util.Map;
 
+@NoArgsConstructor
 public class GoogleResponse implements OAuth2Response {
 
     private Map<String, Object> attributes;

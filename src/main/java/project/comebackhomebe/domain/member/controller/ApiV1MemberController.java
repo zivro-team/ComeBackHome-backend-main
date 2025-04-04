@@ -25,12 +25,6 @@ public class ApiV1MemberController {
         return ResponseEntity.ok(memberService.loadOAuth2(provider, request, response));
     }
 
-    // access 토큰 재발급
-    @PostMapping("/reissue")
-    public void reissue(HttpServletRequest request, HttpServletResponse response) {
-        refreshTokenService.reissueAccessToken(request, response);
-    }
-
     // 로그아웃
     @DeleteMapping("/logout")
     public void logout(HttpServletRequest request) {

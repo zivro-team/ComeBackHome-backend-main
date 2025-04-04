@@ -56,7 +56,9 @@ public class MemberServiceImpl implements MemberService {
         OAuth2Response oAuth2Response = restTemplateService.verifyOAuth2Token(provider, request);
 
         OAuth2Info oAuth2Info = getOAuth2Info(oAuth2Response);
+
         pushToken(oAuth2Info, response);
+
         return oAuth2Response;
     }
 
