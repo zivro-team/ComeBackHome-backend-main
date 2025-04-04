@@ -14,8 +14,6 @@ import project.comebackhomebe.domain.member.repository.MemberRepository;
 import project.comebackhomebe.domain.member.service.MemberService;
 import project.comebackhomebe.domain.member.service.RestTemplateService;
 import project.comebackhomebe.global.redis.service.RefreshTokenService;
-import project.comebackhomebe.global.security.auth.app.KakaoAppResponse;
-import project.comebackhomebe.global.security.auth.web.KakaoResponse;
 import project.comebackhomebe.global.security.auth.OAuth2Response;
 import project.comebackhomebe.global.security.jwt.JwtUtil;
 
@@ -54,15 +52,12 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void loadKakao(HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException {
-        try {
-            KakaoAppResponse oAuth2Response = restTemplateService.verifyKakaoToken(request);
-            log.info("✅ KakaoResponse: " + oAuth2Response);
-            OAuth2Info oAuth2Info = getOAuth2Info(oAuth2Response);
-            pushToken(oAuth2Info, response);
-        } catch (Exception e) {
-            log.error("❌ KakaoResponse 역직렬화 실패", e);
-        }
+    public OAuth2Response loadOAuth2(String provider, HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException {
+        OAuth2Response oAuth2Response = restTemplateService.verifyOAuth2Token(provider, request);
+
+        OAuth2Info oAuth2Info = getOAuth2Info(oAuth2Response);
+        pushToken(oAuth2Info, response);
+        return oAuth2Response;
     }
 
     @Override

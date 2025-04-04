@@ -5,11 +5,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.comebackhomebe.domain.member.service.MemberService;
 import project.comebackhomebe.global.redis.service.RefreshTokenService;
+import project.comebackhomebe.global.security.auth.OAuth2Response;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -20,22 +20,10 @@ public class ApiV1MemberController {
     private final RefreshTokenService refreshTokenService;
     private final MemberService memberService;
 
-    @GetMapping
-    public String main() {
-        return "Hello World!";
+    @PostMapping("/{provider}")
+    public ResponseEntity<OAuth2Response> verifyToken(@PathVariable String provider, HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException {
+        return ResponseEntity.ok(memberService.loadOAuth2(provider, request, response));
     }
-
-    // 토큰 검증 로직
-    @PostMapping("/kakao")
-    public ResponseEntity<?> verifyToken(HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException {
-        try {
-            memberService.loadKakao(request, response);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token: " + e.getMessage());
-        }
-    }
-
 
     // access 토큰 재발급
     @PostMapping("/reissue")

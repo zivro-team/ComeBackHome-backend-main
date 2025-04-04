@@ -1,21 +1,27 @@
-package project.comebackhomebe.global.security.auth.app;
+package project.comebackhomebe.global.security.auth;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import project.comebackhomebe.global.security.auth.OAuth2Response;
 
 import java.util.Map;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class KakaoAppResponse implements OAuth2Response {
+@AllArgsConstructor
+public class KakaoResponse implements OAuth2Response {
 
-    private Long id;  // ✅ JSON의 "id" 필드와 매칭
-    private String connected_at;  // ✅ JSON의 "connected_at" 필드와 매칭
-    private Map<String, Object> properties;  // ✅ "properties" 필드를 Map으로 저장
-    private Map<String, Object> kakao_account;  // ✅ "kakao_account" 필드를 Map으로 저장
+    private Long id;
+    private Map<String, Object> properties;
+    private Map<String, Object> kakao_account;
+
+    public KakaoResponse(Map<String, Object> attributes) {
+        this.id = (Long) attributes.get("id");
+        this.properties = (Map<String, Object>) attributes.get("properties");
+        this.kakao_account = (Map<String, Object>) attributes.get("kakao_account");
+    }
 
     @Override
     public String getProvider() {
