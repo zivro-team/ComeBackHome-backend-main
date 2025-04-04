@@ -13,8 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import project.comebackhomebe.domain.member.service.RestTemplateService;
-import project.comebackhomebe.global.security.auth.app.KakaoAppResponse;
-import project.comebackhomebe.global.security.auth.web.KakaoResponse;
+import project.comebackhomebe.global.security.auth.KakaoResponse;
 import project.comebackhomebe.global.security.jwt.JwtUtil;
 
 import java.net.URI;
@@ -29,7 +28,7 @@ public class RestTemplateServiceImpl implements RestTemplateService {
     private final JwtUtil jwtUtil;
 
     @Override
-    public KakaoAppResponse verifyKakaoToken(HttpServletRequest request) throws JsonProcessingException {
+    public KakaoResponse verifyKakaoToken(HttpServletRequest request) throws JsonProcessingException {
         URI uri = UriComponentsBuilder
                 .fromUriString("https://kapi.kakao.com")
                 .path("/v2/user/me")
@@ -52,7 +51,7 @@ public class RestTemplateServiceImpl implements RestTemplateService {
         log.info(responseEntity.getBody());
 
         // 여기서 null 발생
-        return objectMapper.readValue(responseEntity.getBody(), KakaoAppResponse.class);
+        return objectMapper.readValue(responseEntity.getBody(), KakaoResponse.class);
     }
 
     @Override

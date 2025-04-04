@@ -3,12 +3,11 @@ package project.comebackhomebe.domain.member.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import project.comebackhomebe.global.security.auth.app.KakaoAppResponse;
-import project.comebackhomebe.global.security.auth.web.KakaoResponse;
+import project.comebackhomebe.global.security.auth.KakaoResponse;
 
 public interface RestTemplateService {
     // 유효성 검증 (카카오)
-    KakaoAppResponse verifyKakaoToken(HttpServletRequest request) throws JsonProcessingException;
+    KakaoResponse verifyKakaoToken(HttpServletRequest request) throws JsonProcessingException;
 
     // 유효성 검증 (구글)
     String verifyGoogleToken(HttpServletRequest request, HttpServletResponse response);

@@ -12,9 +12,9 @@ import project.comebackhomebe.domain.member.dto.OAuth2Info;
 import project.comebackhomebe.domain.member.entity.Member;
 import project.comebackhomebe.domain.member.entity.Role;
 import project.comebackhomebe.domain.member.repository.MemberRepository;
-import project.comebackhomebe.global.security.auth.web.GoogleResponse;
-import project.comebackhomebe.global.security.auth.web.KakaoResponse;
-import project.comebackhomebe.global.security.auth.web.NaverResponse;
+import project.comebackhomebe.global.security.auth.GoogleResponse;
+import project.comebackhomebe.global.security.auth.KakaoResponse;
+import project.comebackhomebe.global.security.auth.NaverResponse;
 import project.comebackhomebe.global.security.auth.OAuth2Response;
 
 @Service
@@ -32,12 +32,11 @@ public class CustomOAuth2Service extends DefaultOAuth2UserService {
 
         OAuth2Response oAuth2Response = null;
 
-        if (registrationId.equals("kakao")) {
-            oAuth2Response = new KakaoResponse(oAuth2User.getAttributes());
-        } else if (registrationId.equals("google")) {
-            oAuth2Response = new GoogleResponse(oAuth2User.getAttributes());
-        } else if (registrationId.equals("naver")) {
-            oAuth2Response = new NaverResponse(oAuth2User.getAttributes());
+        switch (registrationId) {
+            case "kakao" -> oAuth2Response = new KakaoResponse(oAuth2User.getAttributes());
+            case "google" -> oAuth2Response = new GoogleResponse(oAuth2User.getAttributes());
+            case "naver" -> oAuth2Response = new NaverResponse(oAuth2User.getAttributes());
+            default -> throw new IllegalArgumentException("지원되지 않는 OAuth2 로그인 제공자: " + registrationId);
         }
 
         String verifyKey = oAuth2Response.getProvider() + " " + oAuth2Response.getProviderId();

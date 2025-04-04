@@ -1,6 +1,4 @@
-package project.comebackhomebe.global.security.auth.web;
-
-import project.comebackhomebe.global.security.auth.OAuth2Response;
+package project.comebackhomebe.global.security.auth;
 
 import java.util.Map;
 
