@@ -2,7 +2,13 @@ package project.comebackhomebe.global.security.auth;
 
 import java.util.Map;
 
-public record GoogleResponse(Map<String, Object> attribute) implements OAuth2Response {
+public class GoogleResponse implements OAuth2Response {
+
+    private Map<String, Object> attributes;
+
+    public GoogleResponse(Map<String, Object> attributes) {
+        this.attributes = attributes;
+    }
 
     @Override
     public String getProvider() {
@@ -11,17 +17,17 @@ public record GoogleResponse(Map<String, Object> attribute) implements OAuth2Res
 
     @Override
     public String getProviderId() {
-        return attribute.get("sub").toString();
+        return attributes.get("sub").toString();
     }
 
     @Override
     public String getEmail() {
-        return attribute.get("email").toString();
+        return attributes.get("email").toString();
     }
 
     @Override
     public String getName() {
-        return attribute.get("name").toString();
+        return attributes.get("name").toString();
     }
 
 }
