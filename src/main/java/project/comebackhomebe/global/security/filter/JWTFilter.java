@@ -27,12 +27,6 @@ public class JWTFilter extends OncePerRequestFilter {
 
         // 토큰 추출
         String accessToken = jwtUtil.resolveToken(request);
-        String requestURI = request.getRequestURI(); // 수정: getRequestURI() 사용
-
-        if (requestURI.equals("/api/v1/auth/kakao")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
 
         // 토큰이 없으면 다음 필터로 진행
         if (accessToken == null) {
@@ -44,6 +38,7 @@ public class JWTFilter extends OncePerRequestFilter {
         // 토큰 만료시
         if (jwtUtil.isExpired(accessToken)){
             log.warn("[JwtFilter] Token is Expired, proceeding reissue.");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 -> refresh 요청
             refreshTokenService.reissueAccessToken(request, response);
             filterChain.doFilter(request, response);
             return;
