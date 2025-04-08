@@ -1,6 +1,8 @@
 package project.comebackhomebe.domain.dog.dogInfo.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import project.comebackhomebe.domain.dog.dogImage.entity.Image;
@@ -35,5 +37,17 @@ public class DogServiceImpl implements DogService {
         dogRepository.save(dog);
 
         return InfoResponse.of(dog);
+    }
+
+    @Override
+    public InfoResponse getInfo(Long id) throws IOException {
+        Dog dog = dogRepository.getByIdOrElseThrow(id);
+
+        return InfoResponse.of(dog);
+    }
+
+    @Override
+    public Page<InfoResponse> getAllInfos(Pageable pageable) {
+        return null;
     }
 }
