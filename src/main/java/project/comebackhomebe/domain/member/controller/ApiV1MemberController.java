@@ -25,6 +25,13 @@ public class ApiV1MemberController {
         return ResponseEntity.ok(memberService.loadOAuth2(provider, request, response));
     }
 
+    // 401 오류를 응답형태로 보내면 가능
+    // access 토큰 재발급
+    @PostMapping("/reissue")
+    public void reissue(HttpServletRequest request, HttpServletResponse response) {
+        refreshTokenService.reissueAccessToken(request, response);
+    }
+
     // 로그아웃
     @DeleteMapping("/logout")
     public void logout(HttpServletRequest request) {
