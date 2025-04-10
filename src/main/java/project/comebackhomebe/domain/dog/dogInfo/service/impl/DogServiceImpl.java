@@ -46,8 +46,6 @@ public class DogServiceImpl implements DogService {
     public InfoResponse getInfo(Long id) throws IOException {
         Dog dog = dogRepository.getByIdOrElseThrow(id);
 
-        Image image = dogImageRepository.
-
         return InfoResponse.of(dog);
     }
 

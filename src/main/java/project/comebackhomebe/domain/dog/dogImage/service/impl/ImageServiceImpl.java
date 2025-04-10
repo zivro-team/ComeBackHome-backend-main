@@ -58,6 +58,7 @@ public class ImageServiceImpl implements ImageService {
         List<String> imageUrls = new ArrayList<>();
 
         dogImageRepository.findById(dogId);
+        return imageUrls;
     }
 
     @Override
