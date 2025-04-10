@@ -43,6 +43,7 @@ public class ImageServiceImpl implements ImageService {
             storage.create(blobInfo, inputStream);
 
             String imageUrl = String.format("https://storage.googleapis.com/%s/%s", bucketName, fileName);
+
             imageUrls.add(imageUrl);
         }
 

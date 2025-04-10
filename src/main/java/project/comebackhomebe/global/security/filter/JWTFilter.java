@@ -38,7 +38,12 @@ public class JWTFilter extends OncePerRequestFilter {
         // 토큰 만료시
         if (jwtUtil.isExpired(accessToken)){
             log.warn("[JwtFilter] Token is Expired, proceeding reissue.");
+            // 1
+            // API 호출 2번을 해야되는거지
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 -> refresh 요청
+
+            // 2
+            // API 한번인데
             refreshTokenService.reissueAccessToken(request, response);
             filterChain.doFilter(request, response);
             return;

@@ -47,7 +47,12 @@ public class DogServiceImpl implements DogService {
     }
 
     @Override
-    public Page<InfoResponse> getAllInfos(Pageable pageable) {
+    public Page<InfoResponse> getList(Pageable pageable) {
+
+
+
         return null;
     }
+
+
 }
