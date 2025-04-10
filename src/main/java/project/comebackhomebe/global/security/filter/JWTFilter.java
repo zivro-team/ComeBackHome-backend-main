@@ -19,7 +19,6 @@ import java.io.IOException;
 public class JWTFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
-    private final RefreshTokenService refreshTokenService;
 
     // 접근 제한자
     @Override
@@ -38,13 +37,9 @@ public class JWTFilter extends OncePerRequestFilter {
         // 토큰 만료시
         if (jwtUtil.isExpired(accessToken)){
             log.warn("[JwtFilter] Token is Expired, proceeding reissue.");
-            // 1
-            // API 호출 2번을 해야되는거지
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 -> refresh 요청
 
-            // 2
-            // API 한번인데
-            refreshTokenService.reissueAccessToken(request, response);
+            response.setStatus(401);
+
             filterChain.doFilter(request, response);
             return;
         }
@@ -52,7 +47,7 @@ public class JWTFilter extends OncePerRequestFilter {
         // 여기서 refresh 와 access 나눠야함
         String category = jwtUtil.getCategory(accessToken);
         if (category == null || category.equals("refresh")) {
-            log.warn("[JWTFilter] No valid category found, proceeding without authentication.");
+            log.warn("[JWTFilter] 이건 리프레쉬 토큰입니다.");
             filterChain.doFilter(request, response);
             return;
         }

@@ -9,6 +9,7 @@ import project.comebackhomebe.global.redis.domain.RefreshToken;
 import project.comebackhomebe.global.redis.repository.RefreshTokenRepository;
 import project.comebackhomebe.global.redis.service.RefreshTokenService;
 import project.comebackhomebe.global.security.jwt.JwtUtil;
+import project.comebackhomebe.global.security.service.TokenResponseUtil;
 
 @Service
 @RequiredArgsConstructor
@@ -16,6 +17,7 @@ import project.comebackhomebe.global.security.jwt.JwtUtil;
 public class RefreshTokenServiceImpl implements RefreshTokenService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtUtil jwtUtil;
+    private final TokenResponseUtil tokenResponseUtil;
 
     @Override
     public void saveRefreshToken(String id, String accessToken, String refreshToken) {
@@ -37,31 +39,29 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     }
 
     @Override
-    public String findRefreshToken(HttpServletRequest request) {
-        String accessToken = jwtUtil.resolveToken(request);
+    public String findRefreshToken(HttpServletRequest request, HttpServletResponse response) {
+        String refreshToken = tokenResponseUtil.getCookie(request, response);
 
-        String verifyKey = jwtUtil.getVerifyKey(accessToken);
+        String verifyKey = jwtUtil.getVerifyKey(refreshToken);
 
         return refreshTokenRepository.findByVerifyKey(verifyKey).getRefreshToken();
     }
 
     @Override
     public void reissueAccessToken(HttpServletRequest request, HttpServletResponse response) {
-        String refreshToken = findRefreshToken(request);
+        String refreshToken = findRefreshToken(request, response);
 
         String newToken = jwtUtil.newGenerateToken(refreshToken);
         log.info("[newCreateAccessToken] New Access Token: {}", newToken);
 
-        response.setHeader("Authorization", newToken);
-
-        request.setAttribute("Authorization", newToken);
+        response.setHeader("Authorization", "Bearer " + newToken);
 
         updateRefreshToken(refreshToken, newToken);
     }
 
     @Override
-    public void deleteRefreshToken(HttpServletRequest request) {
-        String refreshToken = findRefreshToken(request);
+    public void deleteRefreshToken(HttpServletRequest request, HttpServletResponse response) {
+        String refreshToken = findRefreshToken(request, response);
 
         String verifyKey = jwtUtil.getVerifyKey(refreshToken);
         log.info("[deleteRefreshToken] Refresh Token: {}", refreshToken);

@@ -12,6 +12,7 @@ import project.comebackhomebe.domain.member.dto.OAuth2Info;
 import project.comebackhomebe.domain.member.entity.Role;
 import project.comebackhomebe.global.redis.service.RefreshTokenService;
 import project.comebackhomebe.global.security.jwt.JwtUtil;
+import project.comebackhomebe.global.security.service.TokenResponseUtil;
 
 import java.io.IOException;
 
@@ -20,6 +21,7 @@ import java.io.IOException;
 @Slf4j
 public class SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final JwtUtil jwtUtil;
+    private final TokenResponseUtil tokenResponseUtil;
     private final RefreshTokenService refreshTokenService;
 
     @Override
@@ -34,10 +36,11 @@ public class SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         String email = oAuth2Info.getEmail();
         Role role = oAuth2Info.getRole();
 
-        String accessToken = jwtUtil.generateToken("access", verifyKey, username, email, role, 10 * 60 * 1000L);
+        String accessToken = jwtUtil.generateToken("access", verifyKey, username, email, role, 1 * 60 * 1000L);
         String refreshToken = jwtUtil.generateToken("refresh", verifyKey, username, email, role, 60 * 60 * 1000L);
 
         response.setHeader("Authorization", accessToken);
+        response.addCookie(tokenResponseUtil.createCookie("refresh", refreshToken));
         refreshTokenService.saveRefreshToken(verifyKey, accessToken, refreshToken);
 
         log.info("Access Token: {}", accessToken);
