@@ -3,6 +3,7 @@ package project.comebackhomebe.domain.dog.dogInfo.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import project.comebackhomebe.domain.dog.dogImage.entity.Image;
+import project.comebackhomebe.global.util.BaseTimeEntity;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Dog {
+public class Dog extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

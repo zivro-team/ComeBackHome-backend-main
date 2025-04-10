@@ -1,6 +1,9 @@
 package project.comebackhomebe.domain.dog.dogInfo.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import project.comebackhomebe.domain.dog.dogImage.entity.Image;
@@ -9,6 +12,7 @@ import project.comebackhomebe.domain.dog.dogInfo.dto.response.InfoResponse;
 import project.comebackhomebe.domain.dog.dogInfo.entity.Dog;
 import project.comebackhomebe.domain.dog.dogInfo.entity.Gender;
 import project.comebackhomebe.domain.dog.dogInfo.repository.DogRepository;
+import project.comebackhomebe.domain.dog.dogInfo.repository.DogRepositoryCustom;
 import project.comebackhomebe.domain.dog.dogInfo.service.DogService;
 
 import java.io.IOException;
@@ -19,6 +23,7 @@ import java.util.stream.Collectors;
 @Service
 public class DogServiceImpl implements DogService {
     private final DogRepository dogRepository;
+    private final DogRepositoryCustom dogRepositoryCustom;
     private final ImageService imageService;
 
     @Override
@@ -36,4 +41,22 @@ public class DogServiceImpl implements DogService {
 
         return InfoResponse.of(dog);
     }
+
+    @Override
+    public InfoResponse getInfo(Long id) throws IOException {
+        Dog dog = dogRepository.getByIdOrElseThrow(id);
+
+        return InfoResponse.of(dog);
+    }
+
+    @Override
+    public List<InfoResponse> getList(Pageable pageable) {
+        Slice<Dog> dogs = dogRepositoryCustom.getAllDogInfo(pageable);
+
+        List<Dog> infoResponses = dogs.getContent();
+
+        return InfoResponse.listOf(infoResponses);
+    }
+
+
 }

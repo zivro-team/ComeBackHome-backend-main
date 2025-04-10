@@ -7,6 +7,7 @@ import project.comebackhomebe.domain.dog.dogInfo.entity.Status;
 import project.comebackhomebe.domain.dog.dogInfo.entity.Type;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public record InfoResponse(
         Type type,
@@ -25,5 +26,11 @@ public record InfoResponse(
                 dog.getHeight(),
                 ImageResponse.listOf(dog.getImageUrls())
         );
+    }
+
+    public static List<InfoResponse> listOf(List<Dog> dogs) {
+        return dogs.stream()
+                .map(InfoResponse::of)
+                .collect(Collectors.toList());
     }
 }
