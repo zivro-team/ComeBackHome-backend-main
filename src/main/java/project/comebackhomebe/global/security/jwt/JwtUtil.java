@@ -113,12 +113,12 @@ public class JwtUtil {
                 .compact();
     }
 
-    public String newGenerateToken(String refreshToken) {
+    public String newGenerateToken(String refreshToken, String category) {
         String verifyKey = getVerifyKey(refreshToken);
         String username = getUsername(refreshToken);
         String email = getEmail(refreshToken);
         Role role = getRole(refreshToken);
 
-        return generateToken("access", verifyKey, username, email, role, 10 * 60 * 1000L);
+        return generateToken(category, verifyKey, username, email, role, 10 * 60 * 1000L);
     }
 }

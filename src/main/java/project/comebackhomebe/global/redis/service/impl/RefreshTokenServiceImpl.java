@@ -28,12 +28,12 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     }
 
     @Override
-    public void updateRefreshToken(String refreshToken, String newToken) {
+    public void updateRefreshToken(String refreshToken, String newAccessToken, String newRefreshToken) {
         String verifyKey = jwtUtil.getVerifyKey(refreshToken);
 
         RefreshToken token = refreshTokenRepository.findByVerifyKey(verifyKey);
 
-        RefreshToken updatedToken = RefreshToken.update(token, newToken);
+        RefreshToken updatedToken = RefreshToken.update(token, newAccessToken, newRefreshToken);
 
         refreshTokenRepository.save(updatedToken);
     }
@@ -51,12 +51,13 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     public void reissueAccessToken(HttpServletRequest request, HttpServletResponse response) {
         String refreshToken = findRefreshToken(request, response);
 
-        String newToken = jwtUtil.newGenerateToken(refreshToken);
-        log.info("[newCreateAccessToken] New Access Token: {}", newToken);
+        String newAccessToken = jwtUtil.newGenerateToken(refreshToken, "access");
+        String newRefreshToken = jwtUtil.newGenerateToken(refreshToken, "refresh");
+        log.info("[newCreateAccessToken] New Access Token: {}", newAccessToken);
 
-        response.setHeader("Authorization", "Bearer " + newToken);
+        response.setHeader("Authorization", "Bearer " + newAccessToken);
 
-        updateRefreshToken(refreshToken, newToken);
+        updateRefreshToken(refreshToken, newAccessToken, newRefreshToken);
     }
 
     @Override
@@ -67,5 +68,10 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         log.info("[deleteRefreshToken] Refresh Token: {}", refreshToken);
 
         refreshTokenRepository.deleteById(verifyKey);
+    }
+
+    // refresh Rotate
+    public void refreshRotate(HttpServletRequest request, HttpServletResponse response) {
+        String refreshToken = findRefreshToken(request, response);
     }
 }
