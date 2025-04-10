@@ -41,7 +41,6 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     @Override
     public String findRefreshToken(HttpServletRequest request, HttpServletResponse response) {
         String refreshToken = tokenResponseUtil.getCookie(request, response);
-        log.info("Refresh token: {}", refreshToken);
 
         String verifyKey = jwtUtil.getVerifyKey(refreshToken);
 

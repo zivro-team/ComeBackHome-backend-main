@@ -16,9 +16,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
-import project.comebackhomebe.domain.member.service.MemberService;
 import project.comebackhomebe.global.redis.service.RefreshTokenService;
 import project.comebackhomebe.global.security.filter.JWTFilter;
+import project.comebackhomebe.global.security.filter.RefreshFilter;
 import project.comebackhomebe.global.security.handler.SuccessHandler;
 import project.comebackhomebe.global.security.jwt.JwtUtil;
 import project.comebackhomebe.global.security.service.CustomOAuth2Service;
@@ -32,7 +32,6 @@ import java.util.Collections;
 public class SecurityConfig {
 
     private final CustomOAuth2Service customOAuth2Service;
-    private final MemberService memberService;
     private final SuccessHandler successHandler;
     private final JwtUtil jwtUtil;
     private final CustomClientRegistrationRepo customClientRegistrationRepo;
@@ -66,12 +65,11 @@ public class SecurityConfig {
                 );
 
         http
-                .addFilterBefore(new JWTFilter(jwtUtil, refreshTokenService), UsernamePasswordAuthenticationFilter.class)
-                .addFilterAfter(new JWTFilter(jwtUtil, refreshTokenService), OAuth2LoginAuthenticationFilter.class);
+                .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
+        .addFilterBefore(new RefreshFilter(refreshTokenService, jwtUtil), OAuth2LoginAuthenticationFilter.class); // RefreshTokenFilter 추가
 
 
         //경로별 인가 작업
-
         http
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/").permitAll()

@@ -29,7 +29,6 @@ public class ApiV1MemberController {
     // access 토큰 재발급
     @PostMapping("/reissue")
     public void reissue(HttpServletRequest request, HttpServletResponse response) {
-        refreshTokenService.reissueAccessToken(request, response);
     }
 
     // 로그아웃
