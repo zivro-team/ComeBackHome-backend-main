@@ -17,7 +17,6 @@ public interface DogService {
     InfoResponse getInfo(Long id) throws IOException;
 
     // 전체 정보 가져오기
-    Page<InfoResponse> getList(Pageable pageable);
-
+    List<InfoResponse> getList(Pageable pageable);
 
 }

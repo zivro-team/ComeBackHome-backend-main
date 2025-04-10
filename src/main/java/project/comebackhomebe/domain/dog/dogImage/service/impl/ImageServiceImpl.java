@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import project.comebackhomebe.domain.dog.dogImage.repository.DogImageRepository;
 import project.comebackhomebe.domain.dog.dogImage.service.ImageService;
 
 import java.io.IOException;
@@ -19,6 +20,7 @@ import java.util.UUID;
 @Service
 public class ImageServiceImpl implements ImageService {
     private final Storage storage;
+    private final DogImageRepository dogImageRepository;
 
     @Value("${spring.cloud.gcp.storage.bucket}")
     private String bucketName;
@@ -49,6 +51,13 @@ public class ImageServiceImpl implements ImageService {
 
         return imageUrls;
 
+    }
+
+    @Override
+    public List<String> getImage(Long dogId) throws IOException {
+        List<String> imageUrls = new ArrayList<>();
+
+        dogImageRepository.findById(dogId);
     }
 
     @Override
