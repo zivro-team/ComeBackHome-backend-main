@@ -7,7 +7,7 @@ public interface RefreshTokenService {
     // refresh 토큰을 Redis에 저장
     void saveRefreshToken(String id, String accessToken, String refreshToken);
 
-    void updateRefreshToken(String oldToken, String newToken);
+    void updateRefreshToken(String oldToken, String newAccessToken, String newRefreshToken);
 
     // access 토큰으로 사용자 ID 추출 (jwtUtil) -> 사용자 ID로 refresh 토큰 찾기
     String findRefreshToken(HttpServletRequest request, HttpServletResponse response);

@@ -32,11 +32,11 @@ public class RefreshToken implements Serializable {
                 .build();
     }
 
-    public static RefreshToken update(RefreshToken refreshToken, String accessToken) {
+    public static RefreshToken update(RefreshToken refreshToken, String newAccessToken, String newRefreshToken) {
         return RefreshToken.builder()
                 .verifyKey(refreshToken.verifyKey)
-                .accessToken(accessToken)
-                .refreshToken(refreshToken.refreshToken)
+                .accessToken(newAccessToken)
+                .refreshToken(newRefreshToken)
                 .build();
     }
 }
