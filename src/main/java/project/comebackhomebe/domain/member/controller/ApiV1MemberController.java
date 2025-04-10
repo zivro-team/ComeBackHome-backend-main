@@ -20,12 +20,12 @@ public class ApiV1MemberController {
     private final RefreshTokenService refreshTokenService;
     private final MemberService memberService;
 
+    // 소셜 로그인
     @PostMapping("/{provider}")
     public ResponseEntity<OAuth2Response> verifyToken(@PathVariable String provider, HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException {
         return ResponseEntity.ok(memberService.loadOAuth2(provider, request, response));
     }
 
-    // 401 오류를 응답형태로 보내면 가능
     // access 토큰 재발급
     @PostMapping("/reissue")
     public void reissue(HttpServletRequest request, HttpServletResponse response) {
@@ -34,8 +34,8 @@ public class ApiV1MemberController {
 
     // 로그아웃
     @DeleteMapping("/logout")
-    public void logout(HttpServletRequest request) {
-        refreshTokenService.deleteRefreshToken(request);
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
+        refreshTokenService.deleteRefreshToken(request, response);
     }
 
 }
