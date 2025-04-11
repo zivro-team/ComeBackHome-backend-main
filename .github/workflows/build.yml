@@ -19,29 +19,41 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      # Gradle 캐시로 속도 최적화
+      - name: Caching Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
       - name: Build with Gradle
         run: |
           chmod +x gradlew
           ./gradlew build
 
+      # GCP 인증 (Artifact Registry + 권한용)
       - name: Authenticate to GCP
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
 
-      - name: Configure Docker for GCP
+      - name: Configure Docker for GCP Artifact Registry
         run: |
           gcloud auth configure-docker asia-northeast3-docker.pkg.dev --quiet
 
+      # Buildx 없이 깔끔한 이미지 빌드 & 푸시
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v2
         with:
           context: .
           push: true
           tags: asia-northeast3-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/backend-main/backend-main:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
 
+      # SSH로 GCP VM에 접속해 deploy.sh 실행
       - name: Deploy to GCP VM via SSH
         uses: appleboy/ssh-action@v0.1.6
         with:
@@ -50,3 +62,5 @@ jobs:
           key: ${{ secrets.GCP_SSH_KEY }}
           script: |
             bash ~/deploy.sh
+          script_stop: true
+          command_timeout: 15m
