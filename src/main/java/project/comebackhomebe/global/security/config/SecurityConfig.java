@@ -76,15 +76,28 @@ public class SecurityConfig {
         //경로별 인가 작업
         http
                 .authorizeHttpRequests((auth) -> auth
+                        // Swagger 관련 경로들을 가장 먼저 허용!
+                        .requestMatchers(
+                                "/swagger",
+                                "/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/api-docs",
+                                "/api-docs/**",
+                                "/v3/api-docs/**",
+                                "/swagger-resources/**",
+                                "/webjars/**"
+                        ).permitAll()
+
+                        // 그 외 인증이 필요 없는 경로
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/oauth/**").permitAll()
                         .requestMatchers("/oauth2/**").permitAll()
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/api/v1/auth/**").permitAll()
-                        .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**", "/swagger-resources", "/webjars/**").permitAll()
+
+                        // 나머지는 인증 필요
                         .anyRequest().authenticated()
                 );
-
         //세션 설정 : STATELESS
         http
                 .sessionManagement((session) -> session
