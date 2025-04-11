@@ -22,6 +22,9 @@ import project.comebackhomebe.global.security.filter.RefreshFilter;
 import project.comebackhomebe.global.security.handler.SuccessHandler;
 import project.comebackhomebe.global.security.jwt.JwtUtil;
 import project.comebackhomebe.global.security.service.CustomOAuth2Service;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.web.filter.ForwardedHeaderFilter;
+
 
 import java.util.Collections;
 import java.util.List;
@@ -126,6 +129,14 @@ public class SecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring()
                 .requestMatchers("/error", "/favicon.ico");
+    }
+
+    @Bean
+    public FilterRegistrationBean<ForwardedHeaderFilter> forwardedHeaderFilter() {
+        FilterRegistrationBean<ForwardedHeaderFilter> filterRegBean = new FilterRegistrationBean<>();
+        filterRegBean.setFilter(new ForwardedHeaderFilter());
+        filterRegBean.setOrder(0); // 가장 먼저 실행되게 설정
+        return filterRegBean;
     }
 }
 
