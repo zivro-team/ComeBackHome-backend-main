@@ -3,9 +3,8 @@ FROM openjdk:17-jdk
 # 작업 디렉토리 설정
 WORKDIR /app
 
-# JAR 파일을 컨테이너로 복사
-COPY build/libs/app-*.jar app.jar
+# 실행 가능한 JAR 파일을 복사
+COPY build/libs/Comebackhome-be-0.0.1-SNAPSHOT.jar app.jar
 
-
-# 실행 명령어
+# Spring Boot 실행
 ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=dev", "-Duser.timezone=Asia/Seoul", "/app/app.jar"]
