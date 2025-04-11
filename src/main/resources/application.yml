@@ -10,7 +10,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     show-sql: true
@@ -32,6 +32,8 @@ spring:
       org.hibernate.orm.jdbc.bind: TRACE
       org.hibernate.orm.jdbc.extract: TRACE
       org.springframework.transaction.interceptor: TRACE
+      org.springdoc: DEBUG
+      org.springframework: DEBUG
 
   data:
     redis:
@@ -43,3 +45,9 @@ spring:
     gcp:
       storage:
         bucket: comebackhome-bucket
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui/index.html
