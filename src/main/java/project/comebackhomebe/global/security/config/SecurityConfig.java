@@ -78,7 +78,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests((auth) -> auth
                         // Swagger 관련 경로들을 가장 먼저 허용!
                         .requestMatchers(
-                                "/swagger",
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
                                 "/api-docs",
