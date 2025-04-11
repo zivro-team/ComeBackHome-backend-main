@@ -113,13 +113,13 @@ public class SecurityConfig {
 
 
     // 계층 권한
-    @Bean
-    public RoleHierarchy roleHierarchy() {
-        return RoleHierarchyImpl.fromHierarchy(
-                """
-                        ADMIN > USER"""
-        );
-    }
+//    @Bean
+//    public RoleHierarchy roleHierarchy() {
+//        return RoleHierarchyImpl.fromHierarchy(
+//                """
+//                        ADMIN > USER"""
+//        );
+//    }
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
