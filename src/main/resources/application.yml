@@ -48,9 +48,12 @@ spring:
         bucket: comebackhome-bucket
 
 springdoc:
-  api-docs:
-    path: /v3/api-docs
+  packages-to-scan: project.comebackhomebe.domain
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
   swagger-ui:
-    path: /swagger-ui/index.html
-    url: https://cbh.kro.kr/v3/api-docs
+    path: /swagger-ui
+    disable-swagger-default-url: true
+    display-request-duration: true
+    operations-sorter: alpha
 
