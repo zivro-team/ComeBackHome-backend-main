@@ -52,5 +52,5 @@ springdoc:
     path: /v3/api-docs
   swagger-ui:
     path: /swagger-ui/index.html
-    url: https://cbh.kro.kr/v3/api-docs
+    url: /v3/api-docs
 
