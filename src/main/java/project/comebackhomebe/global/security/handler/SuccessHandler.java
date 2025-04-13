@@ -36,7 +36,7 @@ public class SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         String email = oAuth2Info.getEmail();
         Role role = oAuth2Info.getRole();
 
-        String accessToken = jwtUtil.generateToken("access", verifyKey, username, email, role, 1 * 60 * 1000L);
+        String accessToken = jwtUtil.generateToken("access", verifyKey, username, email, role, 100000 * 60 * 1000L);
         String refreshToken = jwtUtil.generateToken("refresh", verifyKey, username, email, role, 60 * 60 * 1000L);
 
         response.setHeader("Authorization", accessToken);

@@ -2,6 +2,7 @@ package project.comebackhomebe.domain.dog.dogHealth.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import project.comebackhomebe.domain.dog.dogHealth.dto.request.DogHealthRequest;
 import project.comebackhomebe.domain.dog.dogInfo.entity.Dog;
 
 @Entity
@@ -24,16 +25,16 @@ public class DogHealth {
 
     private String feature;
 
-    @ManyToOne
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "dog_id")
     private Dog dog;
 
-    public static DogHealth from(String health_status_1, String health_status_2, String health_status_3, String feature) {
+    public static DogHealth from(DogHealthRequest request) {
         return DogHealth.builder()
-                .health_status_1(health_status_1)
-                .health_status_2(health_status_2)
-                .health_status_3(health_status_3)
-                .feature(feature)
+                .health_status_1(request.health_status_1())
+                .health_status_2(request.health_status_2())
+                .health_status_3(request.health_status_3())
+                .feature(request.feature())
                 .build();
     }
 }

@@ -2,6 +2,8 @@ package project.comebackhomebe.domain.dog.dogInfo.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import project.comebackhomebe.domain.dog.dogHealth.dto.request.DogHealthRequest;
+import project.comebackhomebe.domain.dog.dogHealth.entity.DogHealth;
 import project.comebackhomebe.domain.dog.dogImage.entity.Image;
 import project.comebackhomebe.global.util.BaseTimeEntity;
 
@@ -45,7 +47,10 @@ public class Dog extends BaseTimeEntity {
     @ToString.Exclude
     private List<Image> imageUrls; // 이미지들
 
-    public static Dog createDiscover(String breed, Gender gender, String height, List<Image> imageUrls) {
+    @OneToOne(mappedBy = "dog", cascade = CascadeType.ALL, orphanRemoval = true)
+    private DogHealth health;
+
+    public static Dog createDiscover(String breed, Gender gender, String height, List<Image> imageUrls, DogHealthRequest healthRequest) {
         Dog dog = Dog.builder()
                 .type(Type.DISCOVER)
                 .status(Status.FIND)
@@ -57,6 +62,8 @@ public class Dog extends BaseTimeEntity {
 
         imageUrls.forEach(dog::addImage);
 
+        DogHealth dogHealth = DogHealth.from(healthRequest);
+        dog.addHealth(dogHealth);
         return dog;
     }
 
@@ -94,6 +101,11 @@ public class Dog extends BaseTimeEntity {
     public void addImage(Image image) {
         this.imageUrls.add(image);
         image.setDog(this); // Image의 dog 필드 설정
+    }
+
+    public void addHealth(DogHealth health) {
+        this.health = health;
+        health.setDog(this);
     }
 
 }

@@ -16,10 +16,8 @@ public class DogHealthServiceImpl implements DogHealthService {
 
     @Override
     public DogHealthResponse createDogHealth(DogHealthRequest dogHealthRequest) {
-        DogHealth dogHealth = DogHealth.from(
-                dogHealthRequest.health_status_1(), dogHealthRequest.health_status_2(),
-                dogHealthRequest.health_status_3(), dogHealthRequest.feature()
-        );
+
+        DogHealth dogHealth = DogHealth.from(dogHealthRequest);
 
         return DogHealthResponse.of(dogHealth);
     }
