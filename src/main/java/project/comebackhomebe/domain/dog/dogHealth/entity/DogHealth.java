@@ -1,16 +1,12 @@
 package project.comebackhomebe.domain.dog.dogHealth.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
+import project.comebackhomebe.domain.dog.dogInfo.entity.Dog;
 
 @Entity
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -27,6 +23,10 @@ public class DogHealth {
     private String health_status_3;
 
     private String feature;
+
+    @ManyToOne
+    @JoinColumn(name = "dog_id")
+    private Dog dog;
 
     public static DogHealth from(String health_status_1, String health_status_2, String health_status_3, String feature) {
         return DogHealth.builder()
