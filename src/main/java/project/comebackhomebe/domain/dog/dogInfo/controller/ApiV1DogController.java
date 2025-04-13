@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import project.comebackhomebe.domain.dog.dogHealth.dto.request.DogHealthRequest;
 import project.comebackhomebe.domain.dog.dogInfo.dto.request.InfoRequest;
 import project.comebackhomebe.domain.dog.dogInfo.dto.response.InfoResponse;
 import project.comebackhomebe.domain.dog.dogInfo.service.DogService;
@@ -23,8 +24,9 @@ public class ApiV1DogController {
     // 정보 생성
     @PostMapping(consumes = "multipart/form-data")
     public ResponseEntity<InfoResponse> createDogInfo(@RequestPart("infoRequest") @Valid InfoRequest infoRequest,
-                                                  @RequestPart("images") List<MultipartFile> images) throws IOException {
-        return ResponseEntity.ok(dogService.createInfo(infoRequest.breed(), infoRequest.gender(), infoRequest.height(), images));
+                                                      @RequestPart("healthRequest") @Valid DogHealthRequest healthRequest,
+                                                      @RequestPart("images") List<MultipartFile> images) throws IOException {
+        return ResponseEntity.ok(dogService.createInfo(infoRequest.breed(), infoRequest.gender(), infoRequest.height(), images, healthRequest));
     }
     //
     // 정보 가져오기
