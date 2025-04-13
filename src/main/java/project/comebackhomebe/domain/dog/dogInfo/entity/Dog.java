@@ -5,6 +5,7 @@ import lombok.*;
 import project.comebackhomebe.domain.dog.dogImage.entity.Image;
 import project.comebackhomebe.global.util.BaseTimeEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -45,14 +46,18 @@ public class Dog extends BaseTimeEntity {
     private List<Image> imageUrls; // 이미지들
 
     public static Dog createDiscover(String breed, Gender gender, String height, List<Image> imageUrls) {
-        return Dog.builder()
+        Dog dog = Dog.builder()
                 .type(Type.DISCOVER)
                 .status(Status.FIND)
                 .breed(breed)
                 .gender(gender)
                 .height(height)
-                .imageUrls(imageUrls)
+                .imageUrls(new ArrayList<>())
                 .build();
+
+        imageUrls.forEach(dog::addImage);
+
+        return dog;
     }
 
     public static Dog createLost(String breed, Gender gender, String height, List<Image> imageUrls) {
@@ -84,6 +89,11 @@ public class Dog extends BaseTimeEntity {
                 .gender(dog.gender)
                 .height(dog.height)
                 .build();
+    }
+
+    public void addImage(Image image) {
+        this.imageUrls.add(image);
+        image.setDog(this); // Image의 dog 필드 설정
     }
 
 }

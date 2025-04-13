@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import project.comebackhomebe.domain.dog.dogInfo.entity.Dog;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
