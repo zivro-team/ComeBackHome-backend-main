@@ -2,9 +2,7 @@ version: '3.8'
 
 services:
   backend:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: asia-northeast3-docker.pkg.dev/comebackhome-454307/backend-main/backend-main:latest
     container_name: backend-container
     restart: unless-stopped
     ports:
