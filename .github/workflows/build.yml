@@ -33,7 +33,7 @@ jobs:
       - name: Build with Gradle
         run: |
           chmod +x gradlew
-          ./gradlew build
+          ./gradlew clean build
 
       # GCP 인증 (Artifact Registry + 권한용)
       - name: Authenticate to GCP
