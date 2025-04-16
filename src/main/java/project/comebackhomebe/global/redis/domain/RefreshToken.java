@@ -20,14 +20,11 @@ public class RefreshToken implements Serializable {
     @Id
     private String verifyKey; // 카카오 ID
 
-    private String accessToken; // Access 토큰
-
     private String refreshToken; // Refresh 토큰
 
     public static RefreshToken from(String verifyKey, String accessToken, String refreshToken) {
         return RefreshToken.builder()
                 .verifyKey(verifyKey)
-                .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
     }
@@ -35,7 +32,6 @@ public class RefreshToken implements Serializable {
     public static RefreshToken update(RefreshToken refreshToken, String newAccessToken, String newRefreshToken) {
         return RefreshToken.builder()
                 .verifyKey(refreshToken.verifyKey)
-                .accessToken(newAccessToken)
                 .refreshToken(newRefreshToken)
                 .build();
     }
