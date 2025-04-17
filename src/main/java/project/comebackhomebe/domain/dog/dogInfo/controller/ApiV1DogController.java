@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import project.comebackhomebe.domain.dog.dogHealth.dto.request.DogHealthRequest;
+import project.comebackhomebe.domain.dog.dogImage.dto.response.ImageResponse;
+import project.comebackhomebe.domain.dog.dogImage.service.ImageService;
 import project.comebackhomebe.domain.dog.dogInfo.dto.request.InfoRequest;
 import project.comebackhomebe.domain.dog.dogInfo.dto.response.InfoResponse;
 import project.comebackhomebe.domain.dog.dogInfo.service.DogService;
@@ -26,6 +28,7 @@ import java.util.List;
 public class ApiV1DogController {
 
     private final DogService dogService;
+    private final ImageService imageService;
 
     // 정보 생성
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -62,8 +65,10 @@ public class ApiV1DogController {
     }
 
     // 정보 수정하기
-
-
+    @PostMapping("/test")
+    public ResponseEntity<List<String>> testImageUrls(@RequestPart("images") List<MultipartFile> images) throws IOException {
+        return ResponseEntity.ok(imageService.saveImage(images));
+    }
     // 정보 삭제하기
 
 }
