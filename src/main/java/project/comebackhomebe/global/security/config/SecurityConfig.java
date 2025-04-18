@@ -93,6 +93,7 @@ public class SecurityConfig {
                         .requestMatchers("/oauth2/**").permitAll()
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers("/api/v1/dogInfo/**").permitAll()
 
                         // 나머지는 인증 필요
                         .anyRequest().authenticated()
