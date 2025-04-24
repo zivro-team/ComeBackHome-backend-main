@@ -1,6 +1,8 @@
 package project.comebackhomebe.domain.member.service.impl;
 
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -14,8 +16,13 @@ import project.comebackhomebe.domain.member.repository.MemberRepository;
 import project.comebackhomebe.domain.member.service.MemberService;
 import project.comebackhomebe.domain.member.service.RestTemplateService;
 import project.comebackhomebe.global.redis.service.RefreshTokenService;
+import project.comebackhomebe.global.security.auth.GoogleResponse;
+import project.comebackhomebe.global.security.auth.KakaoResponse;
+import project.comebackhomebe.global.security.auth.NaverResponse;
 import project.comebackhomebe.global.security.auth.OAuth2Response;
 import project.comebackhomebe.global.security.jwt.JwtUtil;
+
+import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +32,7 @@ public class MemberServiceImpl implements MemberService {
     private final RestTemplateService restTemplateService;
     private final RefreshTokenService refreshTokenService;
     private final JwtUtil jwtUtil;
+    private final ObjectMapper objectMapper;
 
     @Override
     public OAuth2Info getOAuth2Info(OAuth2Response oAuth2Response) {
@@ -79,6 +87,27 @@ public class MemberServiceImpl implements MemberService {
 
         log.info("Access Token: {}", accessToken);
         log.info("Refresh Token: {}", refreshToken);
+    }
+
+    @Override
+    public OAuth2Response getOAuth2Data(String provider, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        OAuth2Response oAuth2Response = parseResponse(provider, response); // 소셜에 맞는 데이터로 변환
+
+        OAuth2Info oAuth2Info = getOAuth2Info(oAuth2Response); // DB 저장 DTO
+
+        pushToken(oAuth2Info, response); // 토큰 생성
+
+        return oAuth2Response;
+    }
+
+
+    private OAuth2Response parseResponse(String provider, HttpServletResponse response) throws IOException {
+        return switch (provider.toUpperCase()) {
+            case "KAKAO" -> objectMapper.readValue((JsonParser) response, KakaoResponse.class);
+            case "GOOGLE" -> objectMapper.readValue((JsonParser) response, GoogleResponse.class);
+            case "NAVER" -> objectMapper.readValue((JsonParser) response, NaverResponse.class);
+            default -> throw new IllegalArgumentException("지원하지 않는 OAuth2 공급자입니다.");
+        };
     }
 
 
