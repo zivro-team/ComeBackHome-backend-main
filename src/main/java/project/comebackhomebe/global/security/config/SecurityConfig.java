@@ -16,6 +16,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import project.comebackhomebe.global.redis.repository.BlacklistRepository;
 import project.comebackhomebe.global.redis.service.RefreshTokenService;
 import project.comebackhomebe.global.security.filter.JWTFilter;
 import project.comebackhomebe.global.security.filter.RefreshFilter;
@@ -40,6 +41,7 @@ public class SecurityConfig {
     private final JwtUtil jwtUtil;
     private final CustomClientRegistrationRepo customClientRegistrationRepo;
     private final RefreshTokenService refreshTokenService;
+    private final BlacklistRepository blacklistRepository;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -69,7 +71,7 @@ public class SecurityConfig {
                 );
 
         http
-                .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JWTFilter(jwtUtil, blacklistRepository), UsernamePasswordAuthenticationFilter.class)
         .addFilterBefore(new RefreshFilter(refreshTokenService, jwtUtil), OAuth2LoginAuthenticationFilter.class); // RefreshTokenFilter 추가
 
 
@@ -94,6 +96,7 @@ public class SecurityConfig {
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/api/v1/dogInfo/**").permitAll()
+                        .requestMatchers("/api/v2/member/**").permitAll()
 
                         // 나머지는 인증 필요
                         .anyRequest().authenticated()

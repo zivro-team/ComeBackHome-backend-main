@@ -30,7 +30,7 @@ public class TokenResponseUtil {
         return cookie;
     }
 
-    public String getCookie(HttpServletRequest request, HttpServletResponse response) {
+    public String getCookie(HttpServletRequest request) {
         String refresh = null; // 여기서 원래 refresh 토큰 받아야함?
 
         // 리프레쉬 토큰 추출
@@ -57,5 +57,12 @@ public class TokenResponseUtil {
         return request.getUserPrincipal();
     }
 
+    public void expiredCookie(HttpServletResponse response) {
+        Cookie expiredCookie = new Cookie("refresh", null);
+        expiredCookie.setPath("/");
+        expiredCookie.setHttpOnly(true);
+        expiredCookie.setMaxAge(0); // 즉시 만료
+        response.addCookie(expiredCookie);
+    }
 
 }

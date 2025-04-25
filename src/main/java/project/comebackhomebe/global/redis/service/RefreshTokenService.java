@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public interface RefreshTokenService {
     // refresh 토큰을 Redis에 저장
-    void saveRefreshToken(String id, String accessToken, String refreshToken);
+    void saveRefreshToken(String id, String refreshToken);
 
     void updateRefreshToken(String oldToken, String newAccessToken, String newRefreshToken);
 

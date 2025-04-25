@@ -1,16 +1,11 @@
 package project.comebackhomebe.global.security.auth;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.Map;
 
-@Getter
-@Setter
+
 @NoArgsConstructor
-@AllArgsConstructor
 public class KakaoResponse implements OAuth2Response {
 
     private Long id;
@@ -25,7 +20,7 @@ public class KakaoResponse implements OAuth2Response {
 
     @Override
     public String getProvider() {
-        return "Kakao";
+        return "kakao";
     }
 
     @Override
@@ -35,18 +30,15 @@ public class KakaoResponse implements OAuth2Response {
 
     @Override
     public String getEmail() {
-        if (kakao_account != null && kakao_account.containsKey("email")) {
-            return kakao_account.get("email").toString();
-        }
-        return "N/A";
+        return kakao_account != null && kakao_account.containsKey("email")
+                ? kakao_account.get("email").toString()
+                : "N/A";
     }
 
     @Override
     public String getName() {
-        if (properties != null && properties.containsKey("nickname")) {
-            return properties.get("nickname").toString();
-        }
-        return "N/A";
+        return properties != null && properties.containsKey("nickname")
+                ? properties.get("nickname").toString()
+                : "N/A";
     }
 }
-
