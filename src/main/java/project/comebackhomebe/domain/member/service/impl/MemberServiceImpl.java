@@ -22,6 +22,7 @@ import project.comebackhomebe.global.security.auth.NaverResponse;
 import project.comebackhomebe.global.security.auth.OAuth2Response;
 import project.comebackhomebe.global.security.jwt.JwtUtil;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 
 @Service
@@ -91,7 +92,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public OAuth2Response getOAuth2Data(String provider, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        OAuth2Response oAuth2Response = parseResponse(provider, response); // 소셜에 맞는 데이터로 변환
+
+        OAuth2Response oAuth2Response = parseResponse(provider, request); // 소셜에 맞는 데이터로 변환
 
         OAuth2Info oAuth2Info = getOAuth2Info(oAuth2Response); // DB 저장 DTO
 
@@ -101,11 +103,23 @@ public class MemberServiceImpl implements MemberService {
     }
 
 
-    private OAuth2Response parseResponse(String provider, HttpServletResponse response) throws IOException {
+    private OAuth2Response parseResponse(String provider, HttpServletRequest request) throws IOException {
+
+        StringBuilder jsonBuilder = new StringBuilder();
+
+        try (BufferedReader reader = request.getReader()) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                jsonBuilder.append(line);
+            }
+        }
+
+        String responseBody = jsonBuilder.toString();
+
         return switch (provider.toUpperCase()) {
-            case "KAKAO" -> objectMapper.readValue((JsonParser) response, KakaoResponse.class);
-            case "GOOGLE" -> objectMapper.readValue((JsonParser) response, GoogleResponse.class);
-            case "NAVER" -> objectMapper.readValue((JsonParser) response, NaverResponse.class);
+            case "KAKAO" -> objectMapper.readValue(responseBody, KakaoResponse.class);
+            case "GOOGLE" -> objectMapper.readValue(responseBody, GoogleResponse.class);
+            case "NAVER" -> objectMapper.readValue(responseBody, NaverResponse.class);
             default -> throw new IllegalArgumentException("지원하지 않는 OAuth2 공급자입니다.");
         };
     }
