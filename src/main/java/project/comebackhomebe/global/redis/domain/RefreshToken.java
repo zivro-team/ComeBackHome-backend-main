@@ -17,9 +17,10 @@ import java.io.Serializable;
 @RedisHash(value = "Token", timeToLive = 60 * 60 * 24 * 14)
 public class RefreshToken implements Serializable {
 
-    @Id
+
     private String verifyKey; // 회원 ID
 
+    @Id
     private String refreshToken; // Refresh 토큰
 
     public static RefreshToken from(String verifyKey, String refreshToken) {
