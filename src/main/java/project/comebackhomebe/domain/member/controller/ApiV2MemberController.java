@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.comebackhomebe.domain.member.service.MemberService;
+import project.comebackhomebe.global.redis.service.impl.BlacklistService;
 import project.comebackhomebe.global.redis.service.impl.V2ReissueService;
 import project.comebackhomebe.global.security.auth.OAuth2Response;
 
@@ -17,6 +18,7 @@ import java.io.IOException;
 public class ApiV2MemberController {
     private final MemberService memberService;
     private final V2ReissueService refreshTokenService;
+    private final BlacklistService blacklistService;
 
     @PostMapping("/{provider}")
     public ResponseEntity<OAuth2Response> login(@PathVariable("provider") String provider,
@@ -33,5 +35,6 @@ public class ApiV2MemberController {
     @DeleteMapping("/logout")
     public void logout(HttpServletRequest request, HttpServletResponse response) {
         refreshTokenService.deleteRefreshToken(request, response);
+        blacklistService.createBlacklist(request);
     }
 }
