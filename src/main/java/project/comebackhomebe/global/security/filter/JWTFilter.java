@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
+import project.comebackhomebe.global.redis.repository.BlacklistRepository;
 import project.comebackhomebe.global.redis.service.RefreshTokenService;
 import project.comebackhomebe.global.security.jwt.JwtUtil;
 
@@ -19,6 +20,7 @@ import java.io.IOException;
 public class JWTFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
+    private final BlacklistRepository blacklistRepository;
 
     // 접근 제한자
     @Override
@@ -30,6 +32,13 @@ public class JWTFilter extends OncePerRequestFilter {
         // 토큰이 없으면 다음 필터로 진행
         if (accessToken == null) {
             log.warn("[JWTFilter] No valid token found, proceeding without authentication.");
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        // blacklist 체크
+        if (blacklistRepository.existsById(accessToken)) {
+            log.warn("[JWTFilter] Blacklisted access token [{}]", accessToken);
             filterChain.doFilter(request, response);
             return;
         }

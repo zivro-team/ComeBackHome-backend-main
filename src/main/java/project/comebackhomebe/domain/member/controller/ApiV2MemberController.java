@@ -37,4 +37,9 @@ public class ApiV2MemberController {
         refreshTokenService.deleteRefreshToken(request, response);
         blacklistService.createBlacklist(request);
     }
+
+    @GetMapping("/test")
+    public void test(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        System.out.println("blacklist test");
+    }
 }
