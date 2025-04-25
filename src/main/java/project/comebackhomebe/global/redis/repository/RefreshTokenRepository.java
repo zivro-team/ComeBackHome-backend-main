@@ -9,4 +9,6 @@ import project.comebackhomebe.global.redis.domain.RefreshToken;
 @EnableRedisRepositories(basePackageClasses = RefreshTokenRepository.class)
 public interface RefreshTokenRepository extends CrudRepository<RefreshToken, String> {
     RefreshToken findByVerifyKey(String verifyKey);
+
+    RefreshToken findByRefreshToken(String refreshToken);
 }

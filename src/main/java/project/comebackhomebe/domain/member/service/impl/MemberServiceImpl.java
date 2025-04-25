@@ -83,7 +83,7 @@ public class MemberServiceImpl implements MemberService {
         String refreshToken = jwtUtil.generateToken("refresh", verifyKey, username, email, role, 60 * 60 * 1000L);
 
         response.setHeader("Authorization", accessToken);
-        refreshTokenService.saveRefreshToken(verifyKey, accessToken, refreshToken);
+        refreshTokenService.saveRefreshToken(verifyKey, refreshToken);
 
         log.info("Access Token: {}", accessToken);
         log.info("Refresh Token: {}", refreshToken);

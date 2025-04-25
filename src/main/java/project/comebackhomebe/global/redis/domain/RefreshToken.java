@@ -18,18 +18,18 @@ import java.io.Serializable;
 public class RefreshToken implements Serializable {
 
     @Id
-    private String verifyKey; // 카카오 ID
+    private String verifyKey; // 회원 ID
 
     private String refreshToken; // Refresh 토큰
 
-    public static RefreshToken from(String verifyKey, String accessToken, String refreshToken) {
+    public static RefreshToken from(String verifyKey, String refreshToken) {
         return RefreshToken.builder()
                 .verifyKey(verifyKey)
                 .refreshToken(refreshToken)
                 .build();
     }
 
-    public static RefreshToken update(RefreshToken refreshToken, String newAccessToken, String newRefreshToken) {
+    public static RefreshToken update(RefreshToken refreshToken, String newRefreshToken) {
         return RefreshToken.builder()
                 .verifyKey(refreshToken.verifyKey)
                 .refreshToken(newRefreshToken)

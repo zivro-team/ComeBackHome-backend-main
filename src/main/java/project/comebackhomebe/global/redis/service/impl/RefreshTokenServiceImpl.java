@@ -20,8 +20,8 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     private final TokenResponseUtil tokenResponseUtil;
 
     @Override
-    public void saveRefreshToken(String id, String accessToken, String refreshToken) {
-        RefreshToken token = RefreshToken.from(id, accessToken, refreshToken);
+    public void saveRefreshToken(String id, String refreshToken) {
+        RefreshToken token = RefreshToken.from(id, refreshToken);
         log.info("Saving refresh token: {}", token);
 
         refreshTokenRepository.save(token);
@@ -33,14 +33,14 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
         RefreshToken token = refreshTokenRepository.findByVerifyKey(verifyKey);
 
-        RefreshToken updatedToken = RefreshToken.update(token, newAccessToken, newRefreshToken);
+        RefreshToken updatedToken = RefreshToken.update(token, newRefreshToken);
 
         refreshTokenRepository.save(updatedToken);
     }
 
     @Override
     public String findRefreshToken(HttpServletRequest request, HttpServletResponse response) {
-        String refreshToken = tokenResponseUtil.getCookie(request, response);
+        String refreshToken = tokenResponseUtil.getCookie(request);
 
         String verifyKey = jwtUtil.getVerifyKey(refreshToken);
 
