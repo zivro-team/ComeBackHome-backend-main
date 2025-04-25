@@ -4,10 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import project.comebackhomebe.domain.member.service.MemberService;
 import project.comebackhomebe.global.redis.service.impl.V2ReissueService;
 import project.comebackhomebe.global.security.auth.OAuth2Response;
@@ -31,5 +28,10 @@ public class ApiV2MemberController {
     @PostMapping("/reissue")
     public void reissue(HttpServletRequest request, HttpServletResponse response) {
         refreshTokenService.reissueAccessToken(request, response);
+    }
+
+    @DeleteMapping("/logout")
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
+        refreshTokenService.deleteRefreshToken(request, response);
     }
 }

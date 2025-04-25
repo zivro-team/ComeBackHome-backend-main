@@ -78,4 +78,12 @@ public class V2ReissueService {
 
         log.info("토큰 발행 완료 : {}", newAccessToken);
     }
+
+    public void deleteRefreshToken(HttpServletRequest request, HttpServletResponse response) {
+        String refreshToken = tokenResponseUtil.getCookie(request);
+
+        refreshTokenRepository.deleteById(refreshToken);
+
+        tokenResponseUtil.expiredCookie(response);
+    }
 }

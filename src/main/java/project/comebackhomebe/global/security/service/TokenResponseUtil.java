@@ -57,5 +57,12 @@ public class TokenResponseUtil {
         return request.getUserPrincipal();
     }
 
+    public void expiredCookie(HttpServletResponse response) {
+        Cookie expiredCookie = new Cookie("refresh", null);
+        expiredCookie.setPath("/");
+        expiredCookie.setHttpOnly(true);
+        expiredCookie.setMaxAge(0); // 즉시 만료
+        response.addCookie(expiredCookie);
+    }
 
 }
