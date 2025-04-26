@@ -73,6 +73,17 @@ public class DogServiceImpl implements DogService {
     }
 
     @Override
+    public InfoResponse updateInfo(Long id) throws IOException {
+        Dog dog = dogRepository.getByIdOrElseThrow(id);
+
+        Dog updateDog = Dog.updateDogInfo(id, dog);
+
+        dogRepository.save(updateDog);
+
+        return InfoResponse.of(updateDog);
+    }
+
+    @Override
     public List<InfoResponse> getList(Pageable pageable) {
         Slice<Dog> dogs = dogRepositoryCustom.getAllDogInfo(pageable);
 

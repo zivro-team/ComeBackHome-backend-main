@@ -84,23 +84,16 @@ public class Dog extends BaseTimeEntity {
         return dog;
     }
 
-    public static Dog updateDiscover(Dog dog) {
+    public static Dog updateDogInfo(Long id, Dog dog) {
         return Dog.builder()
-                .type(Type.DISCOVER)
+                .id(id)
+                .type(dog.type)
                 .status(Status.FOUND)
                 .breed(dog.breed)
                 .gender(dog.gender)
                 .height(dog.height)
-                .build();
-    }
-
-    public static Dog updateLost(Dog dog) {
-        return Dog.builder()
-                .type(Type.LOST)
-                .status(Status.FOUND)
-                .breed(dog.breed)
-                .gender(dog.gender)
-                .height(dog.height)
+                .imageUrls(dog.imageUrls)
+                .health(dog.health)
                 .build();
     }
 

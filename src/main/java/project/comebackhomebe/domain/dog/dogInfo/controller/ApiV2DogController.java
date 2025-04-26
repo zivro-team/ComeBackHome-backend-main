@@ -69,10 +69,11 @@ public class ApiV2DogController {
     }
 
     // 정보 수정하기
-    @PostMapping("/test")
-    public ResponseEntity<List<String>> testImageUrls(@RequestPart("images") List<MultipartFile> images) throws IOException {
-        return ResponseEntity.ok(imageService.saveImage(images));
+    @PatchMapping("/{id}")
+    public ResponseEntity<InfoResponse> updateDogInfo(@PathVariable("id") Long id) throws IOException {
+        return ResponseEntity.ok(dogService.updateInfo(id));
     }
+
     // 정보 삭제하기
 
 }
