@@ -14,6 +14,7 @@ import project.comebackhomebe.domain.dog.dogImage.service.ImageService;
 import project.comebackhomebe.domain.dog.dogInfo.dto.response.InfoResponse;
 import project.comebackhomebe.domain.dog.dogInfo.entity.Dog;
 import project.comebackhomebe.domain.dog.dogInfo.entity.Gender;
+import project.comebackhomebe.domain.dog.dogInfo.entity.Type;
 import project.comebackhomebe.domain.dog.dogInfo.repository.DogRepository;
 import project.comebackhomebe.domain.dog.dogInfo.repository.DogRepositoryCustom;
 import project.comebackhomebe.domain.dog.dogInfo.service.DogService;
@@ -48,7 +49,7 @@ public class DogServiceImpl implements DogService {
     }
 
     @Override
-    public InfoResponse getInfo(String breed, Gender gender, String height, List<DogImageRequest> images, DogHealthRequest healthRequest) throws IOException {
+    public InfoResponse createInfos(Type type, String breed, Gender gender, String height, List<DogImageRequest> images, DogHealthRequest healthRequest) throws IOException {
         List<String> imageUrls = images.stream()
                 .map(DogImageRequest::imageUrl)
                 .toList();
@@ -57,7 +58,7 @@ public class DogServiceImpl implements DogService {
                 .map(Image::from) // Image 생성자 사용
                 .collect(Collectors.toList());
 
-        Dog dog = Dog.createDiscover(breed, gender, height, imageEntities, healthRequest);
+        Dog dog = Dog.createDogInfo(type, breed, gender, height, imageEntities, healthRequest);
 
         dogRepository.save(dog);
 
@@ -72,6 +73,40 @@ public class DogServiceImpl implements DogService {
     }
 
     @Override
+    public InfoResponse updateInfo(Long id) throws IOException {
+        Dog dog = dogRepository.getByIdOrElseThrow(id);
+
+        Dog updateDog = Dog.updateDogInfo(id, dog);
+
+        dogRepository.save(updateDog);
+
+        return InfoResponse.of(updateDog);
+    }
+
+    @Override
+    public List<InfoResponse> getListByBreed(String breed, Pageable pageable) {
+        Slice<Dog> dogs = dogRepositoryCustom.getDogInfoByBreed(breed, pageable);
+
+        List<Dog> infoResponses = dogs.getContent();
+
+        return InfoResponse.listOf(infoResponses);
+    }
+
+    @Override
+    public List<InfoResponse> getListByType(Type type, Pageable pageable) {
+        Slice<Dog> dogs = dogRepositoryCustom.getDogInfoByType(type, pageable);
+
+        List<Dog> infoResponses = dogs.getContent();
+
+        return InfoResponse.listOf(infoResponses);
+    }
+
+    @Override
+    public void deleteInfo(Long id) throws IOException {
+        dogRepository.deleteById(id);
+    }
+
+    @Override
     public List<InfoResponse> getList(Pageable pageable) {
         Slice<Dog> dogs = dogRepositoryCustom.getAllDogInfo(pageable);
 
@@ -79,6 +114,8 @@ public class DogServiceImpl implements DogService {
 
         return InfoResponse.listOf(infoResponses);
     }
+
+
 
 
 }

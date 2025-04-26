@@ -18,6 +18,7 @@ import project.comebackhomebe.domain.dog.dogImage.dto.response.ImageResponse;
 import project.comebackhomebe.domain.dog.dogImage.service.ImageService;
 import project.comebackhomebe.domain.dog.dogInfo.dto.request.InfoRequest;
 import project.comebackhomebe.domain.dog.dogInfo.dto.response.InfoResponse;
+import project.comebackhomebe.domain.dog.dogInfo.entity.Type;
 import project.comebackhomebe.domain.dog.dogInfo.service.DogService;
 
 import java.io.IOException;
@@ -30,10 +31,9 @@ import java.util.List;
 public class ApiV2DogController {
 
     private final DogService dogService;
-    private final ImageService imageService;
 
     // 정보 생성
-    @PostMapping
+    @PostMapping("/{type}")
     @Operation(summary = "강아지 정보 생성 (LOST)", description = "강아지를 잃어버렸을 때 사용하는 API")
     @Parameters({
             @Parameter(name = "breed", description = "강아지 종", example = "골든 리트리버"),
@@ -45,10 +45,11 @@ public class ApiV2DogController {
             @Parameter(name = "feature", description = "특징", example = "개 목걸이가 걸려있음"),
 
     })
-    public ResponseEntity<InfoResponse> createDogInfo(@RequestPart("infoRequest") @Valid InfoRequest infoRequest,
+    public ResponseEntity<InfoResponse> createDogInfo(@PathVariable("type") Type type,
+                                                      @RequestPart("infoRequest") @Valid InfoRequest infoRequest,
                                                       @RequestPart("healthRequest") @Valid DogHealthRequest healthRequest,
                                                       @RequestPart("images") @Valid List<DogImageRequest> imageRequest) throws IOException {
-        return ResponseEntity.ok(dogService.getInfo(infoRequest.breed(), infoRequest.gender(), infoRequest.height(), imageRequest, healthRequest));
+        return ResponseEntity.ok(dogService.createInfos(type, infoRequest.breed(), infoRequest.gender(), infoRequest.height(), imageRequest, healthRequest));
     }
 
     //
@@ -67,11 +68,30 @@ public class ApiV2DogController {
     }
 
     // 정보 수정하기
-    @PostMapping("/test")
-    public ResponseEntity<List<String>> testImageUrls(@RequestPart("images") List<MultipartFile> images) throws IOException {
-        return ResponseEntity.ok(imageService.saveImage(images));
+    @PatchMapping("/{id}")
+    public ResponseEntity<InfoResponse> updateDogInfo(@PathVariable("id") Long id) throws IOException {
+        return ResponseEntity.ok(dogService.updateInfo(id));
     }
-    // 정보 삭제하기
 
+
+    // 신고, 피신고 분류
+    @GetMapping("/type/{type}")
+    public ResponseEntity<List<InfoResponse>> getDogInfoByType(@PathVariable("type") Type type,
+                                                         Pageable pageable) throws IOException {
+        return ResponseEntity.ok(dogService.getListByType(type, pageable));
+    }
+
+    // 종 분류
+    @GetMapping("/breed/{breed}")
+    public ResponseEntity<List<InfoResponse>> getDogInfoByType(@PathVariable("breed") String breed,
+                                                               Pageable pageable) throws IOException {
+        return ResponseEntity.ok(dogService.getListByBreed(breed, pageable));
+    }
+
+    // 정보 삭제하기
+    @DeleteMapping("/{id}")
+    public void deleteDogInfo(@PathVariable("id") Long id) throws IOException {
+        dogService.deleteInfo(id);
+    }
 }
 

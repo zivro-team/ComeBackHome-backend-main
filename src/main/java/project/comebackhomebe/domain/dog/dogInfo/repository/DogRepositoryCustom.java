@@ -14,9 +14,6 @@ public interface DogRepositoryCustom {
     // 카테고리 (타입)
     Slice<Dog> getDogInfoByType(Type type, Pageable pageable);
 
-    // 카테고리 (상태)
-    Slice<Dog> getDogInfoByStatus(Status status, Pageable pageable);
-
     // 카테고리 (종)
     Slice<Dog> getDogInfoByBreed(String breed, Pageable pageable);
 }
