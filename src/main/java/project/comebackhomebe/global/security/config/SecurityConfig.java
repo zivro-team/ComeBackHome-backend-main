@@ -97,6 +97,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/api/v1/dogInfo/**").permitAll()
                         .requestMatchers("/api/v2/member/**").permitAll()
+                        .requestMatchers("/api/v2/dogInfo/**").permitAll()
 
                         // 나머지는 인증 필요
                         .anyRequest().authenticated()

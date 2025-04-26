@@ -2,6 +2,8 @@ package project.comebackhomebe.domain.dog.dogImage.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import project.comebackhomebe.domain.dog.dogImage.dto.request.DogImageRequest;
+import project.comebackhomebe.domain.dog.dogImage.dto.request.ImageRequest;
 import project.comebackhomebe.domain.dog.dogInfo.entity.Dog;
 
 import java.util.List;
@@ -26,5 +28,9 @@ public class Image {
 
     public static Image from (String imageUrl) {
         return Image.builder().imageUrl(imageUrl).build();
+    }
+
+    public static Image from (DogImageRequest imageRequest) {
+        return Image.builder().imageUrl(String.valueOf(imageRequest)).build();
     }
 }
