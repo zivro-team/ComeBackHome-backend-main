@@ -102,6 +102,11 @@ public class DogServiceImpl implements DogService {
     }
 
     @Override
+    public void deleteInfo(Long id) throws IOException {
+        dogRepository.deleteById(id);
+    }
+
+    @Override
     public List<InfoResponse> getList(Pageable pageable) {
         Slice<Dog> dogs = dogRepositoryCustom.getAllDogInfo(pageable);
 

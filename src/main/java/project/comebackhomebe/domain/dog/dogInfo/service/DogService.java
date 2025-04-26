@@ -35,4 +35,7 @@ public interface DogService {
     // 신고, 잃어버림 기준 가져오기
     List<InfoResponse> getListByType(Type type, Pageable pageable);
 
+    // 강아지 정보 삭제
+    void deleteInfo(Long id) throws IOException;
+
 }

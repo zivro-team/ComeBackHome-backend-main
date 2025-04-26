@@ -87,5 +87,11 @@ public class ApiV2DogController {
                                                                Pageable pageable) throws IOException {
         return ResponseEntity.ok(dogService.getListByBreed(breed, pageable));
     }
+
+    // 정보 삭제하기
+    @DeleteMapping("/{id}")
+    public void deleteDogInfo(@PathVariable("id") Long id) throws IOException {
+        dogService.deleteInfo(id);
+    }
 }
 
