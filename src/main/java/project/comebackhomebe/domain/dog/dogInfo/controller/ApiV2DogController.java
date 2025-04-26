@@ -18,6 +18,7 @@ import project.comebackhomebe.domain.dog.dogImage.dto.response.ImageResponse;
 import project.comebackhomebe.domain.dog.dogImage.service.ImageService;
 import project.comebackhomebe.domain.dog.dogInfo.dto.request.InfoRequest;
 import project.comebackhomebe.domain.dog.dogInfo.dto.response.InfoResponse;
+import project.comebackhomebe.domain.dog.dogInfo.entity.Type;
 import project.comebackhomebe.domain.dog.dogInfo.service.DogService;
 
 import java.io.IOException;
@@ -33,7 +34,7 @@ public class ApiV2DogController {
     private final ImageService imageService;
 
     // 정보 생성
-    @PostMapping
+    @PostMapping("/{type}")
     @Operation(summary = "강아지 정보 생성 (LOST)", description = "강아지를 잃어버렸을 때 사용하는 API")
     @Parameters({
             @Parameter(name = "breed", description = "강아지 종", example = "골든 리트리버"),
@@ -45,10 +46,11 @@ public class ApiV2DogController {
             @Parameter(name = "feature", description = "특징", example = "개 목걸이가 걸려있음"),
 
     })
-    public ResponseEntity<InfoResponse> createDogInfo(@RequestPart("infoRequest") @Valid InfoRequest infoRequest,
+    public ResponseEntity<InfoResponse> createDogInfo(@PathVariable("type") Type type,
+                                                      @RequestPart("infoRequest") @Valid InfoRequest infoRequest,
                                                       @RequestPart("healthRequest") @Valid DogHealthRequest healthRequest,
                                                       @RequestPart("images") @Valid List<DogImageRequest> imageRequest) throws IOException {
-        return ResponseEntity.ok(dogService.getInfo(infoRequest.breed(), infoRequest.gender(), infoRequest.height(), imageRequest, healthRequest));
+        return ResponseEntity.ok(dogService.createInfos(type, infoRequest.breed(), infoRequest.gender(), infoRequest.height(), imageRequest, healthRequest));
     }
 
     //

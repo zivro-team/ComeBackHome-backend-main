@@ -50,6 +50,23 @@ public class Dog extends BaseTimeEntity {
     @OneToOne(mappedBy = "dog", cascade = CascadeType.ALL, orphanRemoval = true)
     private DogHealth health;
 
+    public static Dog createDogInfo(Type type, String breed, Gender gender, String height, List<Image> imageUrls, DogHealthRequest healthRequest) {
+        Dog dog = Dog.builder()
+                .type(type)
+                .status(Status.FIND)
+                .breed(breed)
+                .gender(gender)
+                .height(height)
+                .imageUrls(new ArrayList<>())
+                .build();
+
+        imageUrls.forEach(dog::addImage);
+
+        DogHealth dogHealth = DogHealth.from(healthRequest);
+        dog.addHealth(dogHealth);
+        return dog;
+    }
+
     public static Dog createDiscover(String breed, Gender gender, String height, List<Image> imageUrls, DogHealthRequest healthRequest) {
         Dog dog = Dog.builder()
                 .type(Type.DISCOVER)
@@ -65,17 +82,6 @@ public class Dog extends BaseTimeEntity {
         DogHealth dogHealth = DogHealth.from(healthRequest);
         dog.addHealth(dogHealth);
         return dog;
-    }
-
-    public static Dog createLost(String breed, Gender gender, String height, List<Image> imageUrls) {
-        return Dog.builder()
-                .type(Type.LOST)
-                .status(Status.FIND)
-                .breed(breed)
-                .gender(gender)
-                .height(height)
-                .imageUrls(imageUrls)
-                .build();
     }
 
     public static Dog updateDiscover(Dog dog) {

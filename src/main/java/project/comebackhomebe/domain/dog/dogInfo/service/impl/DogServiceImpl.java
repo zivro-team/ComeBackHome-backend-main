@@ -14,6 +14,7 @@ import project.comebackhomebe.domain.dog.dogImage.service.ImageService;
 import project.comebackhomebe.domain.dog.dogInfo.dto.response.InfoResponse;
 import project.comebackhomebe.domain.dog.dogInfo.entity.Dog;
 import project.comebackhomebe.domain.dog.dogInfo.entity.Gender;
+import project.comebackhomebe.domain.dog.dogInfo.entity.Type;
 import project.comebackhomebe.domain.dog.dogInfo.repository.DogRepository;
 import project.comebackhomebe.domain.dog.dogInfo.repository.DogRepositoryCustom;
 import project.comebackhomebe.domain.dog.dogInfo.service.DogService;
@@ -48,7 +49,7 @@ public class DogServiceImpl implements DogService {
     }
 
     @Override
-    public InfoResponse getInfo(String breed, Gender gender, String height, List<DogImageRequest> images, DogHealthRequest healthRequest) throws IOException {
+    public InfoResponse createInfos(Type type, String breed, Gender gender, String height, List<DogImageRequest> images, DogHealthRequest healthRequest) throws IOException {
         List<String> imageUrls = images.stream()
                 .map(DogImageRequest::imageUrl)
                 .toList();
@@ -57,7 +58,7 @@ public class DogServiceImpl implements DogService {
                 .map(Image::from) // Image 생성자 사용
                 .collect(Collectors.toList());
 
-        Dog dog = Dog.createDiscover(breed, gender, height, imageEntities, healthRequest);
+        Dog dog = Dog.createDogInfo(type, breed, gender, height, imageEntities, healthRequest);
 
         dogRepository.save(dog);
 
