@@ -39,7 +39,7 @@ spring:
 
   data:
     redis:
-      host: localhost
+      host: redis-refresh-token
       port: 6379
       password: 1234
 
