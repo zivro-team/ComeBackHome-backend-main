@@ -31,7 +31,6 @@ import java.util.List;
 public class ApiV2DogController {
 
     private final DogService dogService;
-    private final ImageService imageService;
 
     // 정보 생성
     @PostMapping("/{type}")
@@ -74,7 +73,19 @@ public class ApiV2DogController {
         return ResponseEntity.ok(dogService.updateInfo(id));
     }
 
-    // 정보 삭제하기
 
+    // 신고, 피신고 분류
+    @GetMapping("/type/{type}")
+    public ResponseEntity<List<InfoResponse>> getDogInfoByType(@PathVariable("type") Type type,
+                                                         Pageable pageable) throws IOException {
+        return ResponseEntity.ok(dogService.getListByType(type, pageable));
+    }
+
+    // 종 분류
+    @GetMapping("/breed/{breed}")
+    public ResponseEntity<List<InfoResponse>> getDogInfoByType(@PathVariable("breed") String breed,
+                                                               Pageable pageable) throws IOException {
+        return ResponseEntity.ok(dogService.getListByBreed(breed, pageable));
+    }
 }
 

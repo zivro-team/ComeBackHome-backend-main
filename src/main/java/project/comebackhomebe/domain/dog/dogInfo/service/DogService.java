@@ -29,4 +29,10 @@ public interface DogService {
     // 찾음 처리
     InfoResponse updateInfo(Long id) throws IOException;
 
+    // 종 별로 정보 가져오기
+    List<InfoResponse> getListByBreed(String breed, Pageable pageable);
+
+    // 신고, 잃어버림 기준 가져오기
+    List<InfoResponse> getListByType(Type type, Pageable pageable);
+
 }

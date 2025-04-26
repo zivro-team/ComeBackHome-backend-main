@@ -84,6 +84,24 @@ public class DogServiceImpl implements DogService {
     }
 
     @Override
+    public List<InfoResponse> getListByBreed(String breed, Pageable pageable) {
+        Slice<Dog> dogs = dogRepositoryCustom.getDogInfoByBreed(breed, pageable);
+
+        List<Dog> infoResponses = dogs.getContent();
+
+        return InfoResponse.listOf(infoResponses);
+    }
+
+    @Override
+    public List<InfoResponse> getListByType(Type type, Pageable pageable) {
+        Slice<Dog> dogs = dogRepositoryCustom.getDogInfoByType(type, pageable);
+
+        List<Dog> infoResponses = dogs.getContent();
+
+        return InfoResponse.listOf(infoResponses);
+    }
+
+    @Override
     public List<InfoResponse> getList(Pageable pageable) {
         Slice<Dog> dogs = dogRepositoryCustom.getAllDogInfo(pageable);
 
@@ -91,6 +109,8 @@ public class DogServiceImpl implements DogService {
 
         return InfoResponse.listOf(infoResponses);
     }
+
+
 
 
 }

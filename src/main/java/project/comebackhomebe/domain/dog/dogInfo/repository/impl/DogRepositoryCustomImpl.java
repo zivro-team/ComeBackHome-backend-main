@@ -48,18 +48,36 @@ public class DogRepositoryCustomImpl implements DogRepositoryCustom {
     }
 
     @Override
-    public Page<Dog> getDogInfoByType(Type type, Pageable pageable) {
-        return null;
+    public Slice<Dog> getDogInfoByType(Type type, Pageable pageable) {
+        QDog dog = QDog.dog;
+
+        List<Dog> dogs = jpaQueryFactory
+                .selectFrom(dog)
+                .orderBy(dog.createdDate.desc())
+                .where(dog.type.eq(type))
+                .offset(pageable.getOffset())  // 페이지 시작 위치
+                .limit(pageable.getPageSize()) // 한 페이지에 표시할 개수
+                .fetch();
+
+
+        return new SliceImpl<>(dogs, pageable, checkHasNext(dogs, pageable));
     }
 
     @Override
-    public Page<Dog> getDogInfoByStatus(Status status, Pageable pageable) {
-        return null;
-    }
+    public Slice<Dog> getDogInfoByBreed(String breed, Pageable pageable) {
 
-    @Override
-    public Page<Dog> getDogInfoByBreed(String breed, Pageable pageable) {
-        return null;
+        QDog dog = QDog.dog;
+
+        List<Dog> dogs = jpaQueryFactory
+                .selectFrom(dog)
+                .orderBy(dog.createdDate.desc())
+                .where(dog.breed.eq(breed))
+                .offset(pageable.getOffset())  // 페이지 시작 위치
+                .limit(pageable.getPageSize()) // 한 페이지에 표시할 개수
+                .fetch();
+
+
+        return new SliceImpl<>(dogs, pageable, checkHasNext(dogs, pageable));
     }
 
 
