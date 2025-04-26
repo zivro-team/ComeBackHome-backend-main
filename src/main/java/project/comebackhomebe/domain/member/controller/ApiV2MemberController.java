@@ -3,6 +3,7 @@ package project.comebackhomebe.domain.member.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.comebackhomebe.domain.member.service.MemberService;
@@ -15,6 +16,7 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/api/v2/member")
 @RequiredArgsConstructor
+@Slf4j
 public class ApiV2MemberController {
     private final MemberService memberService;
     private final V2ReissueService refreshTokenService;

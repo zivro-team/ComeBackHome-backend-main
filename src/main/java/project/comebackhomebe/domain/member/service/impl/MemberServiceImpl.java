@@ -1,6 +1,5 @@
 package project.comebackhomebe.domain.member.service.impl;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,10 +15,10 @@ import project.comebackhomebe.domain.member.repository.MemberRepository;
 import project.comebackhomebe.domain.member.service.MemberService;
 import project.comebackhomebe.domain.member.service.RestTemplateService;
 import project.comebackhomebe.global.redis.service.RefreshTokenService;
-import project.comebackhomebe.global.security.auth.GoogleResponse;
-import project.comebackhomebe.global.security.auth.KakaoResponse;
-import project.comebackhomebe.global.security.auth.NaverResponse;
-import project.comebackhomebe.global.security.auth.OAuth2Response;
+import project.comebackhomebe.global.security.auth.*;
+import project.comebackhomebe.global.security.auth.sdk.GooglesResponse;
+import project.comebackhomebe.global.security.auth.sdk.KakaosResponse;
+import project.comebackhomebe.global.security.auth.sdk.NaversResponse;
 import project.comebackhomebe.global.security.jwt.JwtUtil;
 
 import java.io.BufferedReader;
@@ -98,31 +97,29 @@ public class MemberServiceImpl implements MemberService {
         OAuth2Info oAuth2Info = getOAuth2Info(oAuth2Response); // DB 저장 DTO
 
         pushToken(oAuth2Info, response); // 토큰 생성
-
         return oAuth2Response;
     }
 
+    public OAuth2Response parseResponse(String provider, HttpServletRequest request) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        BufferedReader reader = request.getReader();
 
-    private OAuth2Response parseResponse(String provider, HttpServletRequest request) throws IOException {
-
-        StringBuilder jsonBuilder = new StringBuilder();
-
-        try (BufferedReader reader = request.getReader()) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                jsonBuilder.append(line);
-            }
+        String line;
+        while ((line = reader.readLine()) != null) {
+            sb.append(line);
         }
 
-        String responseBody = jsonBuilder.toString();
+        String body = sb.toString();
+        log.info("OAuth2 응답 본문: {}", body);
 
-        return switch (provider.toUpperCase()) {
-            case "KAKAO" -> objectMapper.readValue(responseBody, KakaoResponse.class);
-            case "GOOGLE" -> objectMapper.readValue(responseBody, GoogleResponse.class);
-            case "NAVER" -> objectMapper.readValue(responseBody, NaverResponse.class);
-            default -> throw new IllegalArgumentException("지원하지 않는 OAuth2 공급자입니다.");
+        return switch (provider.toLowerCase()) {
+            case "google" -> objectMapper.readValue(body, GooglesResponse.class);
+            case "kakao" -> objectMapper.readValue(body, KakaosResponse.class);
+            case "naver" -> objectMapper.readValue(body, NaversResponse.class);
+            default -> throw new IllegalArgumentException("지원하지 않는 provider: " + provider);
         };
     }
+
 
 
 }
