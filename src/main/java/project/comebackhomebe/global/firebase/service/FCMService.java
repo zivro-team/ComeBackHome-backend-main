@@ -13,11 +13,11 @@ public class FCMService {
 
     private final MemberRepository memberRepository;
 
-    public String getToken(Long userId, @Valid FCMTokenRequest token) {
+    public String getToken(Long userId, String token) {
 
         Member member = memberRepository.findById(userId).orElse(null);
 
-        member.setFcmToken(String.valueOf(token));
+        member.setFcmToken(token);
 
         memberRepository.save(member);
 

@@ -23,7 +23,7 @@ public class ApiV1NotificationController {
     // FCM 토큰 저장 서비스 API
     @PostMapping("/token/{userId}")
     public ResponseEntity<String> getToken(@PathVariable Long userId, @Valid @RequestBody FCMTokenRequest tokenRequest) {
-        return ResponseEntity.ok(fcmService.getToken(userId, tokenRequest));
+        return ResponseEntity.ok(fcmService.getToken(userId, tokenRequest.token()));
     }
 
     @PostMapping
