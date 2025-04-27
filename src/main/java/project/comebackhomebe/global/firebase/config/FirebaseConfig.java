@@ -1,4 +1,4 @@
-package project.comebackhomebe.global.firebase;
+package project.comebackhomebe.global.firebase.config;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
@@ -15,7 +15,7 @@ public class FirebaseConfig {
     public void init(){
         try{
             InputStream serviceAccount = new ClassPathResource("firebase-secret-key.json").getInputStream();
-            FirebaseOptions options = new FirebaseOptions.Builder()
+            FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .build();
 
