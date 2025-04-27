@@ -7,4 +7,6 @@ import project.comebackhomebe.domain.notification.dto.response.NotificationRespo
 public interface NotificationService {
     // 알림 보내기
     NotificationResponse sendNotification(NotificationRequest notificationRequest) throws FirebaseMessagingException;
+
+    void sendMessage(String token, String title, String message) throws FirebaseMessagingException;
 }

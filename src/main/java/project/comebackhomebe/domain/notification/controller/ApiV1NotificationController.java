@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.comebackhomebe.domain.notification.dto.request.NotificationRequest;
-import project.comebackhomebe.domain.notification.dto.response.NotificationResponse;
 import project.comebackhomebe.domain.notification.service.NotificationService;
 import project.comebackhomebe.global.firebase.dto.FCMTokenRequest;
 import project.comebackhomebe.global.firebase.service.FCMService;
@@ -27,7 +26,7 @@ public class ApiV1NotificationController {
     }
 
     @PostMapping
-    public ResponseEntity<NotificationResponse> sendMessage(@RequestBody NotificationRequest request) throws FirebaseMessagingException {
-        return ResponseEntity.ok(notificationService.sendNotification(request));
+    public void sendMessage(@RequestBody NotificationRequest request) throws FirebaseMessagingException {
+        notificationService.sendMessage(request.token(), request.title(), request.message());
     }
 }
