@@ -32,6 +32,9 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Column(nullable = true, name = "fcmToken")
+    private String fcmToken;
+
     public static Member from(String verifyKey, String username, String email, Role role) {
         return Member.builder()
                 .verifyKey(verifyKey)
