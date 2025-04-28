@@ -24,7 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/dogInfo")
-@Tag(name = "강아지 정보 라우터", description = "강아지 정보를 처리합니다.")
+@Tag(name = "사용X", description = "사용하지 않는 API입니다.")
 public class ApiV1DogController {
 
     private final DogService dogService;

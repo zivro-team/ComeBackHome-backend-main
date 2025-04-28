@@ -34,7 +34,7 @@ public class ApiV2DogController {
 
     // 정보 생성
     @PostMapping("/{type}")
-    @Operation(summary = "강아지 정보 생성 (LOST)", description = "강아지를 잃어버렸을 때 사용하는 API")
+    @Operation(summary = "강아지 정보 생성", description = "강아지 신고 API 입니다.")
     @Parameters({
             @Parameter(name = "breed", description = "강아지 종", example = "골든 리트리버"),
             @Parameter(name = "height", description = "강아지 크기", example = "24cm"),
@@ -69,6 +69,7 @@ public class ApiV2DogController {
 
     // 정보 수정하기
     @PatchMapping("/{id}")
+    @Operation(summary = "강아지 찾음으로 수정할때 사용", description = "강아지 수정으로 바꿈")
     public ResponseEntity<InfoResponse> updateDogInfo(@PathVariable("id") Long id) throws IOException {
         return ResponseEntity.ok(dogService.updateInfo(id));
     }
@@ -76,6 +77,7 @@ public class ApiV2DogController {
 
     // 신고, 피신고 분류
     @GetMapping("/type/{type}")
+    @Operation(summary = "신고, 피신고 구분 강아지 정보 가져오기", description = "잃어버린 강아지와 발견한 강아지 따로 분류")
     public ResponseEntity<List<InfoResponse>> getDogInfoByType(@PathVariable("type") Type type,
                                                          Pageable pageable) throws IOException {
         return ResponseEntity.ok(dogService.getListByType(type, pageable));
@@ -83,6 +85,7 @@ public class ApiV2DogController {
 
     // 종 분류
     @GetMapping("/breed/{breed}")
+    @Operation(summary = "강아지 종을 기준으로 분류", description = "강아지 종 별로 따로 보이게 분류")
     public ResponseEntity<List<InfoResponse>> getDogInfoByType(@PathVariable("breed") String breed,
                                                                Pageable pageable) throws IOException {
         return ResponseEntity.ok(dogService.getListByBreed(breed, pageable));
@@ -90,6 +93,7 @@ public class ApiV2DogController {
 
     // 정보 삭제하기
     @DeleteMapping("/{id}")
+    @Operation(summary = "강아지 정보 삭제", description = "강아지 정보를 삭제")
     public void deleteDogInfo(@PathVariable("id") Long id) throws IOException {
         dogService.deleteInfo(id);
     }
