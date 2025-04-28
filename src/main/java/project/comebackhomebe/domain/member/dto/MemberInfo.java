@@ -1,12 +1,17 @@
 package project.comebackhomebe.domain.member.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import project.comebackhomebe.domain.member.entity.Member;
 import project.comebackhomebe.domain.member.entity.Role;
-
+@Schema(title = "멤버 정보 반환 Response")
 public record MemberInfo(
+        @Schema(description = "사용자 고유 값")
         String verifyKey,
+        @Schema(description = "사용자 이름")
         String username,
+        @Schema(description = "사용자 이메일")
         String email,
+        @Schema(description = "사용자 역할")
         Role role
 
 ) {

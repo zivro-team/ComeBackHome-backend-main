@@ -1,10 +1,12 @@
 package project.comebackhomebe.global.security.auth.sdk;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import project.comebackhomebe.global.security.auth.OAuth2Response;
 
 @Getter
+@Schema(description = "구글 DTO")
 public class GooglesResponse implements OAuth2Response {
 
     private String sub;

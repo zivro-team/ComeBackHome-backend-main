@@ -1,6 +1,7 @@
 package project.comebackhomebe.domain.member.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import project.comebackhomebe.global.security.auth.OAuth2Response;
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 @Slf4j
+@Tag(name = "사용X", description = "사용하지 않는 API입니다.")
 public class ApiV1MemberController {
 
     private final RefreshTokenService refreshTokenService;

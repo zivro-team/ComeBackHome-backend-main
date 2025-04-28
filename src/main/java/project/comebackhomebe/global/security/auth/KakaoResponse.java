@@ -1,11 +1,13 @@
 package project.comebackhomebe.global.security.auth;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.NoArgsConstructor;
 
 import java.util.Map;
 
 
 @NoArgsConstructor
+@Schema(description = "사용 X")
 public class KakaoResponse implements OAuth2Response {
 
     private Long id;
