@@ -62,6 +62,15 @@ jobs:
           username: ${{ secrets.GCP_VM_USER }}
           key: ${{ secrets.GCP_SSH_KEY }}
           script: |
+            DISK_USAGE=$(df --output=pcent / | tail -1 | tr -dc '0-9')
+            echo "Current disk usage: $DISK_USAGE%"
+          
+            if [ "$DISK_USAGE" -ge 90 ]; then
+              echo "Disk usage above 90%, running clean.sh..."
+              bash ~/clean.sh
+            fi
+          
+            echo "Running deploy.sh..."
             bash ~/deploy.sh
           script_stop: true
           command_timeout: 15m
