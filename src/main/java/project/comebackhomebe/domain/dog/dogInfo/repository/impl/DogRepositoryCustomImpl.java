@@ -2,10 +2,7 @@ package project.comebackhomebe.domain.dog.dogInfo.repository.impl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Repository;
 import project.comebackhomebe.domain.dog.dogInfo.entity.Dog;
 import project.comebackhomebe.domain.dog.dogInfo.entity.QDog;
@@ -78,6 +75,20 @@ public class DogRepositoryCustomImpl implements DogRepositoryCustom {
 
 
         return new SliceImpl<>(dogs, pageable, checkHasNext(dogs, pageable));
+    }
+
+    @Override
+    public Page<Dog> getDogInfo(Pageable pageable) {
+        QDog dog = QDog.dog;
+
+        List<Dog> dogs = jpaQueryFactory
+                .selectFrom(dog)
+                .orderBy(dog.createdDate.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        return new PageImpl<>(dogs);
     }
 
 
