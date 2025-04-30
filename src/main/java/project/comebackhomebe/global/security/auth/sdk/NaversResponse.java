@@ -11,8 +11,9 @@ import project.comebackhomebe.global.security.auth.OAuth2Response;
 @Schema(description = "네이버 DTO")
 public class NaversResponse implements OAuth2Response {
 
-    @JsonProperty("response")
-    private InnerNaverResponse response;
+    private String id;
+    private String name;
+    private String email;
 
     @Override
     public String getProvider() {
@@ -21,28 +22,17 @@ public class NaversResponse implements OAuth2Response {
 
     @Override
     public String getProviderId() {
-        return response.getId();
+        return id;
     }
 
     @Override
     public String getEmail() {
-        return response.getEmail();
+        return email;
     }
 
     @Override
     public String getName() {
-        return response.getName();
+        return name;
     }
 
-    @Data
-    public static class InnerNaverResponse {
-        private String id;
-        private String name;
-        private String email;
-        private String nickname;
-        private String profile_image;
-        private String age;
-        private String gender;
-        private String birthday;
-    }
 }

@@ -11,31 +11,20 @@ public class KakaosResponse implements OAuth2Response {
 
     private Long id;
 
-    @JsonProperty("connected_at")
-    private String connectedAt;
-
     @JsonProperty("kakao_account")
     private KakaoAccount kakaoAccount;
+
+    @JsonProperty("properties")
+    private Properties properties;
 
     @Getter
     public static class KakaoAccount {
         private String email;
+    }
 
-        @JsonProperty("email_verified")
-        private boolean emailVerified;
-
-        private Profile profile;
-
-        @Getter
-        public static class Profile {
-            private String nickname;
-
-            @JsonProperty("thumbnail_image_url")
-            private String thumbnailImageUrl;
-
-            @JsonProperty("profile_image_url")
-            private String profileImageUrl;
-        }
+    @Getter
+    public static class Properties {
+        private String nickname;
     }
 
     @Override
@@ -55,7 +44,7 @@ public class KakaosResponse implements OAuth2Response {
 
     @Override
     public String getName() {
-        return kakaoAccount.getProfile().getNickname();
+        return properties.getNickname();
     }
 }
 
