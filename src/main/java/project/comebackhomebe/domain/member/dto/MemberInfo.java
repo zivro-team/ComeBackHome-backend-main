@@ -3,6 +3,10 @@ package project.comebackhomebe.domain.member.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import project.comebackhomebe.domain.member.entity.Member;
 import project.comebackhomebe.domain.member.entity.Role;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Schema(title = "멤버 정보 반환 Response")
 public record MemberInfo(
         @Schema(description = "사용자 고유 값")
@@ -31,5 +35,11 @@ public record MemberInfo(
                 email,
                 role
         );
+    }
+
+    public static List<MemberInfo> listOf(List<Member> members) {
+        return members.stream()
+                .map(MemberInfo::of)
+                .collect(Collectors.toList());
     }
 }
