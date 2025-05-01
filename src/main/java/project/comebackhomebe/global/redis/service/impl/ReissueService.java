@@ -10,6 +10,7 @@ import project.comebackhomebe.domain.member.entity.Member;
 import project.comebackhomebe.domain.member.repository.MemberRepository;
 import project.comebackhomebe.global.redis.domain.RefreshToken;
 import project.comebackhomebe.global.redis.repository.RefreshTokenRepository;
+import project.comebackhomebe.global.redis.service.RefreshTokenService;
 import project.comebackhomebe.global.security.jwt.JwtUtil;
 import project.comebackhomebe.global.security.service.TokenResponseUtil;
 
@@ -18,11 +19,12 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class V2ReissueService {
+public class ReissueService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final MemberRepository memberRepository;
     private final JwtUtil jwtUtil;
     private final TokenResponseUtil tokenResponseUtil;
+    private final RefreshTokenService refreshTokenService;
 
     public MemberInfo findRefreshTokenToMember(HttpServletRequest request) {
         // 1. 쿠키에서 리프레시 토큰 추출
@@ -72,18 +74,27 @@ public class V2ReissueService {
     public void reissueAccessToken(HttpServletRequest request, HttpServletResponse response) {
         MemberInfo memberInfo = findRefreshTokenToMember(request);
 
-        String newAccessToken = jwtUtil.newAccessToken(memberInfo);
+        String verifyKey = memberInfo.verifyKey();
+
+        refreshTokenService.deleteRefreshToken(request, response);
+
+        String newAccessToken = jwtUtil.newToken(memberInfo, "access");
+
+        String newRefreshToken = jwtUtil.newToken(memberInfo, "refresh");
 
         response.setHeader("Authorization", "Bearer " + newAccessToken);
+        response.addCookie(tokenResponseUtil.createCookie("refresh", newRefreshToken));
+        saveRefreshToken(verifyKey, newRefreshToken);
 
-        log.info("토큰 발행 완료 : {}", newAccessToken);
+
+        log.info("새로운 액세스 토큰 발행 완료 : {}", newAccessToken);
+        log.info("새로운 리프레쉬 토큰 발행 완료 : {}", newRefreshToken);
     }
 
-    public void deleteRefreshToken(HttpServletRequest request, HttpServletResponse response) {
-        String refreshToken = tokenResponseUtil.getCookie(request);
+    public void saveRefreshToken(String id, String refreshToken) {
+        RefreshToken token = RefreshToken.from(id, refreshToken);
+        log.info("Saving refresh token: {}", token);
 
-        refreshTokenRepository.deleteById(refreshToken);
-
-        tokenResponseUtil.expiredCookie(response);
+        refreshTokenRepository.save(token);
     }
 }

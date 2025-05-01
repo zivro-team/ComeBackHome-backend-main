@@ -122,12 +122,12 @@ public class JwtUtil {
         return generateToken(category, verifyKey, username, email, role, 10 * 60 * 1000L);
     }
 
-    public String newAccessToken(MemberInfo memberInfo) {
+    public String newToken(MemberInfo memberInfo, String type) {
         String verifyKey = memberInfo.verifyKey();
         String username = memberInfo.username();
         String email = memberInfo.email();
         Role role = memberInfo.role();
 
-        return generateToken("access", verifyKey, username, email, role, 10 * 60 * 1000L);
+        return generateToken(type, verifyKey, username, email, role, 10 * 60 * 1000L);
     }
 }
