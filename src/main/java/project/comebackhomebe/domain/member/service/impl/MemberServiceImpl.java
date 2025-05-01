@@ -15,9 +15,9 @@ import project.comebackhomebe.domain.member.repository.MemberRepository;
 import project.comebackhomebe.domain.member.service.MemberService;
 import project.comebackhomebe.global.redis.service.RefreshTokenService;
 import project.comebackhomebe.global.security.auth.*;
-import project.comebackhomebe.global.security.auth.sdk.GooglesResponse;
-import project.comebackhomebe.global.security.auth.sdk.KakaosResponse;
-import project.comebackhomebe.global.security.auth.sdk.NaversResponse;
+import project.comebackhomebe.global.security.auth.GoogleResponse;
+import project.comebackhomebe.global.security.auth.KakaoResponse;
+import project.comebackhomebe.global.security.auth.NaverResponse;
 import project.comebackhomebe.global.security.jwt.JwtUtil;
 
 import java.io.BufferedReader;
@@ -89,9 +89,9 @@ public class MemberServiceImpl implements MemberService {
 
     public OAuth2Response parseResponse(String provider, HttpServletRequest request) throws IOException {
         return switch (provider.toLowerCase()) {
-            case "google" -> objectMapper.readValue(request.getInputStream(), GooglesResponse.class);
-            case "kakao" -> objectMapper.readValue(request.getInputStream(), KakaosResponse.class);
-            case "naver" -> objectMapper.readValue(request.getInputStream(), NaversResponse.class);
+            case "google" -> objectMapper.readValue(request.getInputStream(), GoogleResponse.class);
+            case "kakao" -> objectMapper.readValue(request.getInputStream(), KakaoResponse.class);
+            case "naver" -> objectMapper.readValue(request.getInputStream(), NaverResponse.class);
             default -> throw new IllegalArgumentException("지원하지 않는 provider: " + provider);
         };
     }

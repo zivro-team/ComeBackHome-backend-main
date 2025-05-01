@@ -1,19 +1,17 @@
 package project.comebackhomebe.global.security.auth;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
-import java.util.Map;
-
-@NoArgsConstructor
-@Schema(description = "사용 X")
+@Getter
+@Schema(description = "구글 DTO")
 public class GoogleResponse implements OAuth2Response {
 
-    private Map<String, Object> attributes;
+    private String sub;
 
-    public GoogleResponse(Map<String, Object> attributes) {
-        this.attributes = attributes;
-    }
+    private String name;
+
+    private String email;
 
     @Override
     public String getProvider() {
@@ -22,16 +20,18 @@ public class GoogleResponse implements OAuth2Response {
 
     @Override
     public String getProviderId() {
-        return attributes.get("sub").toString();
+        return sub;
     }
 
     @Override
     public String getEmail() {
-        return attributes.get("email").toString();
+        return email;
     }
 
     @Override
     public String getName() {
-        return attributes.get("name").toString();
+        return name;
     }
 }
+
+

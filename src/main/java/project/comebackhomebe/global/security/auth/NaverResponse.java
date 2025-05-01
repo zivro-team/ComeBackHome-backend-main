@@ -1,18 +1,22 @@
 package project.comebackhomebe.global.security.auth;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
-import java.util.Map;
 
-@NoArgsConstructor
-@Schema(description = "사용 X")
+@Getter
+@Schema(description = "네이버 DTO")
 public class NaverResponse implements OAuth2Response {
 
-    private Map<String, Object> response;
+    @JsonProperty("response")
+    private Response response;
 
-    public NaverResponse(Map<String, Object> attributes) {
-        this.response = (Map<String, Object>) attributes.get("response");
+    @Getter
+    private static class Response {
+        private String id;
+        private String name;
+        private String email;
     }
 
     @Override
@@ -22,16 +26,17 @@ public class NaverResponse implements OAuth2Response {
 
     @Override
     public String getProviderId() {
-        return response.get("id").toString();
+        return response.getId();
     }
 
     @Override
     public String getEmail() {
-        return response.get("email").toString();
+        return response.getEmail();
     }
 
     @Override
     public String getName() {
-        return response.get("name").toString();
+        return response.getName();
     }
+
 }
