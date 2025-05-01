@@ -1,27 +1,22 @@
 package project.comebackhomebe.domain.member.service.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import project.comebackhomebe.domain.member.dto.MemberInfo;
 import project.comebackhomebe.domain.member.dto.OAuth2Info;
-import project.comebackhomebe.domain.member.entity.Member;
 import project.comebackhomebe.domain.member.entity.Role;
-import project.comebackhomebe.domain.member.repository.MemberRepository;
 import project.comebackhomebe.domain.member.service.MemberService;
 import project.comebackhomebe.global.redis.service.RefreshTokenService;
-import project.comebackhomebe.global.security.auth.*;
 import project.comebackhomebe.global.security.auth.GoogleResponse;
 import project.comebackhomebe.global.security.auth.KakaoResponse;
 import project.comebackhomebe.global.security.auth.NaverResponse;
+import project.comebackhomebe.global.security.auth.OAuth2Response;
 import project.comebackhomebe.global.security.jwt.JwtUtil;
 import project.comebackhomebe.global.security.service.SocialMemberService;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 
 @Service

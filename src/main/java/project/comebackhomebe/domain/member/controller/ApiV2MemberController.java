@@ -11,8 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.comebackhomebe.domain.member.service.MemberService;
+import project.comebackhomebe.global.redis.service.RefreshTokenService;
 import project.comebackhomebe.global.redis.service.impl.BlacklistService;
-import project.comebackhomebe.global.redis.service.impl.V2ReissueService;
+import project.comebackhomebe.global.redis.service.impl.ReissueService;
 import project.comebackhomebe.global.security.auth.OAuth2Response;
 
 import java.io.IOException;
@@ -24,8 +25,9 @@ import java.io.IOException;
 @Tag(name = "멤버 관련 라우터", description = "유저 API입니다.")
 public class ApiV2MemberController {
     private final MemberService memberService;
-    private final V2ReissueService refreshTokenService;
+    private final ReissueService reissueService;
     private final BlacklistService blacklistService;
+    private final RefreshTokenService refreshTokenService;
 
     @PostMapping("/{provider}")
     @Operation(summary = "로그인 API", description = "provider = 소셜 이름")
@@ -44,7 +46,7 @@ public class ApiV2MemberController {
             @Parameter(name = "Token", description = "리프레쉬 토큰 쿠키로 넘겨야해요", example = "ejkldjals.ejslklda.edkd")
     })
     public void reissue(HttpServletRequest request, HttpServletResponse response) {
-        refreshTokenService.reissueAccessToken(request, response);
+        reissueService.reissueAccessToken(request, response);
     }
 
     @DeleteMapping("/logout")
