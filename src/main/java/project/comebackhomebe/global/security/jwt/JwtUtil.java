@@ -15,6 +15,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.UUID;
 
 @Component
 @Slf4j
@@ -100,7 +101,7 @@ public class JwtUtil {
         return null;
     }
 
-    public String generateToken(String category, String verifyKey, String username, String email, Role role, Long expiredMs) {
+    public String generateAccessToken(String category, String verifyKey, String username, String email, Role role, Long expiredMs) {
         return Jwts.builder()
                 .claim("category", category)
                 .claim("verifyKey", verifyKey)
@@ -113,21 +114,25 @@ public class JwtUtil {
                 .compact();
     }
 
-    public String newGenerateToken(String refreshToken, String category) {
-        String verifyKey = getVerifyKey(refreshToken);
-        String username = getUsername(refreshToken);
-        String email = getEmail(refreshToken);
-        Role role = getRole(refreshToken);
-
-        return generateToken(category, verifyKey, username, email, role, 10 * 60 * 1000L);
+    public String generateRefreshToken(Long expiredMs){
+        return Jwts.builder()
+                .claim("uuid", UUID.randomUUID().toString())
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + expiredMs))
+                .signWith(secretKey)
+                .compact();
     }
 
-    public String newToken(MemberInfo memberInfo, String type) {
+    public String newAccessToken(MemberInfo memberInfo, String type) {
         String verifyKey = memberInfo.verifyKey();
         String username = memberInfo.username();
         String email = memberInfo.email();
         Role role = memberInfo.role();
 
-        return generateToken(type, verifyKey, username, email, role, 10 * 60 * 1000L);
+        return generateAccessToken(type, verifyKey, username, email, role, 10 * 60 * 1000L);
+    }
+
+    public String newRefreshToken() {
+        return generateRefreshToken(60 * 60 * 1000L);
     }
 }

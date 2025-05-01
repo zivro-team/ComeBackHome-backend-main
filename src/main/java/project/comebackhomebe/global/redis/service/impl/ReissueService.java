@@ -78,9 +78,9 @@ public class ReissueService {
 
         refreshTokenService.deleteRefreshToken(request, response);
 
-        String newAccessToken = jwtUtil.newToken(memberInfo, "access");
+        String newAccessToken = jwtUtil.newAccessToken(memberInfo, "access");
 
-        String newRefreshToken = jwtUtil.newToken(memberInfo, "refresh");
+        String newRefreshToken = jwtUtil.newRefreshToken();
 
         response.setHeader("Authorization", "Bearer " + newAccessToken);
         response.addCookie(tokenResponseUtil.createCookie("refresh", newRefreshToken));
