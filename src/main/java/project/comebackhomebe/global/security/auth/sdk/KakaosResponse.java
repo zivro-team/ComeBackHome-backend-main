@@ -17,6 +17,7 @@ public class KakaosResponse implements OAuth2Response {
     @JsonProperty("properties")
     private Properties properties;
 
+    // 내부 클래스 설계
     @Getter
     public static class KakaoAccount {
         private String email;

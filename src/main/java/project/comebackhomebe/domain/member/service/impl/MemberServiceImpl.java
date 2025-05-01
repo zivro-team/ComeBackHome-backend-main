@@ -13,7 +13,6 @@ import project.comebackhomebe.domain.member.entity.Member;
 import project.comebackhomebe.domain.member.entity.Role;
 import project.comebackhomebe.domain.member.repository.MemberRepository;
 import project.comebackhomebe.domain.member.service.MemberService;
-import project.comebackhomebe.domain.member.service.RestTemplateService;
 import project.comebackhomebe.global.redis.service.RefreshTokenService;
 import project.comebackhomebe.global.security.auth.*;
 import project.comebackhomebe.global.security.auth.sdk.GooglesResponse;
@@ -29,7 +28,6 @@ import java.io.IOException;
 @Slf4j
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
-    private final RestTemplateService restTemplateService;
     private final RefreshTokenService refreshTokenService;
     private final JwtUtil jwtUtil;
     private final ObjectMapper objectMapper;
@@ -57,17 +55,6 @@ public class MemberServiceImpl implements MemberService {
 
             return new OAuth2Info(memberInfo);
         }
-    }
-
-    @Override
-    public OAuth2Response loadOAuth2(String provider, HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException {
-        OAuth2Response oAuth2Response = restTemplateService.verifyOAuth2Token(provider, request);
-
-        OAuth2Info oAuth2Info = getOAuth2Info(oAuth2Response);
-
-        pushToken(oAuth2Info, response);
-
-        return oAuth2Response;
     }
 
     @Override
@@ -101,21 +88,10 @@ public class MemberServiceImpl implements MemberService {
     }
 
     public OAuth2Response parseResponse(String provider, HttpServletRequest request) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        BufferedReader reader = request.getReader();
-
-        String line;
-        while ((line = reader.readLine()) != null) {
-            sb.append(line);
-        }
-
-        String body = sb.toString();
-        log.info("OAuth2 응답 본문: {}", body);
-
         return switch (provider.toLowerCase()) {
-            case "google" -> objectMapper.readValue(body, GooglesResponse.class);
-            case "kakao" -> objectMapper.readValue(body, KakaosResponse.class);
-            case "naver" -> objectMapper.readValue(body, NaversResponse.class);
+            case "google" -> objectMapper.readValue(request.getInputStream(), GooglesResponse.class);
+            case "kakao" -> objectMapper.readValue(request.getInputStream(), KakaosResponse.class);
+            case "naver" -> objectMapper.readValue(request.getInputStream(), NaversResponse.class);
             default -> throw new IllegalArgumentException("지원하지 않는 provider: " + provider);
         };
     }
