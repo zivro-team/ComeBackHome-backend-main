@@ -1,6 +1,7 @@
 package project.comebackhomebe.domain.member.repository.impl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -12,13 +13,10 @@ import project.comebackhomebe.domain.member.repository.MemberRepositoryCustom;
 import java.util.List;
 
 @Repository
+@RequiredArgsConstructor
 public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
-
-    public MemberRepositoryCustomImpl(JPAQueryFactory jpaQueryFactory) {
-        this.jpaQueryFactory = jpaQueryFactory;
-    }
 
     @Override
     public Page<Member> getAllMembers(Pageable pageable) {
