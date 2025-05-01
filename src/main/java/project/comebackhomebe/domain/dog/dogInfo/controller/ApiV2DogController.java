@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -48,8 +49,9 @@ public class ApiV2DogController {
     public ResponseEntity<InfoResponse> createDogInfo(@PathVariable("type") Type type,
                                                       @RequestPart("infoRequest") @Valid InfoRequest infoRequest,
                                                       @RequestPart("healthRequest") @Valid DogHealthRequest healthRequest,
-                                                      @RequestPart("images") @Valid List<DogImageRequest> imageRequest) throws IOException {
-        return ResponseEntity.ok(dogService.createInfos(type, infoRequest.breed(), infoRequest.gender(), infoRequest.height(), imageRequest, healthRequest));
+                                                      @RequestPart("images") @Valid List<DogImageRequest> imageRequest,
+                                                      HttpServletRequest request) throws IOException {
+        return ResponseEntity.ok(dogService.createInfos(type, infoRequest.breed(), infoRequest.gender(), infoRequest.height(), imageRequest, healthRequest, request));
     }
 
     //

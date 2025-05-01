@@ -1,5 +1,6 @@
 package project.comebackhomebe.domain.dog.dogInfo.service;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,7 +19,7 @@ public interface DogService {
     InfoResponse createInfo(String breed, Gender gender, String height, List<MultipartFile> images, DogHealthRequest request) throws IOException;
 
     // 정보 올리기 (이미지를 url 들로)
-    InfoResponse createInfos(Type type, String breed, Gender gender, String height, @Valid List<DogImageRequest> imageUrls, DogHealthRequest request) throws IOException;
+    InfoResponse createInfos(Type type, String breed, Gender gender, String height, @Valid List<DogImageRequest> imageUrls, DogHealthRequest healthRequest, HttpServletRequest request) throws IOException;
 
     // 정보 가져오기
     InfoResponse getInfo(Long id) throws IOException;
