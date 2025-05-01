@@ -53,10 +53,6 @@ public class TokenResponseUtil {
         return refresh;
     }
 
-    public Object getPrincipal(HttpServletRequest request) {
-        return request.getUserPrincipal();
-    }
-
     public void expiredCookie(HttpServletResponse response) {
         Cookie expiredCookie = new Cookie("refresh", null);
         expiredCookie.setPath("/");

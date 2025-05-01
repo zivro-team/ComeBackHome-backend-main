@@ -19,6 +19,7 @@ import project.comebackhomebe.global.security.auth.GoogleResponse;
 import project.comebackhomebe.global.security.auth.KakaoResponse;
 import project.comebackhomebe.global.security.auth.NaverResponse;
 import project.comebackhomebe.global.security.jwt.JwtUtil;
+import project.comebackhomebe.global.security.service.SocialMemberService;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,35 +28,10 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Slf4j
 public class MemberServiceImpl implements MemberService {
-    private final MemberRepository memberRepository;
     private final RefreshTokenService refreshTokenService;
     private final JwtUtil jwtUtil;
     private final ObjectMapper objectMapper;
-
-    @Override
-    public OAuth2Info getOAuth2Info(OAuth2Response oAuth2Response) {
-        String verifyKey = oAuth2Response.getProvider() + " " + oAuth2Response.getProviderId();
-
-        String username = oAuth2Response.getName();
-
-        String email = oAuth2Response.getEmail();
-
-        Member existData = memberRepository.findByVerifyKey(verifyKey);
-
-        if (existData == null) {
-            Member member = Member.from(verifyKey, username, email, Role.USER);
-            memberRepository.save(member);
-
-            MemberInfo memberInfo = MemberInfo.of(member);
-
-            return new OAuth2Info(memberInfo);
-
-        } else {
-            MemberInfo memberInfo = MemberInfo.of(existData);
-
-            return new OAuth2Info(memberInfo);
-        }
-    }
+    private final SocialMemberService socialMemberService;
 
     @Override
     public void pushToken(OAuth2Info oAuth2Info, HttpServletResponse response) {
@@ -81,7 +57,7 @@ public class MemberServiceImpl implements MemberService {
 
         OAuth2Response oAuth2Response = parseResponse(provider, request); // 소셜에 맞는 데이터로 변환
 
-        OAuth2Info oAuth2Info = getOAuth2Info(oAuth2Response); // DB 저장 DTO
+        OAuth2Info oAuth2Info = socialMemberService.findOrCreateMember(oAuth2Response); // DB 저장 DTO
 
         pushToken(oAuth2Info, response); // 토큰 생성
         return oAuth2Response;
@@ -95,7 +71,5 @@ public class MemberServiceImpl implements MemberService {
             default -> throw new IllegalArgumentException("지원하지 않는 provider: " + provider);
         };
     }
-
-
 
 }
