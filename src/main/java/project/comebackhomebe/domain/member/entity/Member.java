@@ -3,6 +3,10 @@ package project.comebackhomebe.domain.member.entity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
+import project.comebackhomebe.domain.dog.dogInfo.entity.Dog;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -34,6 +38,11 @@ public class Member {
 
     @Column(nullable = true, name = "fcmToken")
     private String fcmToken;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "dog_id")
+    @ToString.Exclude
+    private List<Dog> dogs = new ArrayList<>();
 
     public static Member from(String verifyKey, String username, String email, Role role) {
         return Member.builder()

@@ -5,6 +5,7 @@ import lombok.*;
 import project.comebackhomebe.domain.dog.dogHealth.dto.request.DogHealthRequest;
 import project.comebackhomebe.domain.dog.dogHealth.entity.DogHealth;
 import project.comebackhomebe.domain.dog.dogImage.entity.Image;
+import project.comebackhomebe.domain.member.entity.Member;
 import project.comebackhomebe.global.util.BaseTimeEntity;
 
 import java.util.ArrayList;
@@ -43,14 +44,18 @@ public class Dog extends BaseTimeEntity {
 
     private String height; // 크기
 
-    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "dog")
+    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "dog") // EAGER 시 오류
     @ToString.Exclude
-    private List<Image> imageUrls; // 이미지들
+    private List<Image> imageUrls;
 
     @OneToOne(mappedBy = "dog", cascade = CascadeType.ALL, orphanRemoval = true)
     private DogHealth health;
 
-    public static Dog createDogInfo(Type type, String breed, Gender gender, String height, List<Image> imageUrls, DogHealthRequest healthRequest) {
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "member_id", updatable = false)
+    private Member member;
+
+    public static Dog createDogInfo(Type type, String breed, Gender gender, String height, List<Image> imageUrls, DogHealthRequest healthRequest, Member member) {
         Dog dog = Dog.builder()
                 .type(type)
                 .status(Status.FIND)
@@ -58,6 +63,7 @@ public class Dog extends BaseTimeEntity {
                 .gender(gender)
                 .height(height)
                 .imageUrls(new ArrayList<>())
+                .member(member)
                 .build();
 
         imageUrls.forEach(dog::addImage);
