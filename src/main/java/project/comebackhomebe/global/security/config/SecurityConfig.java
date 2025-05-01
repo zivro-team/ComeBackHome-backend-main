@@ -3,29 +3,23 @@ package project.comebackhomebe.global.security.config;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
-import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.filter.ForwardedHeaderFilter;
 import project.comebackhomebe.global.redis.repository.BlacklistRepository;
-import project.comebackhomebe.global.redis.service.RefreshTokenService;
 import project.comebackhomebe.global.security.filter.JWTFilter;
-import project.comebackhomebe.global.security.filter.RefreshFilter;
 import project.comebackhomebe.global.security.handler.SuccessHandler;
 import project.comebackhomebe.global.security.jwt.JwtUtil;
 import project.comebackhomebe.global.security.service.CustomOAuth2Service;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.web.filter.ForwardedHeaderFilter;
-
 
 import java.util.Collections;
 import java.util.List;
@@ -40,7 +34,6 @@ public class SecurityConfig {
     private final SuccessHandler successHandler;
     private final JwtUtil jwtUtil;
     private final CustomClientRegistrationRepo customClientRegistrationRepo;
-    private final RefreshTokenService refreshTokenService;
     private final BlacklistRepository blacklistRepository;
 
     @Bean
@@ -71,8 +64,7 @@ public class SecurityConfig {
                 );
 
         http
-                .addFilterBefore(new JWTFilter(jwtUtil, blacklistRepository), UsernamePasswordAuthenticationFilter.class)
-        .addFilterBefore(new RefreshFilter(refreshTokenService, jwtUtil), OAuth2LoginAuthenticationFilter.class); // RefreshTokenFilter 추가
+                .addFilterBefore(new JWTFilter(jwtUtil, blacklistRepository), UsernamePasswordAuthenticationFilter.class);
 
 
         //경로별 인가 작업
