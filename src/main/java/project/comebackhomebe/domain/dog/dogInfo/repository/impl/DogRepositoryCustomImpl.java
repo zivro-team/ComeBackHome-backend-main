@@ -6,7 +6,6 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Repository;
 import project.comebackhomebe.domain.dog.dogInfo.entity.Dog;
 import project.comebackhomebe.domain.dog.dogInfo.entity.QDog;
-import project.comebackhomebe.domain.dog.dogInfo.entity.Status;
 import project.comebackhomebe.domain.dog.dogInfo.entity.Type;
 import project.comebackhomebe.domain.dog.dogInfo.repository.DogRepositoryCustom;
 

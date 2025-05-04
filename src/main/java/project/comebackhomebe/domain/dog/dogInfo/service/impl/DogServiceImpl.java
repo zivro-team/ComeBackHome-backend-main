@@ -8,11 +8,10 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import project.comebackhomebe.domain.dog.dogHealth.dto.request.DogHealthRequest;
-import project.comebackhomebe.domain.dog.dogHealth.service.DogHealthService;
 import project.comebackhomebe.domain.dog.dogImage.dto.request.DogImageRequest;
 import project.comebackhomebe.domain.dog.dogImage.entity.Image;
 import project.comebackhomebe.domain.dog.dogImage.service.ImageService;
-import project.comebackhomebe.domain.dog.dogInfo.dto.response.InfoResponse;
+import project.comebackhomebe.domain.dog.dogInfo.dto.response.DogInfoResponse;
 import project.comebackhomebe.domain.dog.dogInfo.entity.Dog;
 import project.comebackhomebe.domain.dog.dogInfo.entity.Gender;
 import project.comebackhomebe.domain.dog.dogInfo.entity.Type;
@@ -38,7 +37,7 @@ public class DogServiceImpl implements DogService {
     private final JwtUtil jwtUtil;
 
     @Override
-    public InfoResponse createInfo(String breed, Gender gender, String height, List<MultipartFile> images, DogHealthRequest healthRequest) throws IOException {
+    public DogInfoResponse createInfo(String breed, Gender gender, String height, List<MultipartFile> images, DogHealthRequest healthRequest) throws IOException {
         List<String> imageUrls = imageService.saveImage(images);
 
         // URL 리스트를 Image 엔티티 리스트로 변환
@@ -50,11 +49,11 @@ public class DogServiceImpl implements DogService {
 
         dogRepository.save(dog);
 
-        return InfoResponse.of(dog);
+        return DogInfoResponse.of(dog);
     }
 
     @Override
-    public InfoResponse createInfos(Type type, String breed, Gender gender, String height, List<DogImageRequest> images, DogHealthRequest healthRequest, HttpServletRequest request) throws IOException {
+    public DogInfoResponse createInfos(Type type, String breed, Gender gender, String height, List<DogImageRequest> images, DogHealthRequest healthRequest, HttpServletRequest request) throws IOException {
         List<String> imageUrls = images.stream()
                 .map(DogImageRequest::imageUrl)
                 .toList();
@@ -73,43 +72,43 @@ public class DogServiceImpl implements DogService {
 
         dogRepository.save(dog);
 
-        return InfoResponse.of(dog);
+        return DogInfoResponse.of(dog);
     }
 
     @Override
-    public InfoResponse getInfo(Long id) throws IOException {
+    public DogInfoResponse getInfo(Long id) throws IOException {
         Dog dog = dogRepository.getByIdOrElseThrow(id);
 
-        return InfoResponse.of(dog);
+        return DogInfoResponse.of(dog);
     }
 
     @Override
-    public InfoResponse updateInfo(Long id) throws IOException {
+    public DogInfoResponse updateInfo(Long id) throws IOException {
         Dog dog = dogRepository.getByIdOrElseThrow(id);
 
         Dog updateDog = Dog.updateDogInfo(id, dog);
 
         dogRepository.save(updateDog);
 
-        return InfoResponse.of(updateDog);
+        return DogInfoResponse.of(updateDog);
     }
 
     @Override
-    public List<InfoResponse> getListByBreed(String breed, Pageable pageable) {
+    public List<DogInfoResponse> getListByBreed(String breed, Pageable pageable) {
         Slice<Dog> dogs = dogRepositoryCustom.getDogInfoByBreed(breed, pageable);
 
         List<Dog> infoResponses = dogs.getContent();
 
-        return InfoResponse.listOf(infoResponses);
+        return DogInfoResponse.listOf(infoResponses);
     }
 
     @Override
-    public List<InfoResponse> getListByType(Type type, Pageable pageable) {
+    public List<DogInfoResponse> getListByType(Type type, Pageable pageable) {
         Slice<Dog> dogs = dogRepositoryCustom.getDogInfoByType(type, pageable);
 
         List<Dog> infoResponses = dogs.getContent();
 
-        return InfoResponse.listOf(infoResponses);
+        return DogInfoResponse.listOf(infoResponses);
     }
 
     @Override
@@ -118,15 +117,12 @@ public class DogServiceImpl implements DogService {
     }
 
     @Override
-    public List<InfoResponse> getList(Pageable pageable) {
+    public List<DogInfoResponse> getList(Pageable pageable) {
         Slice<Dog> dogs = dogRepositoryCustom.getAllDogInfo(pageable);
 
         List<Dog> infoResponses = dogs.getContent();
 
-        return InfoResponse.listOf(infoResponses);
+        return DogInfoResponse.listOf(infoResponses);
     }
-
-
-
 
 }

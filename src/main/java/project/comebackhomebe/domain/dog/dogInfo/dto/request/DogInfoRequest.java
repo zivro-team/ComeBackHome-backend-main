@@ -5,7 +5,7 @@ import project.comebackhomebe.domain.dog.dogHealth.dto.request.DogHealthRequest;
 import project.comebackhomebe.domain.dog.dogInfo.entity.Gender;
 
 @Schema(title = "강아지 정보 입력 데이터 Request")
-public record InfoRequest(
+public record DogInfoRequest(
         @Schema(description = "강아지 종")
         String breed,
         @Schema(description = "강아지 크기")

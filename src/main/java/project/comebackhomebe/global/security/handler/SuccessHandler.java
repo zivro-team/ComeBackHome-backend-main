@@ -45,7 +45,7 @@ public class SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         response.setHeader("Authorization", accessToken);
         response.addCookie(tokenResponseUtil.createCookie("refresh", refreshToken));
 
-        response.sendRedirect("/api/v2/member");
+        response.sendRedirect("http://localhost:3000");
         refreshTokenService.saveRefreshToken(verifyKey, refreshToken);
 
         log.info("Access Token: {}", accessToken);
