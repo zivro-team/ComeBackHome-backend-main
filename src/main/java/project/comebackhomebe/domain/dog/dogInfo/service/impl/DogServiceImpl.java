@@ -8,6 +8,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import project.comebackhomebe.domain.dog.dogHealth.dto.request.DogHealthRequest;
+import project.comebackhomebe.domain.dog.dogHealth.entity.DogHealth;
 import project.comebackhomebe.domain.dog.dogImage.dto.request.DogImageRequest;
 import project.comebackhomebe.domain.dog.dogImage.entity.Image;
 import project.comebackhomebe.domain.dog.dogImage.service.ImageService;
@@ -37,23 +38,40 @@ public class DogServiceImpl implements DogService {
     private final JwtUtil jwtUtil;
 
     @Override
-    public DogInfoResponse createInfo(String breed, Gender gender, String height, List<MultipartFile> images, DogHealthRequest healthRequest) throws IOException {
-        List<String> imageUrls = imageService.saveImage(images);
+    public DogInfoResponse createLostInfo(DogLostInfoRequest infoRequest, List<DogImageRequest> imageRequest, DogHealthRequest healthRequest, HttpServletRequest request) throws IOException {
+        String token = jwtUtil.resolveToken(request);
 
-        // URL 리스트를 Image 엔티티 리스트로 변환
+        String verifyKey = jwtUtil.getVerifyKey(token);
+
+        Member member = memberRepository.findByVerifyKey(verifyKey);
+
+        List<String> imageUrls = imageRequest.stream()
+                .map(DogImageRequest::imageUrl)
+                .toList();
+
         List<Image> imageEntities = imageUrls.stream()
                 .map(Image::from) // Image 생성자 사용
                 .collect(Collectors.toList());
 
-        Dog dog = Dog.createDiscover(breed, gender, height, imageEntities, healthRequest);
+        DogHealth health = DogHealth.from(healthRequest);
 
-        dogRepository.save(dog);
+        Dog dog = Dog.createLostDogInfo(
+                infoRequest.name(),
+                infoRequest.breed(),
+                infoRequest.gender(),
+                infoRequest.height(),
+                infoRequest.weight(),
+                imageEntities,
+                health,
+                member
+                );
+
 
         return DogInfoResponse.of(dog);
     }
 
     @Override
-    public DogInfoResponse createInfos(Type type, String breed, Gender gender, String height, List<DogImageRequest> images, DogHealthRequest healthRequest, HttpServletRequest request) throws IOException {
+    public DogInfoResponse createDiscoverInfo(String breed, Gender gender, String height, List<DogImageRequest> images, DogHealthRequest dogHealth, HttpServletRequest request) throws IOException {
         List<String> imageUrls = images.stream()
                 .map(DogImageRequest::imageUrl)
                 .toList();
@@ -76,6 +94,11 @@ public class DogServiceImpl implements DogService {
     }
 
     @Override
+    public DogInfoResponse createDiscoverInfo(String breed, Gender gender, String height, List<DogImageRequest> imageUrls, DogHealthRequest healthRequest, HttpServletRequest request) throws IOException {
+        return null;
+    }
+
+    @Override
     public DogInfoResponse getInfo(Long id) throws IOException {
         Dog dog = dogRepository.getByIdOrElseThrow(id);
 
@@ -83,10 +106,10 @@ public class DogServiceImpl implements DogService {
     }
 
     @Override
-    public DogInfoResponse updateInfo(Long id) throws IOException {
+    public DogInfoResponse foundInfo(Long id) {
         Dog dog = dogRepository.getByIdOrElseThrow(id);
 
-        Dog updateDog = Dog.updateDogInfo(id, dog);
+        Dog updateDog = Dog.foundDogInfo(id, dog);
 
         dogRepository.save(updateDog);
 
@@ -123,6 +146,11 @@ public class DogServiceImpl implements DogService {
         List<Dog> infoResponses = dogs.getContent();
 
         return DogInfoResponse.listOf(infoResponses);
+    }
+
+    @Override
+    public DogInfoResponse foundInfo(Long id) throws IOException {
+        return null;
     }
 
 }

@@ -6,6 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 import project.comebackhomebe.domain.dog.dogHealth.dto.request.DogHealthRequest;
 import project.comebackhomebe.domain.dog.dogImage.dto.request.DogImageRequest;
+import project.comebackhomebe.domain.dog.dogInfo.dto.request.DogLostAllRequest;
+import project.comebackhomebe.domain.dog.dogInfo.dto.request.DogLostInfoRequest;
 import project.comebackhomebe.domain.dog.dogInfo.dto.response.DogInfoResponse;
 import project.comebackhomebe.domain.dog.dogInfo.entity.Gender;
 import project.comebackhomebe.domain.dog.dogInfo.entity.Type;
@@ -14,11 +16,11 @@ import java.io.IOException;
 import java.util.List;
 
 public interface DogService {
-    // 정보 올리기
-    DogInfoResponse createInfo(String breed, Gender gender, String height, List<MultipartFile> images, DogHealthRequest request) throws IOException;
-
     // 정보 올리기 (이미지를 url 들로)
-    DogInfoResponse createInfos(Type type, String breed, Gender gender, String height, @Valid List<DogImageRequest> imageUrls, DogHealthRequest healthRequest, HttpServletRequest request) throws IOException;
+    DogInfoResponse createLostInfo(DogLostInfoRequest infoRequest, List<DogImageRequest> imageRequest, DogHealthRequest healthRequest, HttpServletRequest request) throws IOException;
+
+    // 정보 올리기
+    DogInfoResponse createDiscoverInfo(String breed, Gender gender, String height, @Valid List<DogImageRequest> imageUrls, DogHealthRequest healthRequest, HttpServletRequest request) throws IOException;
 
     // 정보 가져오기
     DogInfoResponse getInfo(Long id) throws IOException;
@@ -27,7 +29,7 @@ public interface DogService {
     List<DogInfoResponse> getList(Pageable pageable);
 
     // 찾음 처리
-    DogInfoResponse updateInfo(Long id) throws IOException;
+    DogInfoResponse foundInfo(Long id) throws IOException;
 
     // 종 별로 정보 가져오기
     List<DogInfoResponse> getListByBreed(String breed, Pageable pageable);
