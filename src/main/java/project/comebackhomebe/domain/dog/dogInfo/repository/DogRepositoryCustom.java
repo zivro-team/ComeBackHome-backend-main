@@ -4,7 +4,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import project.comebackhomebe.domain.dog.dogInfo.entity.Dog;
-import project.comebackhomebe.domain.dog.dogInfo.entity.Status;
 import project.comebackhomebe.domain.dog.dogInfo.entity.Type;
 
 public interface DogRepositoryCustom {

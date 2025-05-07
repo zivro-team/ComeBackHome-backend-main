@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import project.comebackhomebe.domain.member.dto.OAuth2Info;
@@ -39,8 +40,12 @@ public class SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         String accessToken = jwtUtil.generateAccessToken("access", verifyKey, username, email, role, 100000 * 60 * 1000L);
         String refreshToken = jwtUtil.generateRefreshToken(60 * 60 * 1000L);
 
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
         response.setHeader("Authorization", accessToken);
         response.addCookie(tokenResponseUtil.createCookie("refresh", refreshToken));
+
+        response.sendRedirect("http://localhost:3000");
         refreshTokenService.saveRefreshToken(verifyKey, refreshToken);
 
         log.info("Access Token: {}", accessToken);
