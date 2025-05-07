@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.comebackhomebe.domain.notification.dto.request.NotificationRequest;
 import project.comebackhomebe.domain.notification.service.NotificationService;
+import project.comebackhomebe.global.CustomRateLimiter.RateLimited;
 import project.comebackhomebe.global.firebase.dto.FCMTokenRequest;
 import project.comebackhomebe.global.firebase.service.FCMService;
 
@@ -23,6 +24,7 @@ public class ApiV1NotificationController {
     private final FCMService fcmService;
 
     // FCM 토큰 저장 서비스 API
+    @RateLimited
     @PostMapping("/token/{userId}")
     @Operation(summary = "토큰 받아오기", description = "FCM 토큰을 서버한테 넘겨줍니다.")
     @Parameters({
@@ -32,6 +34,7 @@ public class ApiV1NotificationController {
         return ResponseEntity.ok(fcmService.getToken(userId, tokenRequest.token()));
     }
 
+    @RateLimited
     @PostMapping
     @Operation(summary = "알림 보내기", description = "해당 사용자에게 알림을 보냅니다.")
     @Parameters({

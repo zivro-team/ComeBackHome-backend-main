@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.comebackhomebe.domain.member.service.MemberService;
+import project.comebackhomebe.global.CustomRateLimiter.RateLimited;
 import project.comebackhomebe.global.redis.service.RefreshTokenService;
 import project.comebackhomebe.global.redis.service.impl.BlacklistService;
 import project.comebackhomebe.global.redis.service.impl.ReissueService;
@@ -29,6 +30,7 @@ public class ApiV2MemberController {
     private final BlacklistService blacklistService;
     private final RefreshTokenService refreshTokenService;
 
+    @RateLimited
     @PostMapping("/{provider}")
     @Operation(summary = "로그인 API", description = "provider = 소셜 이름")
     @Parameters({
@@ -40,6 +42,7 @@ public class ApiV2MemberController {
         return ResponseEntity.ok(memberService.getOAuth2Data(provider, request, response));
     }
 
+    @RateLimited
     @PostMapping("/reissue")
     @Operation(summary = "액세스 재발급 API", description = "액세스토큰을 재발급해줍니다.")
     @Parameters({
@@ -49,6 +52,7 @@ public class ApiV2MemberController {
         reissueService.reissueAccessToken(request, response);
     }
 
+    @RateLimited
     @DeleteMapping("/logout")
     @Operation(summary = "logout API", description = "로그아웃 후 액세스 토큰은 블랙리스트, 리프레쉬 토큰 삭제합니다.")
     @Parameters({
