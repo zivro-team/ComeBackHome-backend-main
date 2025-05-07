@@ -2,7 +2,7 @@ package project.comebackhomebe.domain.dog.dogInfo.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import project.comebackhomebe.domain.dog.dogHealth.dto.response.DogHealthResponse;
-import project.comebackhomebe.domain.dog.dogImage.dto.response.ImageResponse;
+import project.comebackhomebe.domain.dog.dogImage.dto.response.DogImageResponse;
 import project.comebackhomebe.domain.dog.dogInfo.entity.Dog;
 import project.comebackhomebe.domain.dog.dogInfo.entity.Gender;
 import project.comebackhomebe.domain.dog.dogInfo.entity.Status;
@@ -24,7 +24,7 @@ public record DogInfoResponse(
         @Schema(description = "강아지 크기")
         String height,
         @Schema(description = "강아지 이미지들")
-        List<ImageResponse> imageResponses,
+        List<DogImageResponse> imageResponses,
         @Schema(description = "강아지 건강 상태 정보")
         DogHealthResponse healthResponses
 ) {
@@ -35,7 +35,7 @@ public record DogInfoResponse(
                 dog.getGender(),
                 dog.getBreed(),
                 dog.getHeight(),
-                ImageResponse.listOf(dog.getImageUrls()),
+                DogImageResponse.listOf(dog.getImageUrls()),
                 DogHealthResponse.of(dog.getHealth())
         );
     }

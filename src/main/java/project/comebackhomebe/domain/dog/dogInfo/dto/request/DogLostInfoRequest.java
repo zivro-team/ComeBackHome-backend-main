@@ -15,8 +15,6 @@ public record DogLostInfoRequest(
         @Schema(description = "강아지 무게")
         int weight,
         @Schema(description = "강아지 성별")
-        Gender gender,
-        @Schema(description = "강아지 건강 상태 정보")
-        DogHealthRequest dogHealthRequest
+        Gender gender
 ) {
 }

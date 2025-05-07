@@ -3,10 +3,10 @@ package project.comebackhomebe.domain.dog.dogImage.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import project.comebackhomebe.domain.dog.dogImage.dto.request.DogImageRequest;
-import project.comebackhomebe.domain.dog.dogImage.dto.request.ImageRequest;
 import project.comebackhomebe.domain.dog.dogInfo.entity.Dog;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Image {
+public class DogImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,11 +26,14 @@ public class Image {
     @JoinColumn(name = "dog_id")
     private Dog dog;
 
-    public static Image from (String imageUrl) {
-        return Image.builder().imageUrl(imageUrl).build();
+    public static DogImage from(DogImageRequest imageRequest) {
+        return DogImage.builder().imageUrl(String.valueOf(imageRequest)).build();
     }
 
-    public static Image from (DogImageRequest imageRequest) {
-        return Image.builder().imageUrl(String.valueOf(imageRequest)).build();
+    public static List<DogImage> listFrom(List<DogImageRequest> imageRequests) {
+        return imageRequests.stream()
+                .map(DogImage::from)
+                .collect(Collectors.toList());
     }
+
 }

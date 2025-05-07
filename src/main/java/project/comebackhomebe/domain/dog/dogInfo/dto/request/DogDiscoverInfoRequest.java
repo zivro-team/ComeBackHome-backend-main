@@ -11,8 +11,6 @@ public record DogDiscoverInfoRequest(
         @Schema(description = "강아지 크기")
         String height,
         @Schema(description = "강아지 성별")
-        Gender gender,
-        @Schema(description = "강아지 건강 상태 정보")
-        DogHealthRequest dogHealthRequest
+        Gender gender
 ) {
 }

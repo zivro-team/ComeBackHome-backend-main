@@ -1,15 +1,12 @@
 package project.comebackhomebe.domain.dog.dogInfo.service;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.multipart.MultipartFile;
 import project.comebackhomebe.domain.dog.dogHealth.dto.request.DogHealthRequest;
 import project.comebackhomebe.domain.dog.dogImage.dto.request.DogImageRequest;
-import project.comebackhomebe.domain.dog.dogInfo.dto.request.DogLostAllRequest;
+import project.comebackhomebe.domain.dog.dogInfo.dto.request.DogDiscoverInfoRequest;
 import project.comebackhomebe.domain.dog.dogInfo.dto.request.DogLostInfoRequest;
 import project.comebackhomebe.domain.dog.dogInfo.dto.response.DogInfoResponse;
-import project.comebackhomebe.domain.dog.dogInfo.entity.Gender;
 import project.comebackhomebe.domain.dog.dogInfo.entity.Type;
 
 import java.io.IOException;
@@ -20,7 +17,7 @@ public interface DogService {
     DogInfoResponse createLostInfo(DogLostInfoRequest infoRequest, List<DogImageRequest> imageRequest, DogHealthRequest healthRequest, HttpServletRequest request) throws IOException;
 
     // 정보 올리기
-    DogInfoResponse createDiscoverInfo(String breed, Gender gender, String height, @Valid List<DogImageRequest> imageUrls, DogHealthRequest healthRequest, HttpServletRequest request) throws IOException;
+    DogInfoResponse createDiscoverInfo(DogDiscoverInfoRequest infoRequest, List<DogImageRequest> imageRequest, DogHealthRequest healthRequest, HttpServletRequest request) throws IOException;
 
     // 정보 가져오기
     DogInfoResponse getInfo(Long id) throws IOException;

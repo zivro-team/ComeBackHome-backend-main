@@ -2,9 +2,8 @@ package project.comebackhomebe.domain.dog.dogInfo.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import project.comebackhomebe.domain.dog.dogHealth.dto.request.DogHealthRequest;
 import project.comebackhomebe.domain.dog.dogHealth.entity.DogHealth;
-import project.comebackhomebe.domain.dog.dogImage.entity.Image;
+import project.comebackhomebe.domain.dog.dogImage.entity.DogImage;
 import project.comebackhomebe.domain.member.entity.Member;
 import project.comebackhomebe.global.util.BaseTimeEntity;
 
@@ -46,7 +45,7 @@ public class Dog extends BaseTimeEntity {
 
     @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "dog") // EAGER 시 오류
     @ToString.Exclude
-    private List<Image> imageUrls = new ArrayList<>();
+    private List<DogImage> imageUrls = new ArrayList<>();
 
     @OneToOne(mappedBy = "dog", cascade = CascadeType.ALL, orphanRemoval = true)
     private DogHealth health;
@@ -55,7 +54,7 @@ public class Dog extends BaseTimeEntity {
     @JoinColumn(name = "member_id", updatable = false)
     private Member member;
 
-    public static Dog createDiscoverDogInfo(String breed, Gender gender, String height, List<Image> imageUrls, DogHealth dogHealth, Member member) {
+    public static Dog createDiscoverDogInfo(String breed, Gender gender, String height, List<DogImage> imageUrls, DogHealth dogHealth, Member member) {
         return Dog.builder()
                 .type(Type.DISCOVER)
                 .status(Status.FIND)
@@ -68,7 +67,7 @@ public class Dog extends BaseTimeEntity {
                 .build();
     }
 
-    public static Dog createLostDogInfo(String name, String breed, Gender gender, String height, int weight, List<Image> imageUrls, DogHealth dogHealth, Member member) {
+    public static Dog createLostDogInfo(String name, String breed, Gender gender, String height, int weight, List<DogImage> imageUrls, DogHealth dogHealth, Member member) {
         return Dog.builder()
                 .type(Type.LOST)
                 .status(Status.FIND)

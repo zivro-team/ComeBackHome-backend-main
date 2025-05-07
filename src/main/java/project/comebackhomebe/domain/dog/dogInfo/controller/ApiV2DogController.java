@@ -1,18 +1,14 @@
 package project.comebackhomebe.domain.dog.dogInfo.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import project.comebackhomebe.domain.dog.dogHealth.dto.request.DogHealthRequest;
-import project.comebackhomebe.domain.dog.dogImage.dto.request.DogImageRequest;
-import project.comebackhomebe.domain.dog.dogInfo.dto.request.DogInfoRequest;
+import project.comebackhomebe.domain.dog.dogInfo.dto.request.DogDiscoverAllRequest;
+import project.comebackhomebe.domain.dog.dogInfo.dto.request.DogLostAllRequest;
 import project.comebackhomebe.domain.dog.dogInfo.dto.response.DogInfoResponse;
 import project.comebackhomebe.domain.dog.dogInfo.entity.Type;
 import project.comebackhomebe.domain.dog.dogInfo.service.DogService;
@@ -29,25 +25,30 @@ public class ApiV2DogController {
     private final DogService dogService;
 
     // 정보 생성
-    @PostMapping("/{type}")
-    @Operation(summary = "강아지 정보 생성", description = "강아지 신고 API 입니다.")
-    @Parameters({
-            @Parameter(name = "breed", description = "강아지 종", example = "골든 리트리버"),
-            @Parameter(name = "height", description = "강아지 크기", example = "24cm"),
-            @Parameter(name = "gender", description = "강아지 성별", example = "MALE"),
-            @Parameter(name = "health_status_1", description = "영양상태", example = "제처중, 갈비뼈가 너무 튀어나옴"),
-            @Parameter(name = "health_status_2", description = "피부상태", example = "부분적인 탈모"),
-            @Parameter(name = "health_status_3", description = "외형상태", example = "꼬리 색이 파란색"),
-            @Parameter(name = "feature", description = "특징", example = "개 목걸이가 걸려있음"),
-
-    })
-    public ResponseEntity<DogInfoResponse> createDogInfo(@PathVariable("type") Type type,
-                                                         @RequestPart("infoRequest") @Valid DogInfoRequest infoRequest,
-                                                         @RequestPart("healthRequest") @Valid DogHealthRequest healthRequest,
-                                                         @RequestPart("images") @Valid List<DogImageRequest> imageRequest,
-                                                         HttpServletRequest request) throws IOException {
-        return ResponseEntity.ok(dogService.createInfos(type, infoRequest.breed(), infoRequest.gender(), infoRequest.height(), imageRequest, healthRequest, request));
+    @PostMapping("/lost")
+    @Operation(summary = "강아지 정보 생성", description = "강아지 신고 LOST API 입니다.")
+    public ResponseEntity<DogInfoResponse> createLostDogInfo(@RequestBody DogLostAllRequest dogAllRequest,
+                                                             HttpServletRequest request) throws IOException {
+        return ResponseEntity.ok(dogService.createLostInfo(
+                dogAllRequest.dogLostInfoRequest(),
+                dogAllRequest.dogImageRequest(),
+                dogAllRequest.dogHealthRequest(),
+                request
+        ));
     }
+
+    @PostMapping("/discover")
+    @Operation(summary = "강아지 정보 생성", description = "강아지 신고 LOST API 입니다.")
+    public ResponseEntity<DogInfoResponse> createDiscoverDogInfo(@RequestBody DogDiscoverAllRequest dogAllRequest,
+                                                                 HttpServletRequest request) throws IOException {
+        return ResponseEntity.ok(dogService.createDiscoverInfo(
+                dogAllRequest.dogDiscoverInfoRequest(),
+                dogAllRequest.dogImageRequest(),
+                dogAllRequest.dogHealthRequest(),
+                request
+        ));
+    }
+
 
     //
     // 정보 가져오기
@@ -68,7 +69,7 @@ public class ApiV2DogController {
     @PatchMapping("/{id}")
     @Operation(summary = "강아지 찾음으로 수정할때 사용", description = "강아지 수정으로 바꿈")
     public ResponseEntity<DogInfoResponse> updateDogInfo(@PathVariable("id") Long id) throws IOException {
-        return ResponseEntity.ok(dogService.updateInfo(id));
+        return ResponseEntity.ok(dogService.foundInfo(id));
     }
 
 

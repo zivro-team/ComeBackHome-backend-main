@@ -6,15 +6,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import project.comebackhomebe.domain.dog.dogHealth.dto.request.DogHealthRequest;
 import project.comebackhomebe.domain.dog.dogHealth.entity.DogHealth;
 import project.comebackhomebe.domain.dog.dogImage.dto.request.DogImageRequest;
-import project.comebackhomebe.domain.dog.dogImage.entity.Image;
-import project.comebackhomebe.domain.dog.dogImage.service.ImageService;
+import project.comebackhomebe.domain.dog.dogImage.entity.DogImage;
+import project.comebackhomebe.domain.dog.dogInfo.dto.request.DogDiscoverInfoRequest;
+import project.comebackhomebe.domain.dog.dogInfo.dto.request.DogLostInfoRequest;
 import project.comebackhomebe.domain.dog.dogInfo.dto.response.DogInfoResponse;
 import project.comebackhomebe.domain.dog.dogInfo.entity.Dog;
-import project.comebackhomebe.domain.dog.dogInfo.entity.Gender;
 import project.comebackhomebe.domain.dog.dogInfo.entity.Type;
 import project.comebackhomebe.domain.dog.dogInfo.repository.DogRepository;
 import project.comebackhomebe.domain.dog.dogInfo.repository.DogRepositoryCustom;
@@ -25,7 +24,6 @@ import project.comebackhomebe.global.security.jwt.JwtUtil;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -33,7 +31,6 @@ import java.util.stream.Collectors;
 public class DogServiceImpl implements DogService {
     private final DogRepository dogRepository;
     private final DogRepositoryCustom dogRepositoryCustom;
-    private final ImageService imageService;
     private final MemberRepository memberRepository;
     private final JwtUtil jwtUtil;
 
@@ -45,13 +42,7 @@ public class DogServiceImpl implements DogService {
 
         Member member = memberRepository.findByVerifyKey(verifyKey);
 
-        List<String> imageUrls = imageRequest.stream()
-                .map(DogImageRequest::imageUrl)
-                .toList();
-
-        List<Image> imageEntities = imageUrls.stream()
-                .map(Image::from) // Image 생성자 사용
-                .collect(Collectors.toList());
+        List<DogImage> images = DogImage.listFrom(imageRequest);
 
         DogHealth health = DogHealth.from(healthRequest);
 
@@ -61,41 +52,38 @@ public class DogServiceImpl implements DogService {
                 infoRequest.gender(),
                 infoRequest.height(),
                 infoRequest.weight(),
-                imageEntities,
+                images,
                 health,
                 member
-                );
+        );
 
 
         return DogInfoResponse.of(dog);
     }
 
     @Override
-    public DogInfoResponse createDiscoverInfo(String breed, Gender gender, String height, List<DogImageRequest> images, DogHealthRequest dogHealth, HttpServletRequest request) throws IOException {
-        List<String> imageUrls = images.stream()
-                .map(DogImageRequest::imageUrl)
-                .toList();
-
-        List<Image> imageEntities = imageUrls.stream()
-                .map(Image::from) // Image 생성자 사용
-                .collect(Collectors.toList());
-
+    public DogInfoResponse createDiscoverInfo(DogDiscoverInfoRequest infoRequest, List<DogImageRequest> imageRequest, DogHealthRequest healthRequest, HttpServletRequest request) throws IOException {
         String token = jwtUtil.resolveToken(request);
 
         String verifyKey = jwtUtil.getVerifyKey(token);
 
         Member member = memberRepository.findByVerifyKey(verifyKey);
 
-        Dog dog = Dog.createDogInfo(type, breed, gender, height, imageEntities, healthRequest, member);
+        List<DogImage> images = DogImage.listFrom(imageRequest);
 
-        dogRepository.save(dog);
+        DogHealth health = DogHealth.from(healthRequest);
+
+        Dog dog = Dog.createDiscoverDogInfo(
+                infoRequest.breed(),
+                infoRequest.gender(),
+                infoRequest.height(),
+                images,
+                health,
+                member
+        );
+
 
         return DogInfoResponse.of(dog);
-    }
-
-    @Override
-    public DogInfoResponse createDiscoverInfo(String breed, Gender gender, String height, List<DogImageRequest> imageUrls, DogHealthRequest healthRequest, HttpServletRequest request) throws IOException {
-        return null;
     }
 
     @Override
@@ -106,7 +94,7 @@ public class DogServiceImpl implements DogService {
     }
 
     @Override
-    public DogInfoResponse foundInfo(Long id) {
+    public DogInfoResponse foundInfo(Long id) throws IOException {
         Dog dog = dogRepository.getByIdOrElseThrow(id);
 
         Dog updateDog = Dog.foundDogInfo(id, dog);
@@ -146,11 +134,6 @@ public class DogServiceImpl implements DogService {
         List<Dog> infoResponses = dogs.getContent();
 
         return DogInfoResponse.listOf(infoResponses);
-    }
-
-    @Override
-    public DogInfoResponse foundInfo(Long id) throws IOException {
-        return null;
     }
 
 }
