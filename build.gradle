@@ -103,6 +103,9 @@ dependencies {
     // Firebase
     implementation 'com.google.firebase:firebase-admin:9.2.0' // 최신 버전 확인
 
+    // Throttling
+    implementation 'com.bucket4j:bucket4j-core:8.3.0'
+
 }
 
 tasks.named('test') {
