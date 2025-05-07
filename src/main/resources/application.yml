@@ -4,32 +4,13 @@ server:
   forward-headers-strategy: framework
 
 spring:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://34.122.128.155:3306/comebackhome?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
-    username: root
-    password: cbh123@
-
-  jpa:
-    hibernate:
-      ddl-auto: update
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-    show-sql: true
-    database-platform: org.hibernate.dialect.MySQL8Dialect
-    properties:
-      hibernate:
-        format_sql: true
-        highlight_sql: true
-        use_sql_comments: true
-
-  jwt:
-    secret: jdklasjdlknqewoiqe120392ijkdnqmdcsajkldalskdmlaksdj1o3u9120jidksa
-
+  profiles:
+    include: secret  # 민감정보 secret 파일
+    active: dev  # 개발환경 dev 파일
 
   logging:
     level:
-      project.studyproject.domain: DEBUG
+      project.comebackhomebe.domain: DEBUG
       org.hibernate.SQL: DEBUG
       org.hibernate.orm.jdbc.bind: TRACE
       org.hibernate.orm.jdbc.extract: TRACE
@@ -37,25 +18,14 @@ spring:
       org.springdoc: DEBUG
       org.springframework: DEBUG
 
-  data:
-    redis:
-      host: localhost
-      port: 6379
-      password: 1234
-
-  cloud:
-    gcp:
-      storage:
-        bucket: comebackhome-bucket
-
-springdoc:
-  packages-to-scan: project.comebackhomebe.domain
-  default-consumes-media-type: application/json;charset=UTF-8
-  default-produces-media-type: application/json;charset=UTF-8
-  swagger-ui:
-    path: /swagger-ui/index.html
-    url: /v3/api-docs
-    disable-swagger-default-url: true
-    display-request-duration: true
-    operations-sorter: alpha
+  springdoc:
+    packages-to-scan: project.comebackhomebe.domain
+    default-consumes-media-type: application/json;charset=UTF-8
+    default-produces-media-type: application/json;charset=UTF-8
+    swagger-ui:
+      path: /swagger-ui/index.html
+      url: /v3/api-docs
+      disable-swagger-default-url: true
+      display-request-duration: true
+      operations-sorter: alpha
 

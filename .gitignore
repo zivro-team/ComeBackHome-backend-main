@@ -38,3 +38,9 @@ out/
 
 ## Firebase, GCS Keys ##
 *.json
+
+## Socail Connection ##
+SocialClientRegistration.class
+
+## yaml 파일 ##
+/src/main/resources/yaml/application-secret.yml

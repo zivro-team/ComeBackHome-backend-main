@@ -7,4 +7,4 @@ WORKDIR /app
 COPY build/libs/Comebackhome-be-0.0.1-SNAPSHOT.jar app.jar
 
 # Spring Boot 실행
-ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=dev", "-Duser.timezone=Asia/Seoul", "/app/app.jar"]
+ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prod", "-Duser.timezone=Asia/Seoul", "/app/app.jar"]
