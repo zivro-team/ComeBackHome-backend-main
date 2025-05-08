@@ -15,7 +15,7 @@ public class GoogleCloudStorageConfig {
     @Bean
     public Storage storage() throws IOException {
 
-        ClassPathResource resource = new ClassPathResource("static/comebackhome-gcs.json");
+        ClassPathResource resource = new ClassPathResource("comebackhome-gcs.json");
         GoogleCredentials credentials = GoogleCredentials.fromStream(resource.getInputStream());
         String projectId = "comebackhome-454307";
         return StorageOptions.newBuilder()

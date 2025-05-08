@@ -8,7 +8,7 @@ services:
     ports:
       - "8085:8085"
     environment:
-      SPRING_PROFILES_ACTIVE: dev
+      SPRING_PROFILES_ACTIVE: "prod, secret"
       GOOGLE_APPLICATION_CREDENTIALS: /path/to/your/service-account-key.json  # GCS 인증
     volumes:
       - ./build/libs:/build/libs
