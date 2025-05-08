@@ -106,6 +106,9 @@ dependencies {
     // Throttling
     implementation 'com.bucket4j:bucket4j-core:8.3.0'
 
+    // Websocket + stomp
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
 }
 
 tasks.named('test') {
