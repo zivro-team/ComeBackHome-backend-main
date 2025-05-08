@@ -1,6 +1,7 @@
 package project.comebackhomebe.global.security.config;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
@@ -13,6 +14,10 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class SocialClientRegistration {
+
+    @Value("${spring.google.redirect_uri}")
+    private String redirectUri;
+
     public ClientRegistration naverClientRegistration() {
 
         return ClientRegistration.withRegistrationId("naver")
@@ -33,7 +38,7 @@ public class SocialClientRegistration {
         return ClientRegistration.withRegistrationId("google")
                 .clientId("416289344803-am06jjp5pv895q3u4imn7eth7t1pep0f.apps.googleusercontent.com")
                 .clientSecret("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")
-                .redirectUri("http://localhost:8085/login/oauth2/code/google")
+                .redirectUri(redirectUri)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .scope("profile", "email")
                 .authorizationUri("https://accounts.google.com/o/oauth2/v2/auth")

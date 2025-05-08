@@ -28,3 +28,6 @@ spring:
     gcp:
       storage:
         bucket: comebackhome-bucket
+
+  google:
+    redirect_uri: "http://localhost:8085/login/oauth2/code/google"

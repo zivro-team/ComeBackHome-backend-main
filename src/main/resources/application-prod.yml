@@ -25,3 +25,6 @@ spring:
     gcp:
       storage:
         bucket: comebackhome-bucket
+
+  google:
+    redirect_uri: "https://cbh.kro.kr/login/oauth2/code/google"
