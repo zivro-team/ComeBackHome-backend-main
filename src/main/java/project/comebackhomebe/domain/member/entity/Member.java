@@ -52,4 +52,14 @@ public class Member {
                 .role(role)
                 .build();
     }
+
+    public static Member fcmTokenFrom(Member member, String fcmToken) {
+        return Member.builder()
+                .verifyKey(member.verifyKey)
+                .username(member.username)
+                .email(member.email)
+                .role(member.role)
+                .fcmToken(fcmToken)
+                .build();
+    }
 }

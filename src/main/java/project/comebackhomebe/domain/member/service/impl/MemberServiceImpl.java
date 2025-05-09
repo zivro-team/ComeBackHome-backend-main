@@ -16,6 +16,7 @@ import project.comebackhomebe.global.security.auth.NaverResponse;
 import project.comebackhomebe.global.security.auth.OAuth2Response;
 import project.comebackhomebe.global.security.jwt.JwtUtil;
 import project.comebackhomebe.global.security.service.SocialMemberService;
+import project.comebackhomebe.global.security.service.TokenResponseUtil;
 
 import java.io.IOException;
 
@@ -27,6 +28,7 @@ public class MemberServiceImpl implements MemberService {
     private final JwtUtil jwtUtil;
     private final ObjectMapper objectMapper;
     private final SocialMemberService socialMemberService;
+    private final TokenResponseUtil tokenResponseUtil;
 
     @Override
     public void pushToken(OAuth2Info oAuth2Info, HttpServletResponse response) {
@@ -41,6 +43,7 @@ public class MemberServiceImpl implements MemberService {
         String refreshToken = jwtUtil.generateRefreshToken(60 * 60 * 1000L);
 
         response.setHeader("Authorization", accessToken);
+        response.addCookie(tokenResponseUtil.createCookie("refresh", refreshToken));
         refreshTokenService.saveRefreshToken(verifyKey, refreshToken);
 
         log.info("Access Token: {}", accessToken);
