@@ -25,7 +25,7 @@ public class TokenResponseUtil {
         cookie.setMaxAge(24 * 60 * 60);
         cookie.setSecure(true);
         cookie.setPath("/");
-        cookie.setDomain("localhost");
+        cookie.setDomain("cbh.kro.kr");
         cookie.setHttpOnly(true);
 
         return cookie;
