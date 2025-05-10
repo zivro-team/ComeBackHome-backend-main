@@ -93,7 +93,8 @@ public class SecurityConfig {
                         .requestMatchers(("/api/v1/notification/**")).permitAll()
                         .requestMatchers(("/api/v1/admin/**")).permitAll()
                         .requestMatchers(("/**")).permitAll()
-                        .requestMatchers("/", "/css/**", "/js/**", "/index.html", "/app/**", "/topic/**", "/ws/**").permitAll()
+                        .requestMatchers("/", "/css/**", "/js/**", "/templates/index.html", "/app/**", "/topic/**", "/ws/**").permitAll()
+                        .requestMatchers("/css/**", "/js/**", "/images/**", "/static/**", "/spring-boot-tutorial/**").permitAll()
 
                         // 나머지는 인증 필요
                         .anyRequest().authenticated()

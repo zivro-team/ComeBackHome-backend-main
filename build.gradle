@@ -109,6 +109,10 @@ dependencies {
     // Websocket + stomp
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
+    // 타임리프
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+
 }
 
 tasks.named('test') {
