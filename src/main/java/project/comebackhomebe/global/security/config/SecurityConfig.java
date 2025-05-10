@@ -91,7 +91,6 @@ public class SecurityConfig {
                         .requestMatchers("/api/v2/member/**").permitAll()
                         .requestMatchers("/api/v2/dogInfo/**").permitAll()
                         .requestMatchers(("/api/v1/notification/**")).permitAll()
-                        .requestMatchers(("/api/v1/admin/**")).permitAll()
 
                         // 나머지는 인증 필요
                         .anyRequest().authenticated()
@@ -110,7 +109,7 @@ public class SecurityConfig {
 
                         CorsConfiguration configuration = new CorsConfiguration();
 
-                        configuration.setAllowedOrigins(List.of("http://localhost:8085", "https://cbh.kro.kr", "http://cbh.kro.kr"));
+                        configuration.setAllowedOrigins(List.of("http://localhost:3000","http://localhost:8085", "https://cbh.kro.kr", "http://cbh.kro.kr"));
                         configuration.setAllowedMethods(Collections.singletonList("*"));
                         configuration.setAllowCredentials(true);
                         configuration.setAllowedHeaders(Collections.singletonList("*"));
