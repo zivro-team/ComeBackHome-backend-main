@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -19,14 +20,15 @@ public class TokenResponseUtil {
      * @param value
      * @return
      */
-    public Cookie createCookie(String key, String value) {
+    public ResponseCookie createCookie(String key, String value) {
 
-        Cookie cookie = new Cookie(key, value);
-        cookie.setMaxAge(24 * 60 * 60);
-        cookie.setSecure(true);
-        cookie.setPath("/");
-        cookie.setDomain("cbh.kro.kr");
-        cookie.setHttpOnly(true);
+        ResponseCookie cookie = ResponseCookie.from(key, value)
+                .httpOnly(true)
+                .secure(true) // 로컬 개발 시엔 false
+                .path("/")
+                .maxAge(86400)
+                .sameSite("None") // :white_check_mark: 여기가 핵심!
+                .build();
 
         return cookie;
     }
