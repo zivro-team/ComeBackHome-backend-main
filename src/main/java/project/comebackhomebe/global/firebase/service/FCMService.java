@@ -1,25 +1,27 @@
 package project.comebackhomebe.global.firebase.service;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import project.comebackhomebe.domain.member.entity.Member;
 import project.comebackhomebe.domain.member.repository.MemberRepository;
-import project.comebackhomebe.global.firebase.dto.FCMTokenRequest;
+import project.comebackhomebe.global.security.jwt.JwtUtil;
 
 @Service
 @RequiredArgsConstructor
 public class FCMService {
 
     private final MemberRepository memberRepository;
+    private final JwtUtil jwtUtil;
 
-    public String getToken(Long userId, String token) {
+    public String getToken(String accessToken, String fcmToken) {
 
-        Member member = memberRepository.findById(userId).orElse(null);
+        String verifyKey = jwtUtil.getVerifyKey(accessToken);
 
-        member.setFcmToken(token);
+        Member member = memberRepository.findByVerifyKey(verifyKey);
 
-        memberRepository.save(member);
+        Member setMember = Member.fcmTokenFrom(member, fcmToken);
+
+        memberRepository.save(setMember);
 
         return "토큰이 성공적으로 저장되었습니다";
     }

@@ -36,9 +36,6 @@ out/
 ### VS Code ###
 .vscode/
 
-## Firebase, GCS Keys ##
-*.json
-
 ## Socail Connection ##
 SocialClientRegistration.class
 
