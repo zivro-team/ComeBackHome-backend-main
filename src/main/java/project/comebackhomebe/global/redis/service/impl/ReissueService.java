@@ -83,7 +83,7 @@ public class ReissueService {
         String newRefreshToken = jwtUtil.newRefreshToken();
 
         response.setHeader("Authorization", "Bearer " + newAccessToken);
-        response.addCookie(tokenResponseUtil.createCookie("refresh", newRefreshToken));
+        response.addHeader("Set-Cookie", tokenResponseUtil.createCookie("refresh", newRefreshToken).toString());
         saveRefreshToken(verifyKey, newRefreshToken);
 
 

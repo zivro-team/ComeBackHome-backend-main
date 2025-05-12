@@ -43,7 +43,7 @@ public class MemberServiceImpl implements MemberService {
         String refreshToken = jwtUtil.generateRefreshToken(60 * 60 * 1000L);
 
         response.setHeader("Authorization", accessToken);
-        response.addCookie(tokenResponseUtil.createCookie("refresh", refreshToken));
+        response.addHeader("Set-Cookie", tokenResponseUtil.createCookie("refresh", refreshToken).toString());
         refreshTokenService.saveRefreshToken(verifyKey, refreshToken);
 
         log.info("Access Token: {}", accessToken);
