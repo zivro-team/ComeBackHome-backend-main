@@ -9,7 +9,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
+import project.comebackhomebe.domain.member.dto.MemberInfo;
 import project.comebackhomebe.domain.member.service.MemberService;
 import project.comebackhomebe.global.CustomRateLimiter.RateLimited;
 import project.comebackhomebe.global.redis.service.RefreshTokenService;
@@ -62,6 +66,18 @@ public class ApiV2MemberController {
     public void logout(HttpServletRequest request, HttpServletResponse response) {
         refreshTokenService.deleteRefreshToken(request, response);
         blacklistService.createBlacklist(request);
+    }
+
+    @MessageMapping("/user.addUser")
+    @SendTo("/user/topic")
+    public MemberInfo addUser(@Payload MemberInfo memberInfo) {
+        return null;
+    }
+
+    @MessageMapping("/user.disConnectUser")
+    @SendTo("/user/topic")
+    public MemberInfo disConnect(@Payload MemberInfo memberInfo) {
+        return null;
     }
 
 }
