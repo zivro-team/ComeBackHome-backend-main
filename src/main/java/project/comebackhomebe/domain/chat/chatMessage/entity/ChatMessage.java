@@ -4,10 +4,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
+import project.comebackhomebe.domain.chat.chatMessage.dto.ChatMessageInfo;
 
 import java.util.Date;
 
-@Entity
 @Getter
 @Setter
 @NoArgsConstructor
@@ -28,4 +28,13 @@ public class ChatMessage {
     private String content;
 
     private Date timestamp;
+
+    public static ChatMessage from(ChatMessageInfo chatMessageInfo, String chatId) {
+        return ChatMessage.builder()
+                .chatId(chatId)
+                .senderId(chatMessageInfo.senderId())
+                .receiverId(chatMessageInfo.receiverId())
+                .content(chatMessageInfo.content())
+                .build();
+    }
 }

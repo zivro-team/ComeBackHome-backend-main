@@ -39,6 +39,9 @@ public class Member {
     @Column(nullable = true, name = "fcmToken")
     private String fcmToken;
 
+    @Column(nullable = false, name = "status")
+    private UserStatus status;
+
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "dog_id")
     @ToString.Exclude
@@ -50,6 +53,7 @@ public class Member {
                 .username(username)
                 .email(email)
                 .role(role)
+                .status(UserStatus.ONLINE)
                 .build();
     }
 
@@ -59,6 +63,7 @@ public class Member {
                 .username(member.username)
                 .email(member.email)
                 .role(member.role)
+                .status(member.status)
                 .fcmToken(fcmToken)
                 .build();
     }
