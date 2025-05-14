@@ -29,6 +29,14 @@ spring:
       port: 6379
       password: 1234
 
+    mongodb:
+      username: root
+      password: root
+      host: localhost
+      port: 27017
+      database: chat_app
+      authentication-database: admin
+
   cloud:
     gcp:
       storage:
@@ -36,3 +44,5 @@ spring:
 
   google:
     redirect_uri: "http://localhost:8085/login/oauth2/code/google"
+
+
