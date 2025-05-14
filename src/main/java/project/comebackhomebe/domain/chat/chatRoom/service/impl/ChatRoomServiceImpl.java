@@ -17,11 +17,11 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     @Override
     public Optional<String> getChatRoomId(String senderId, String receiverId, boolean createNewRoomIfNotExists) {
 
-        return chatRoomRepository.findBySenderIdAndRecipientId(senderId, receiverId)
+        return chatRoomRepository.findBySenderIdAndReceiverId(senderId, receiverId)
                 .map(ChatRoom::getChatId)
                 .or(() -> {
                     if (createNewRoomIfNotExists) {
-                        String chatId = createChatId(senderId, receiverId);
+                        var chatId = createChatId(senderId, receiverId);
                         return Optional.of(chatId);
                     }
                     return Optional.empty();
@@ -29,21 +29,12 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     }
 
     private String createChatId(String senderId, String receiverId) {
-        String chatId = String.format(senderId, receiverId);
+        var chatId = String.format(senderId, receiverId);
 
-        ChatRoom senderRecipient = ChatRoom.builder()
-                .chatId(chatId)
-                .senderId(senderId)
-                .receiverId(receiverId)
-                .build();
-
-        ChatRoom recipientSender = ChatRoom.builder()
-                .chatId(chatId)
-                .senderId(receiverId)
-                .receiverId(senderId)
-                .build();
-
+        ChatRoom senderRecipient = ChatRoom.from(chatId, senderId, receiverId);
         chatRoomRepository.save(senderRecipient);
+
+        ChatRoom recipientSender = ChatRoom.from(chatId, receiverId, senderId);
         chatRoomRepository.save(recipientSender);
 
         return chatId;

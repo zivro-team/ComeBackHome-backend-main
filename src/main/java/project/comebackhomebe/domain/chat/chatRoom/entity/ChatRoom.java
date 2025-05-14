@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
-@Entity
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,9 +19,17 @@ public class ChatRoom {
     @Id
     private String id;
 
-    private String chatId;
+    private String chatId; // 고유 ChatRoom ID
 
     private String senderId;
 
     private String receiverId;
+
+    public static ChatRoom from(String chatId, String senderId, String receiverId) {
+        return ChatRoom.builder()
+                .chatId(chatId)
+                .senderId(senderId)
+                .receiverId(receiverId)
+                .build();
+    }
 }
