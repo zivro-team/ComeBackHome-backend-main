@@ -28,6 +28,32 @@ services:
     networks:
       - app-network
 
+  mongodb:
+    image: mongo
+    container_name: mongo_db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+    networks:
+      - app-network
+
+  mongo-express:
+    image: mongo-express
+    container_name: mongo_express
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=root
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=root
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+    networks:
+      - app-network
+
 networks:
   app-network:
     driver: bridge
@@ -35,4 +61,5 @@ networks:
 volumes:
   mysql-data:
   refresh-token-data:
+  mongo-data:
 
