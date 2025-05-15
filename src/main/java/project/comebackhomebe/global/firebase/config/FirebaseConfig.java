@@ -14,7 +14,7 @@ public class FirebaseConfig {
     @PostConstruct
     public void init(){
         try{
-            InputStream serviceAccount = new ClassPathResource("static/firebase-secret-key.json").getInputStream();
+            InputStream serviceAccount = new ClassPathResource("firebase-secret-key.json").getInputStream();
             FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .build();
