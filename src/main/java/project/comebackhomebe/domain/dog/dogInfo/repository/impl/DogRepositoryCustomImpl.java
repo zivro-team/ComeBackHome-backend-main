@@ -90,5 +90,27 @@ public class DogRepositoryCustomImpl implements DogRepositoryCustom {
         return new PageImpl<>(dogs);
     }
 
+    @Override
+    public List<Dog> getDogInfosByBreed(String breed) {
+        QDog dog = QDog.dog;
 
+        return jpaQueryFactory
+                .selectFrom(dog)
+                .orderBy(dog.createdDate.desc())
+                .where(dog.breed.eq(breed))
+                .fetch();
+    }
+
+    @Override
+    public List<Dog> getDogInfosByArea(String area) {
+        QDog dog = QDog.dog;
+
+        // TODO: 도로명 주소 필터링 해야함 이거
+
+        return jpaQueryFactory
+                .selectFrom(dog)
+                .orderBy(dog.createdDate.desc())
+                .where(dog.area.eq(area))
+                .fetch();
+    }
 }

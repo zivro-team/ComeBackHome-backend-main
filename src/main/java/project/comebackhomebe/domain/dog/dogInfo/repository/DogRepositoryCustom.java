@@ -5,6 +5,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import project.comebackhomebe.domain.dog.dogInfo.entity.Dog;
 import project.comebackhomebe.domain.dog.dogInfo.entity.Type;
+import project.comebackhomebe.domain.member.entity.Member;
+
+import java.util.List;
 
 public interface DogRepositoryCustom {
     // 전체 게시글 가져오기
@@ -18,4 +21,10 @@ public interface DogRepositoryCustom {
 
     // 관리자
     Page<Dog> getDogInfo(Pageable pageable);
+
+    // 같은 종
+    List<Dog> getDogInfosByBreed(String breed);
+
+    // 같은 지역
+    List<Dog> getDogInfosByArea(String area);
 }
