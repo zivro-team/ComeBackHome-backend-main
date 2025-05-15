@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import project.comebackhomebe.domain.dog.dogInfo.entity.Dog;
 import project.comebackhomebe.domain.dog.dogInfo.repository.DogRepository;
 import project.comebackhomebe.domain.dog.dogInfo.repository.DogRepositoryCustom;
+import project.comebackhomebe.domain.member.repository.MemberRepository;
 import project.comebackhomebe.domain.member.repository.MemberRepositoryCustom;
 import project.comebackhomebe.domain.notification.dto.request.NotificationRequest;
 import project.comebackhomebe.domain.notification.dto.response.NotificationResponse;
@@ -17,6 +18,7 @@ import project.comebackhomebe.domain.notification.entity.Notification;
 import project.comebackhomebe.domain.notification.repository.NotificationRepository;
 import project.comebackhomebe.domain.notification.service.NotificationService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,7 +26,8 @@ import java.util.List;
 @Slf4j
 public class NotificationServiceImpl implements NotificationService {
 
-    private final MemberRepositoryCustom memberRepository;
+    private final MemberRepositoryCustom memberRepositoryCustom;
+    private final MemberRepository memberRepository;
 
     @Override
     public void sendMessage(String token, String title, String body) throws FirebaseMessagingException {
@@ -44,7 +47,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public void registerNewDogFromBreed(String breed) throws FirebaseMessagingException {
-        List<String> tokens = memberRepository.getFcmTokensByBreed(breed);
+        List<String> tokens = memberRepositoryCustom.getFcmTokensByBreed(breed);
 
         for (String token : tokens){
             sendMessage(
@@ -56,7 +59,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public void findDogByBoundary(String area) throws FirebaseMessagingException {
-        List<String> tokens = memberRepository.getFcmTokensByArea(area);
+        List<String> tokens = memberRepositoryCustom.getFcmTokensByArea(area);
 
         for (String token : tokens){
             sendMessage(
@@ -69,6 +72,20 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public void matchDogByAi (List<Dog> dogs) throws FirebaseMessagingException {
+        List<String> tokens = new ArrayList<>();
+
+        for (Dog dog : dogs){
+            String token = memberRepository.findFcmTokenByDogId(dog.getId());
+            tokens.add(token);
+        }
+
+        for (String token : tokens){
+            sendMessage(
+                    token,
+                     "AI 분석 결과 사용자의 강아지랑 유사합니다!",
+                    "빠르게 확인해보세요");
+        }
+
 
     }
 
