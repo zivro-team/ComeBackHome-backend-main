@@ -6,6 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import project.comebackhomebe.domain.dog.dogInfo.entity.Dog;
+import project.comebackhomebe.domain.dog.dogInfo.entity.QDog;
 import project.comebackhomebe.domain.member.entity.Member;
 import project.comebackhomebe.domain.member.entity.QMember;
 import project.comebackhomebe.domain.member.repository.MemberRepositoryCustom;
@@ -29,5 +31,17 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
                 .fetch();
 
         return new PageImpl<>(members);
+    }
+
+    @Override
+    public List<String> getMembersByDog(Dog dog) {
+        QMember qMember = QMember.member;
+        QDog qDog = QDog.dog;
+
+        return jpaQueryFactory
+                .select(qMember.fcmToken)
+                .from(qMember.dogs, qDog)
+                .where(qDog.id.eq(dog.getId()))
+                .fetch();
     }
 }
