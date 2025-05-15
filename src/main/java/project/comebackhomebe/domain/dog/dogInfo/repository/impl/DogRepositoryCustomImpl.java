@@ -91,17 +91,6 @@ public class DogRepositoryCustomImpl implements DogRepositoryCustom {
     }
 
     @Override
-    public List<Dog> getDogInfosByBreed(String breed) {
-        QDog dog = QDog.dog;
-
-        return jpaQueryFactory
-                .selectFrom(dog)
-                .orderBy(dog.createdDate.desc())
-                .where(dog.breed.eq(breed))
-                .fetch();
-    }
-
-    @Override
     public List<Dog> getDogInfosByArea(String area) {
         QDog dog = QDog.dog;
 

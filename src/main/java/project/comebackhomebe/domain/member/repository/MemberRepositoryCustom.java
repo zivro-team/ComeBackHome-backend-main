@@ -12,5 +12,5 @@ public interface MemberRepositoryCustom {
     Page<Member> getAllMembers(Pageable pageable);
 
     // 강아지 정보에서 멤버 정보 가져오기
-    List<String> getMembersByDog(Dog dog);
+    List<String> getFcmTokensByBreed(String breed);
 }

@@ -22,9 +22,6 @@ public interface DogRepositoryCustom {
     // 관리자
     Page<Dog> getDogInfo(Pageable pageable);
 
-    // 같은 종
-    List<Dog> getDogInfosByBreed(String breed);
-
     // 같은 지역
     List<Dog> getDogInfosByArea(String area);
 }
