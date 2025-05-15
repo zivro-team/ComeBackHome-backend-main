@@ -16,4 +16,7 @@ public interface MemberRepositoryCustom {
 
     // 지역에서 fcmToken 가져오기
     List<String> getFcmTokensByArea(String area);
+
+    // AI 종 분석 후 알림
+    List<String> getFcmTokensByDog(List<Long> dogIds);
 }

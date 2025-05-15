@@ -20,6 +20,7 @@ import project.comebackhomebe.domain.notification.service.NotificationService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +28,6 @@ import java.util.List;
 public class NotificationServiceImpl implements NotificationService {
 
     private final MemberRepositoryCustom memberRepositoryCustom;
-    private final MemberRepository memberRepository;
 
     @Override
     public void sendMessage(String token, String title, String body) throws FirebaseMessagingException {
@@ -72,21 +72,19 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public void matchDogByAi (List<Dog> dogs) throws FirebaseMessagingException {
-        List<String> tokens = new ArrayList<>();
 
-        for (Dog dog : dogs){
-            String token = memberRepository.findFcmTokenByDogId(dog.getId());
-            tokens.add(token);
-        }
+        List<Long> dogIds = dogs.stream()
+                .map(Dog::getId)
+                .collect(Collectors.toList());
+
+        List<String> tokens = memberRepositoryCustom.getFcmTokensByDog(dogIds);
 
         for (String token : tokens){
             sendMessage(
                     token,
-                     "AI 분석 결과 사용자의 강아지랑 유사합니다!",
+                    "AI 분석 결과 사용자의 강아지와 유사한 강아지가 있습니다!",
                     "빠르게 확인해보세요");
         }
-
-
     }
 
 

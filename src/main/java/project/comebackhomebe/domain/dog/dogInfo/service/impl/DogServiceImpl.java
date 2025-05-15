@@ -61,7 +61,6 @@ public class DogServiceImpl implements DogService {
                 member
         );
 
-        notificationService.registerNewDogFromBreed(infoRequest.breed());
         notificationService.findDogByBoundary(infoRequest.area());
 
         dogRepository.save(dog);

@@ -10,6 +10,7 @@ import project.comebackhomebe.domain.member.entity.Member;
 public interface MemberRepository extends JpaRepository<Member, Long> {
     Member findByVerifyKey(String verifyKey);
 
-    @Query("SELECT m.fcmToken FROM Dog d JOIN d.member m WHERE d.id = :id")
-    String findFcmTokenByDogId(@Param("id") Long dogId);
+    // 없어도 됨
+//    @Query("SELECT m.fcmToken FROM Dog d JOIN d.member m WHERE d.id = :id")
+//    String findFcmTokenByDogId(@Param("id") Long dogId);
 }

@@ -60,4 +60,17 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
                 .distinct()  // 중복 제거
                 .fetch();
     }
+
+    @Override
+    public List<String> getFcmTokensByDog(List<Long> dogIds) {
+        QDog qDog = QDog.dog;
+        QMember qMember = QMember.member;
+
+        return jpaQueryFactory
+                .select(qMember.fcmToken)
+                .from(qDog)
+                .join(qDog.member, qMember)
+                .where(qDog.id.in(dogIds))
+                .fetch();
+    }
 }

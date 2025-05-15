@@ -53,8 +53,6 @@ public class ApiV2DogController {
         ));
     }
 
-
-    //
     // 정보 가져오기
     @RateLimited
     @GetMapping("/{id}")
