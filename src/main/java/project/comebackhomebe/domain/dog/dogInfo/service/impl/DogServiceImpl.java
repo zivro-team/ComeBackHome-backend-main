@@ -62,6 +62,9 @@ public class DogServiceImpl implements DogService {
         );
 
         notificationService.registerNewDogFromBreed(infoRequest.breed());
+        notificationService.findDogByBoundary(infoRequest.area());
+
+        dogRepository.save(dog);
 
         return DogInfoResponse.of(dog);
     }
@@ -89,6 +92,9 @@ public class DogServiceImpl implements DogService {
         );
 
         notificationService.registerNewDogFromBreed(infoRequest.breed());
+        notificationService.findDogByBoundary(infoRequest.area());
+
+        dogRepository.save(dog);
 
         return DogInfoResponse.of(dog);
     }

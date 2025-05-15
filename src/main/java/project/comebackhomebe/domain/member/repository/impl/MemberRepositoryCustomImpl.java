@@ -33,6 +33,7 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
         return new PageImpl<>(members);
     }
 
+    @Override
     public List<String> getFcmTokensByBreed(String breed) {
         QDog qDog = QDog.dog;
         QMember qMember = QMember.member;
@@ -40,8 +41,22 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
         return jpaQueryFactory
                 .select(qMember.fcmToken)
                 .from(qDog)
-                .join(qDog.member, qMember)  // Dog와 Member의 관계에 따라 조인 방식 조정 필요
+                .join(qDog.member, qMember)
                 .where(qDog.breed.eq(breed))
+                .distinct()  // 중복 제거
+                .fetch();
+    }
+
+    @Override
+    public List<String> getFcmTokensByArea(String area) {
+        QDog qDog = QDog.dog;
+        QMember qMember = QMember.member;
+
+        return jpaQueryFactory
+                .select(qMember.fcmToken)
+                .from(qDog)
+                .join(qDog.member, qMember)
+                .where(qDog.area.eq(area))
                 .distinct()  // 중복 제거
                 .fetch();
     }

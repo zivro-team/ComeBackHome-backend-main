@@ -24,7 +24,6 @@ import java.util.List;
 @Slf4j
 public class NotificationServiceImpl implements NotificationService {
 
-    private final DogRepositoryCustom dogRepository;
     private final MemberRepositoryCustom memberRepository;
 
     @Override
@@ -57,6 +56,14 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public void findDogByBoundary(String area) throws FirebaseMessagingException {
+        List<String> tokens = memberRepository.getFcmTokensByArea(area);
+
+        for (String token : tokens){
+            sendMessage(
+                    token,
+                    area + "에서 강아지가 발견되었습니다!",
+                    "빠르게 확인해보세요");
+        }
 
     }
 

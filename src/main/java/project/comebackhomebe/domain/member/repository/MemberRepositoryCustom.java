@@ -11,6 +11,9 @@ public interface MemberRepositoryCustom {
     // 관리자
     Page<Member> getAllMembers(Pageable pageable);
 
-    // 강아지 정보에서 멤버 정보 가져오기
+    // 종에서 fcmToken 가져오기
     List<String> getFcmTokensByBreed(String breed);
+
+    // 지역에서 fcmToken 가져오기
+    List<String> getFcmTokensByArea(String area);
 }
