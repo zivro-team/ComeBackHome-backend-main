@@ -47,6 +47,7 @@ public class DogServiceImpl implements DogService {
         DogHealth health = DogHealth.from(healthRequest);
 
         Dog dog = Dog.createLostDogInfo(
+                infoRequest.area(),
                 infoRequest.name(),
                 infoRequest.breed(),
                 infoRequest.gender(),
@@ -74,6 +75,7 @@ public class DogServiceImpl implements DogService {
         DogHealth health = DogHealth.from(healthRequest);
 
         Dog dog = Dog.createDiscoverDogInfo(
+                infoRequest.area(),
                 infoRequest.breed(),
                 infoRequest.gender(),
                 infoRequest.height(),
