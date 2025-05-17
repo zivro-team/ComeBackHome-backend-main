@@ -29,3 +29,9 @@ springdoc:
     display-request-duration: true
     operations-sorter: alpha
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - prometheus
