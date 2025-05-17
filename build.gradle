@@ -116,7 +116,11 @@ dependencies {
     // 타임리프
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
+    // Actuator - 애플리케이션 모니터링 및 메트릭 노출
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
+    // Micrometer - Prometheus 메트릭 레지스트리
+    implementation 'io.micrometer:micrometer-registry-prometheus'
 }
 
 tasks.named('test') {

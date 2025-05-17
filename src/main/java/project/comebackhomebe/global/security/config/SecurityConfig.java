@@ -95,6 +95,7 @@ public class SecurityConfig {
                         .requestMatchers(("/**")).permitAll()
                         .requestMatchers("/", "/css/**", "/js/**", "/templates/index.html", "/app/**", "/topic/**", "/ws/**").permitAll()
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/static/**", "/spring-boot-tutorial/**").permitAll()
+                        .requestMatchers("/actuator/**").permitAll()
 
                         // 나머지는 인증 필요
                         .anyRequest().authenticated()
