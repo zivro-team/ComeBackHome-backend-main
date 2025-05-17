@@ -116,6 +116,10 @@ dependencies {
     // 타임리프
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
+    // Slack
+    implementation 'com.github.maricn:logback-slack-appender:1.6.1'
+    implementation 'com.slack.api:slack-api-client:1.30.0'
+
 
 }
 

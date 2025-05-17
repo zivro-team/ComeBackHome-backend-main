@@ -29,3 +29,8 @@ springdoc:
     display-request-duration: true
     operations-sorter: alpha
 
+slack:
+  webhook-uri: https://hooks.slack.com/services/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
+  username: "임현성_백엔드"
+  emoji: ""
+  channel: ""
