@@ -34,3 +34,10 @@ slack:
   username: "임현성_백엔드"
   emoji: ""
   channel: ""
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - prometheus
