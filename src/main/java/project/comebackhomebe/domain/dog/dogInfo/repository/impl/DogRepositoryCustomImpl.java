@@ -89,6 +89,4 @@ public class DogRepositoryCustomImpl implements DogRepositoryCustom {
 
         return new PageImpl<>(dogs);
     }
-
-
 }

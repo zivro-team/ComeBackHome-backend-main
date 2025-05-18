@@ -118,6 +118,9 @@ dependencies {
 
     // Actuator - 애플리케이션 모니터링 및 메트릭 노출
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    // Slack
+    implementation 'com.github.maricn:logback-slack-appender:1.6.1'
+    implementation 'com.slack.api:slack-api-client:1.30.0'
 
     // Micrometer - Prometheus 메트릭 레지스트리
     implementation 'io.micrometer:micrometer-registry-prometheus'

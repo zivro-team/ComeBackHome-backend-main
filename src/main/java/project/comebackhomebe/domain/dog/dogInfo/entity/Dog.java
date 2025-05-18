@@ -43,6 +43,8 @@ public class Dog extends BaseTimeEntity {
 
     private String height; // 크기
 
+    private String area; // 도로명 위치
+
     @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "dog") // EAGER 시 오류
     @ToString.Exclude
     private List<DogImage> imageUrls = new ArrayList<>();
@@ -54,10 +56,11 @@ public class Dog extends BaseTimeEntity {
     @JoinColumn(name = "member_id", updatable = false)
     private Member member;
 
-    public static Dog createDiscoverDogInfo(String breed, Gender gender, String height, List<DogImage> imageUrls, DogHealth dogHealth, Member member) {
+    public static Dog createDiscoverDogInfo(String area, String breed, Gender gender, String height, List<DogImage> imageUrls, DogHealth dogHealth, Member member) {
         return Dog.builder()
                 .type(Type.DISCOVER)
                 .status(Status.FIND)
+                .area(area)
                 .breed(breed)
                 .gender(gender)
                 .height(height)
@@ -67,10 +70,11 @@ public class Dog extends BaseTimeEntity {
                 .build();
     }
 
-    public static Dog createLostDogInfo(String name, String breed, Gender gender, String height, int weight, List<DogImage> imageUrls, DogHealth dogHealth, Member member) {
+    public static Dog createLostDogInfo(String area, String name, String breed, Gender gender, String height, int weight, List<DogImage> imageUrls, DogHealth dogHealth, Member member) {
         return Dog.builder()
                 .type(Type.LOST)
                 .status(Status.FIND)
+                .area(area)
                 .name(name)
                 .breed(breed)
                 .gender(gender)

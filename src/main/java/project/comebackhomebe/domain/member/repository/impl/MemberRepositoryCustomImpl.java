@@ -6,6 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import project.comebackhomebe.domain.dog.dogInfo.entity.Dog;
+import project.comebackhomebe.domain.dog.dogInfo.entity.QDog;
 import project.comebackhomebe.domain.member.entity.Member;
 import project.comebackhomebe.domain.member.entity.QMember;
 import project.comebackhomebe.domain.member.repository.MemberRepositoryCustom;
@@ -29,5 +31,46 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
                 .fetch();
 
         return new PageImpl<>(members);
+    }
+
+    @Override
+    public List<String> getFcmTokensByBreed(String breed) {
+        QDog qDog = QDog.dog;
+        QMember qMember = QMember.member;
+
+        return jpaQueryFactory
+                .select(qMember.fcmToken)
+                .from(qDog)
+                .join(qDog.member, qMember)
+                .where(qDog.breed.eq(breed))
+                .distinct()  // 중복 제거
+                .fetch();
+    }
+
+    @Override
+    public List<String> getFcmTokensByArea(String area) {
+        QDog qDog = QDog.dog;
+        QMember qMember = QMember.member;
+
+        return jpaQueryFactory
+                .select(qMember.fcmToken)
+                .from(qDog)
+                .join(qDog.member, qMember)
+                .where(qDog.area.eq(area))
+                .distinct()  // 중복 제거
+                .fetch();
+    }
+
+    @Override
+    public List<String> getFcmTokensByDog(List<Long> dogIds) {
+        QDog qDog = QDog.dog;
+        QMember qMember = QMember.member;
+
+        return jpaQueryFactory
+                .select(qMember.fcmToken)
+                .from(qDog)
+                .join(qDog.member, qMember)
+                .where(qDog.id.in(dogIds))
+                .fetch();
     }
 }

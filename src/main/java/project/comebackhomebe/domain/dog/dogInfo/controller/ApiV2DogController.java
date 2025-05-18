@@ -1,5 +1,6 @@
 package project.comebackhomebe.domain.dog.dogInfo.controller;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,7 +31,7 @@ public class ApiV2DogController {
     @PostMapping("/lost")
     @Operation(summary = "강아지 정보 생성", description = "강아지 신고 LOST API 입니다.")
     public ResponseEntity<DogInfoResponse> createLostDogInfo(@RequestBody DogLostAllRequest dogAllRequest,
-                                                             HttpServletRequest request) throws IOException {
+                                                             HttpServletRequest request) throws IOException, FirebaseMessagingException {
         return ResponseEntity.ok(dogService.createLostInfo(
                 dogAllRequest.dogLostInfoRequest(),
                 dogAllRequest.dogImageRequest(),
@@ -43,7 +44,7 @@ public class ApiV2DogController {
     @PostMapping("/discover")
     @Operation(summary = "강아지 정보 생성", description = "강아지 신고 LOST API 입니다.")
     public ResponseEntity<DogInfoResponse> createDiscoverDogInfo(@RequestBody DogDiscoverAllRequest dogAllRequest,
-                                                                 HttpServletRequest request) throws IOException {
+                                                                 HttpServletRequest request) throws IOException, FirebaseMessagingException {
         return ResponseEntity.ok(dogService.createDiscoverInfo(
                 dogAllRequest.dogDiscoverInfoRequest(),
                 dogAllRequest.dogImageRequest(),
@@ -52,8 +53,6 @@ public class ApiV2DogController {
         ));
     }
 
-
-    //
     // 정보 가져오기
     @RateLimited
     @GetMapping("/{id}")

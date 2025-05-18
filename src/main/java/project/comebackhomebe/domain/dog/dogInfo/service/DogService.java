@@ -1,5 +1,6 @@
 package project.comebackhomebe.domain.dog.dogInfo.service;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Pageable;
 import project.comebackhomebe.domain.dog.dogHealth.dto.request.DogHealthRequest;
@@ -14,10 +15,10 @@ import java.util.List;
 
 public interface DogService {
     // 정보 올리기 (이미지를 url 들로)
-    DogInfoResponse createLostInfo(DogLostInfoRequest infoRequest, List<DogImageRequest> imageRequest, DogHealthRequest healthRequest, HttpServletRequest request) throws IOException;
+    DogInfoResponse createLostInfo(DogLostInfoRequest infoRequest, List<DogImageRequest> imageRequest, DogHealthRequest healthRequest, HttpServletRequest request) throws IOException, FirebaseMessagingException;
 
     // 정보 올리기
-    DogInfoResponse createDiscoverInfo(DogDiscoverInfoRequest infoRequest, List<DogImageRequest> imageRequest, DogHealthRequest healthRequest, HttpServletRequest request) throws IOException;
+    DogInfoResponse createDiscoverInfo(DogDiscoverInfoRequest infoRequest, List<DogImageRequest> imageRequest, DogHealthRequest healthRequest, HttpServletRequest request) throws IOException, FirebaseMessagingException;
 
     // 정보 가져오기
     DogInfoResponse getInfo(Long id) throws IOException;

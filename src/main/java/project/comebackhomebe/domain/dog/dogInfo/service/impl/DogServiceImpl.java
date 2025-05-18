@@ -1,5 +1,6 @@
 package project.comebackhomebe.domain.dog.dogInfo.service.impl;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ import project.comebackhomebe.domain.dog.dogInfo.repository.DogRepositoryCustom;
 import project.comebackhomebe.domain.dog.dogInfo.service.DogService;
 import project.comebackhomebe.domain.member.entity.Member;
 import project.comebackhomebe.domain.member.repository.MemberRepository;
+import project.comebackhomebe.domain.notification.service.NotificationService;
 import project.comebackhomebe.global.security.jwt.JwtUtil;
 
 import java.io.IOException;
@@ -33,9 +35,10 @@ public class DogServiceImpl implements DogService {
     private final DogRepositoryCustom dogRepositoryCustom;
     private final MemberRepository memberRepository;
     private final JwtUtil jwtUtil;
+    private final NotificationService notificationService;
 
     @Override
-    public DogInfoResponse createLostInfo(DogLostInfoRequest infoRequest, List<DogImageRequest> imageRequest, DogHealthRequest healthRequest, HttpServletRequest request) throws IOException {
+    public DogInfoResponse createLostInfo(DogLostInfoRequest infoRequest, List<DogImageRequest> imageRequest, DogHealthRequest healthRequest, HttpServletRequest request) throws IOException, FirebaseMessagingException {
         String token = jwtUtil.resolveToken(request);
 
         String verifyKey = jwtUtil.getVerifyKey(token);
@@ -47,6 +50,7 @@ public class DogServiceImpl implements DogService {
         DogHealth health = DogHealth.from(healthRequest);
 
         Dog dog = Dog.createLostDogInfo(
+                infoRequest.area(),
                 infoRequest.name(),
                 infoRequest.breed(),
                 infoRequest.gender(),
@@ -57,12 +61,15 @@ public class DogServiceImpl implements DogService {
                 member
         );
 
+        notificationService.findDogByBoundary(infoRequest.area());
+
+        dogRepository.save(dog);
 
         return DogInfoResponse.of(dog);
     }
 
     @Override
-    public DogInfoResponse createDiscoverInfo(DogDiscoverInfoRequest infoRequest, List<DogImageRequest> imageRequest, DogHealthRequest healthRequest, HttpServletRequest request) throws IOException {
+    public DogInfoResponse createDiscoverInfo(DogDiscoverInfoRequest infoRequest, List<DogImageRequest> imageRequest, DogHealthRequest healthRequest, HttpServletRequest request) throws IOException, FirebaseMessagingException {
         String token = jwtUtil.resolveToken(request);
 
         String verifyKey = jwtUtil.getVerifyKey(token);
@@ -74,6 +81,7 @@ public class DogServiceImpl implements DogService {
         DogHealth health = DogHealth.from(healthRequest);
 
         Dog dog = Dog.createDiscoverDogInfo(
+                infoRequest.area(),
                 infoRequest.breed(),
                 infoRequest.gender(),
                 infoRequest.height(),
@@ -82,6 +90,10 @@ public class DogServiceImpl implements DogService {
                 member
         );
 
+        notificationService.registerNewDogFromBreed(infoRequest.breed());
+        notificationService.findDogByBoundary(infoRequest.area());
+
+        dogRepository.save(dog);
 
         return DogInfoResponse.of(dog);
     }

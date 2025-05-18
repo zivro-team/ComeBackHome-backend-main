@@ -6,6 +6,8 @@ import project.comebackhomebe.domain.dog.dogInfo.entity.Gender;
 
 @Schema(title = "강아지 정보 입력 데이터 Request")
 public record DogLostInfoRequest(
+        @Schema(description = "강아지 위치")
+        String area,
         @Schema(description = "강아지 이름")
         String name,
         @Schema(description = "강아지 종")
