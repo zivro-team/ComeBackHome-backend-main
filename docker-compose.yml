@@ -79,7 +79,7 @@ services:
     restart: unless-stopped
     user: root
     ports:
-      - "3000:3000"
+      - "4000:3000"
     links:
       - prometheus:prometheus
     volumes:
