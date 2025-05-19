@@ -12,44 +12,30 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class TokenResponseUtil {
 
-    /**
-     * key = 키 값 , value = jwt값
-     * Cookie 로 저장하기 위해 생성
-     *
-     * @param key
-     * @param value
-     * @return
-     */
     public ResponseCookie createCookie(String key, String value) {
 
-        ResponseCookie cookie = ResponseCookie.from(key, value)
+        return ResponseCookie.from(key, value)
                 .httpOnly(true)
-                .secure(true) // 로컬 개발 시엔 false
+                .secure(true)
                 .path("/")
                 .maxAge(86400)
-                .sameSite("None") // :white_check_mark: 여기가 핵심!
+                .sameSite("None")
                 .build();
-
-        return cookie;
     }
 
     public String getCookie(HttpServletRequest request) {
-        String refresh = null; // 여기서 원래 refresh 토큰 받아야함?
+        String refresh = null;
 
-        // 리프레쉬 토큰 추출
+
         Cookie[] cookies = request.getCookies();
-        // 리프레쉬 토큰 추출
+
         for (Cookie cookie : cookies) {
-
             if (cookie.getName().equals("refresh")) {
-
                 refresh = cookie.getValue();
             }
         }
 
         if (refresh == null) {
-
-            //response status code
             return "오류" + HttpStatus.BAD_REQUEST;
         }
 

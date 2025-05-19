@@ -22,6 +22,7 @@ import project.comebackhomebe.domain.dog.dogInfo.service.DogService;
 import project.comebackhomebe.domain.member.entity.Member;
 import project.comebackhomebe.domain.member.repository.MemberRepository;
 import project.comebackhomebe.domain.notification.service.NotificationService;
+import project.comebackhomebe.global.security.jwt.JwtService;
 import project.comebackhomebe.global.security.jwt.JwtUtil;
 
 import java.io.IOException;
@@ -35,11 +36,12 @@ public class DogServiceImpl implements DogService {
     private final DogRepositoryCustom dogRepositoryCustom;
     private final MemberRepository memberRepository;
     private final JwtUtil jwtUtil;
+    private final JwtService jwtService;
     private final NotificationService notificationService;
 
     @Override
     public DogInfoResponse createLostInfo(DogLostInfoRequest infoRequest, List<DogImageRequest> imageRequest, DogHealthRequest healthRequest, HttpServletRequest request) throws IOException, FirebaseMessagingException {
-        String token = jwtUtil.resolveToken(request);
+        String token = jwtService.resolveAccessToken(request);
 
         String verifyKey = jwtUtil.getVerifyKey(token);
 
@@ -70,7 +72,7 @@ public class DogServiceImpl implements DogService {
 
     @Override
     public DogInfoResponse createDiscoverInfo(DogDiscoverInfoRequest infoRequest, List<DogImageRequest> imageRequest, DogHealthRequest healthRequest, HttpServletRequest request) throws IOException, FirebaseMessagingException {
-        String token = jwtUtil.resolveToken(request);
+        String token = jwtService.resolveAccessToken(request);
 
         String verifyKey = jwtUtil.getVerifyKey(token);
 

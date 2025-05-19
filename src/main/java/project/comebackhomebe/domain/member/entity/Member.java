@@ -39,7 +39,7 @@ public class Member {
     @Column(nullable = true, name = "fcmToken")
     private String fcmToken;
 
-    @Column(nullable = false, name = "status")
+    @Column(nullable = true, name = "status")
     private UserStatus status;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)

@@ -8,12 +8,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import project.comebackhomebe.domain.member.dto.OAuth2Info;
 import project.comebackhomebe.domain.member.entity.Role;
+import project.comebackhomebe.domain.member.exception.MemberException;
 import project.comebackhomebe.domain.member.service.MemberService;
+import project.comebackhomebe.global.exception.ErrorCode;
 import project.comebackhomebe.global.redis.service.RefreshTokenService;
 import project.comebackhomebe.global.security.auth.GoogleResponse;
 import project.comebackhomebe.global.security.auth.KakaoResponse;
 import project.comebackhomebe.global.security.auth.NaverResponse;
 import project.comebackhomebe.global.security.auth.OAuth2Response;
+import project.comebackhomebe.global.security.jwt.JwtService;
 import project.comebackhomebe.global.security.jwt.JwtUtil;
 import project.comebackhomebe.global.security.service.SocialMemberService;
 import project.comebackhomebe.global.security.service.TokenResponseUtil;
@@ -26,6 +29,7 @@ import java.io.IOException;
 public class MemberServiceImpl implements MemberService {
     private final RefreshTokenService refreshTokenService;
     private final JwtUtil jwtUtil;
+    private final JwtService jwtService;
     private final ObjectMapper objectMapper;
     private final SocialMemberService socialMemberService;
     private final TokenResponseUtil tokenResponseUtil;
@@ -39,8 +43,8 @@ public class MemberServiceImpl implements MemberService {
         String email = oAuth2Info.getEmail();
         Role role = oAuth2Info.getRole();
 
-        String accessToken = jwtUtil.generateAccessToken("access", verifyKey, username, email, role, 10 * 60 * 1000L);
-        String refreshToken = jwtUtil.generateRefreshToken(60 * 60 * 1000L);
+        String accessToken = jwtService.generateAccessToken("access", verifyKey, username, email, role, 10 * 60 * 1000L);
+        String refreshToken = jwtService.generateRefreshToken(60 * 60 * 1000L);
 
         response.setHeader("Authorization", accessToken);
         response.addHeader("Set-Cookie", tokenResponseUtil.createCookie("refresh", refreshToken).toString());
@@ -57,7 +61,8 @@ public class MemberServiceImpl implements MemberService {
 
         OAuth2Info oAuth2Info = socialMemberService.findOrCreateMember(oAuth2Response); // DB 저장 DTO
 
-        pushToken(oAuth2Info, response); // 토큰 생성
+        pushToken(oAuth2Info, response);
+
         return oAuth2Response;
     }
 
@@ -66,7 +71,7 @@ public class MemberServiceImpl implements MemberService {
             case "google" -> objectMapper.readValue(request.getInputStream(), GoogleResponse.class);
             case "kakao" -> objectMapper.readValue(request.getInputStream(), KakaoResponse.class);
             case "naver" -> objectMapper.readValue(request.getInputStream(), NaverResponse.class);
-            default -> throw new IllegalArgumentException("지원하지 않는 provider: " + provider);
+            default -> throw new MemberException(ErrorCode.INVALID_SOCIAL_ID);
         };
     }
 

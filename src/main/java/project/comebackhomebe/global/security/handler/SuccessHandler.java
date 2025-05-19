@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import project.comebackhomebe.domain.member.dto.OAuth2Info;
 import project.comebackhomebe.domain.member.entity.Role;
 import project.comebackhomebe.global.redis.service.RefreshTokenService;
+import project.comebackhomebe.global.security.jwt.JwtService;
 import project.comebackhomebe.global.security.jwt.JwtUtil;
 import project.comebackhomebe.global.security.service.TokenResponseUtil;
 
@@ -22,6 +23,7 @@ import java.io.IOException;
 @Slf4j
 public class SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final JwtUtil jwtUtil;
+    private final JwtService jwtService;
     private final TokenResponseUtil tokenResponseUtil;
     private final RefreshTokenService refreshTokenService;
 
@@ -37,8 +39,8 @@ public class SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         String email = oAuth2Info.getEmail();
         Role role = oAuth2Info.getRole();
 
-        String accessToken = jwtUtil.generateAccessToken("access", verifyKey, username, email, role, 100000 * 60 * 1000L);
-        String refreshToken = jwtUtil.generateRefreshToken(60 * 60 * 1000L);
+        String accessToken = jwtService.generateAccessToken("access", verifyKey, username, email, role, 100000 * 60 * 1000L);
+        String refreshToken = jwtService.generateRefreshToken(60 * 60 * 1000L);
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 

@@ -18,6 +18,7 @@ import org.springframework.web.filter.ForwardedHeaderFilter;
 import project.comebackhomebe.global.redis.repository.BlacklistRepository;
 import project.comebackhomebe.global.security.filter.JWTFilter;
 import project.comebackhomebe.global.security.handler.SuccessHandler;
+import project.comebackhomebe.global.security.jwt.JwtService;
 import project.comebackhomebe.global.security.jwt.JwtUtil;
 import project.comebackhomebe.global.security.service.CustomOAuth2Service;
 
@@ -33,6 +34,7 @@ public class SecurityConfig {
     private final CustomOAuth2Service customOAuth2Service;
     private final SuccessHandler successHandler;
     private final JwtUtil jwtUtil;
+    private final JwtService jwtService;
     private final CustomClientRegistrationRepo customClientRegistrationRepo;
     private final BlacklistRepository blacklistRepository;
 
@@ -64,7 +66,7 @@ public class SecurityConfig {
                 );
 
         http
-                .addFilterBefore(new JWTFilter(jwtUtil, blacklistRepository), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JWTFilter(jwtUtil, jwtService, blacklistRepository), UsernamePasswordAuthenticationFilter.class);
 
 
         //경로별 인가 작업
