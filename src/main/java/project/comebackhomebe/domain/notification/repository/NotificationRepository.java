@@ -1,10 +1,8 @@
 package project.comebackhomebe.domain.notification.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import project.comebackhomebe.domain.notification.entity.Notification;
 
-@Repository
-public interface NotificationRepository extends JpaRepository<Notification, Long> {
+public interface NotificationRepository extends ElasticsearchRepository<Notification, String> {
     // 이거 ELK 적용해야할듯
 }
