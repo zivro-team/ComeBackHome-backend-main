@@ -32,10 +32,10 @@ public class JwtServiceImpl implements JwtService {
     @Override
     public String resolveAccessToken(HttpServletRequest request) {
         String bearerToken = getAuthorizationHeader(request);
-        validateBearerToken(bearerToken);
-        String accessToken = parseBearerToken(bearerToken);
-        validateAccessToken(accessToken);
-        return accessToken;
+        if (bearerToken == null) {
+            return null;
+        }
+        return parseBearerToken(bearerToken);
     }
 
     /**
@@ -44,39 +44,16 @@ public class JwtServiceImpl implements JwtService {
     private String getAuthorizationHeader(HttpServletRequest request) {
         String header = request.getHeader("Authorization");
         if (header == null) {
-            throw new MemberException(ErrorCode.ACCESS_TOKEN_NOT_FOUND);
+            return null;
         }
         return header;
-    }
-
-    /**
-     * Authorization 헤더가 Bearer 형식인지 검증합니다.
-     */
-    private void validateBearerToken(String bearerToken) {
-        if (!bearerToken.startsWith("Bearer ")) {
-            throw new MemberException(ErrorCode.ACCESS_TOKEN_NOT_FOUND);
-        }
     }
 
     /**
      * Bearer 토큰에서 실제 액세스 토큰 부분을 추출합니다.
      */
     private String parseBearerToken(String bearerToken) {
-        try {
-            return bearerToken.substring(7); // "Bearer " 이후의 토큰 값
-        } catch (StringIndexOutOfBoundsException e) {
-            throw new MemberException(ErrorCode.ACCESS_TOKEN_NOT_FOUND);
-        }
-    }
-
-    /**
-     * 추출된 액세스 토큰이 유효한지 검증합니다.
-     */
-    private void validateAccessToken(String accessToken) {
-        if (accessToken.isEmpty()) {
-            throw new MemberException(ErrorCode.ACCESS_TOKEN_NOT_FOUND);
-        }
-        log.info("[extractAccessToken] 토큰 추출 완료: {}", accessToken);
+        return bearerToken.substring(7); // "Bearer " 이후의 토큰 값
     }
 
     @Override
