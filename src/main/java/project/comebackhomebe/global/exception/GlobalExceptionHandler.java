@@ -23,35 +23,35 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseV0> handleOAuth2Exception(OAuth2Exception exception) {
         ErrorCode errorCode = exception.getErrorCode();
         sendSlackMessage(exception, errorCode);
-        return ResponseEntity.ok(ErrorResponseV0.of(errorCode));
+        return ResponseEntity.status(errorCode.getHttpStatus()).body(ErrorResponseV0.of(errorCode));
     }
 
     @ExceptionHandler(MemberException.class)
     public ResponseEntity<ErrorResponseV0> handleMemberException(MemberException exception) {
         ErrorCode errorCode = exception.getErrorCode();
         sendSlackMessage(exception, errorCode);
-        return ResponseEntity.ok(ErrorResponseV0.of(errorCode));
+        return ResponseEntity.status(errorCode.getHttpStatus()).body(ErrorResponseV0.of(errorCode));
     }
 
     @ExceptionHandler(DogException.class)
     public ResponseEntity<ErrorResponseV0> handleDogInfoException(DogException exception) {
         ErrorCode errorCode = exception.getErrorCode();
         sendSlackMessage(exception, errorCode);
-        return ResponseEntity.ok(ErrorResponseV0.of(errorCode));
+        return ResponseEntity.status(errorCode.getHttpStatus()).body(ErrorResponseV0.of(errorCode));
     }
 
     @ExceptionHandler(NotificationException.class)
     public ResponseEntity<ErrorResponseV0> handleNotificationException(NotificationException exception) {
         ErrorCode errorCode = exception.getErrorCode();
         sendSlackMessage(exception, errorCode);
-        return ResponseEntity.ok(ErrorResponseV0.of(errorCode));
+        return ResponseEntity.status(errorCode.getHttpStatus()).body(ErrorResponseV0.of(errorCode));
     }
 
     @ExceptionHandler(ChatException.class)
     public ResponseEntity<ErrorResponseV0> handleChatException(ChatException exception) {
         ErrorCode errorCode = exception.getErrorCode();
         sendSlackMessage(exception, errorCode);
-        return ResponseEntity.ok(ErrorResponseV0.of(errorCode));
+        return ResponseEntity.status(errorCode.getHttpStatus()).body(ErrorResponseV0.of(errorCode));
     }
 
     private void sendSlackMessage(Exception e, ErrorCode errorCode) {
