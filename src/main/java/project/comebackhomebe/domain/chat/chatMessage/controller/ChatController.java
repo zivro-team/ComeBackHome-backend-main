@@ -22,6 +22,10 @@ public class ChatController {
         chatMessageService.processMessage(chatMessageinfo);
     }
 
+    /**
+     * 채팅방 들어가기
+     * 처음에만 들어가면 됨
+     */
     @GetMapping("/messages/{senderId}/{receiverId}")
     public ResponseEntity<List<ChatMessageInfo>> findChatMessage(
             @PathVariable("senderId") String senderId,
