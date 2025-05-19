@@ -19,6 +19,8 @@ public enum ErrorCode {
     USER_NOT_FOUND(2002, "사용자를 찾을 수 없습니다."),
     INVALID_USER_ACCOUNT(2003, "유효하지 않은 사용자입니다."),
     TOKEN_EXPIRED(2004, "만료된 토큰입니다."),
+    INVALID_SOCIAL_ID(2005, "잘못된 소셜 접근입니다."),
+    REFRESH_TOKEN_NOT_FOUND(2006, "리프레쉬 토큰이 없습니다."),
 
     // 강아지 정보
     DOG_NOT_FOUND(3000, "해당 강아지 정보를 찾을 수 없습니다."),

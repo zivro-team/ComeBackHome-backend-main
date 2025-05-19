@@ -20,10 +20,13 @@ import java.util.UUID;
 @Component
 @Slf4j
 public class JwtUtil {
-    private SecretKey secretKey;
+    private final SecretKey secretKey;
 
     public JwtUtil(@Value("${spring.jwt.secret}") String secret) {
-        secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
+        secretKey = new SecretKeySpec(
+                secret.getBytes(StandardCharsets.UTF_8),
+                Jwts.SIG.HS256.key().build().getAlgorithm()
+        );
     }
 
     public boolean isValidJwt(String token) {
@@ -35,23 +38,48 @@ public class JwtUtil {
     }
 
     public String getVerifyKey(String token) {
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("verifyKey", String.class);
+        return Jwts.parser()
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .get("verifyKey", String.class);
     }
 
     public String getUsername(String token) {
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("username", String.class);
+        return Jwts.parser()
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .get("username", String.class);
     }
 
     public String getEmail(String token) {
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("email", String.class);
+        return Jwts.parser()
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .get("email", String.class);
     }
 
     public Role getRole(String token) {
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("role", Role.class);
+        return Jwts.parser()
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .get("role", Role.class);
     }
 
     public String getCategory(String token) {
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("category", String.class);
+        return Jwts.parser()
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .get("category", String.class);
     }
 
     public Boolean isExpired(String token) {
@@ -90,49 +118,5 @@ public class JwtUtil {
         log.info("[getAuthentication] 인증 절차 완료");
 
         return new UsernamePasswordAuthenticationToken(oAuth2Info, null, oAuth2Info.getAuthorities());
-    }
-
-    public String resolveToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-            log.info("[resolveToken]  bearer 토큰 추출 : {}", bearerToken.substring(7));
-            return bearerToken.substring(7); // "Bearer " 이후의 토큰 값만 가져옴
-        }
-        return null;
-    }
-
-    public String generateAccessToken(String category, String verifyKey, String username, String email, Role role, Long expiredMs) {
-        return Jwts.builder()
-                .claim("category", category)
-                .claim("verifyKey", verifyKey)
-                .claim("username", username)
-                .claim("email", email)
-                .claim("Role", role)
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + expiredMs))
-                .signWith(secretKey)
-                .compact();
-    }
-
-    public String generateRefreshToken(Long expiredMs){
-        return Jwts.builder()
-                .claim("uuid", UUID.randomUUID().toString())
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + expiredMs))
-                .signWith(secretKey)
-                .compact();
-    }
-
-    public String newAccessToken(MemberInfo memberInfo, String type) {
-        String verifyKey = memberInfo.verifyKey();
-        String username = memberInfo.username();
-        String email = memberInfo.email();
-        Role role = memberInfo.role();
-
-        return generateAccessToken(type, verifyKey, username, email, role, 10 * 60 * 1000L);
-    }
-
-    public String newRefreshToken() {
-        return generateRefreshToken(60 * 60 * 1000L);
     }
 }

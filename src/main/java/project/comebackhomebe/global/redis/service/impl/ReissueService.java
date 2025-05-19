@@ -11,6 +11,7 @@ import project.comebackhomebe.domain.member.repository.MemberRepository;
 import project.comebackhomebe.global.redis.domain.RefreshToken;
 import project.comebackhomebe.global.redis.repository.RefreshTokenRepository;
 import project.comebackhomebe.global.redis.service.RefreshTokenService;
+import project.comebackhomebe.global.security.jwt.JwtService;
 import project.comebackhomebe.global.security.jwt.JwtUtil;
 import project.comebackhomebe.global.security.service.TokenResponseUtil;
 
@@ -23,6 +24,7 @@ public class ReissueService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final MemberRepository memberRepository;
     private final JwtUtil jwtUtil;
+    private final JwtService jwtService;
     private final TokenResponseUtil tokenResponseUtil;
     private final RefreshTokenService refreshTokenService;
 
@@ -78,9 +80,9 @@ public class ReissueService {
 
         refreshTokenService.deleteRefreshToken(request, response);
 
-        String newAccessToken = jwtUtil.newAccessToken(memberInfo, "access");
+        String newAccessToken = jwtService.generateNewAccessToken(memberInfo, "access");
 
-        String newRefreshToken = jwtUtil.newRefreshToken();
+        String newRefreshToken = jwtService.generateNewRefreshToken();
 
         response.setHeader("Authorization", "Bearer " + newAccessToken);
         response.addHeader("Set-Cookie", tokenResponseUtil.createCookie("refresh", newRefreshToken).toString());

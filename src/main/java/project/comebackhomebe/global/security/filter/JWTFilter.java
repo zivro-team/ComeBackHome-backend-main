@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 import project.comebackhomebe.global.redis.repository.BlacklistRepository;
 import project.comebackhomebe.global.redis.service.RefreshTokenService;
+import project.comebackhomebe.global.security.jwt.JwtService;
 import project.comebackhomebe.global.security.jwt.JwtUtil;
 
 import java.io.IOException;
@@ -20,6 +21,7 @@ import java.io.IOException;
 public class JWTFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
+    private final JwtService jwtService;
     private final BlacklistRepository blacklistRepository;
 
     // 접근 제한자
@@ -27,7 +29,7 @@ public class JWTFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         // 토큰 추출
-        String accessToken = jwtUtil.resolveToken(request);
+        String accessToken = jwtService.resolveAccessToken(request);
 
         // 토큰이 없으면 다음 필터로 진행
         if (accessToken == null) {
