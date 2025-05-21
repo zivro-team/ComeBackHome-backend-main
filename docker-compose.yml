@@ -101,7 +101,7 @@ services:
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
-      - ES_JAVA_OPTS=-Xms2g -Xmx2g
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
     command: >
       bash -c '
         bin/elasticsearch-plugin install analysis-nori || true;
