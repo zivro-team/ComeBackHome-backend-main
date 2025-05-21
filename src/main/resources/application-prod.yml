@@ -9,6 +9,8 @@ spring:
     password: cbh123@
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+  elasticsearch:
+    uris: http://localhost:9200
 
   jpa:
     hibernate:

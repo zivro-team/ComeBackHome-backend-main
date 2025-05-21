@@ -1,5 +1,6 @@
 services:
   backend:
+    image: asia-northeast3-docker.pkg.dev/comebackhome-454307/backend-main/backend-main:latest
     container_name: backend-container
     restart: unless-stopped
     ports:
@@ -73,7 +74,7 @@ services:
 #      - node-exporter:node-exporter
 
   grafana:
-    image: grafana/grafana-oss:8.5.2
+    image: grafana/grafana-oss:10.2.3
     pull_policy: always
     container_name: grafana
     restart: unless-stopped
@@ -81,13 +82,14 @@ services:
     ports:
       - "4000:3000"
     links:
-      - prometheus:prometheus
+      - elasticsearch:elasticsearch
     volumes:
       - ./data/grafana:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
       - GF_USERS_ALLOW_SIGN_UP=false
-      - GF_SERVER_DOMAIN=localhost
+      - GF_SERVER_DOMAIN=localhost:4000
       - GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s/grafana/
       - GF_SERVER_SERVE_FROM_SUB_PATH=true
     networks:
@@ -102,14 +104,17 @@ services:
       - ES_JAVA_OPTS=-Xms2g -Xmx2g
     command: >
       bash -c '
-        bin/elasticsearch-plugin install analysis-nori;
+        bin/elasticsearch-plugin install analysis-nori || true;
         /usr/local/bin/docker-entrypoint.sh elasticsearch
       '
+    volumes:
+      - ./data/elasticsearch:/usr/share/elasticsearch/data
     ports:
       - "9200:9200"
       - "9300:9300"
     networks:
       - app-network
+
 
 networks:
   app-network:

@@ -19,6 +19,21 @@ import project.comebackhomebe.domain.notification.repository.NotificationReposit
 @SpringBootApplication
 @EnableJpaAuditing
 @EnableAspectJAutoProxy
+@EnableElasticsearchRepositories(basePackages = "project.comebackhomebe.domain.notification.repository")
+@EnableMongoRepositories(basePackages = {
+        "project.comebackhomebe.domain.chat.chatMessage.repository",
+        "project.comebackhomebe.domain.chat.chatRoom.repository"
+})
+@EnableJpaRepositories(basePackages = "project.comebackhomebe.domain",
+        excludeFilters = @ComponentScan.Filter(
+                type = FilterType.ASSIGNABLE_TYPE,
+                classes = {
+                        project.comebackhomebe.domain.notification.repository.NotificationRepository.class,
+                        project.comebackhomebe.domain.chat.chatMessage.repository.ChatMessageRepository.class,
+                        project.comebackhomebe.domain.chat.chatRoom.repository.ChatRoomRepository.class
+                }
+        )
+)
 public class ComebackhomeBeApplication {
 
     public static void main(String[] args) {

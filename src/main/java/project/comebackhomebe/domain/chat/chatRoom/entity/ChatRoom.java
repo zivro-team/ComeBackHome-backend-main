@@ -1,6 +1,5 @@
 package project.comebackhomebe.domain.chat.chatRoom.entity;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
