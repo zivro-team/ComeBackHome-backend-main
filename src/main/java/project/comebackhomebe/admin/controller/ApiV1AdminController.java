@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import project.comebackhomebe.admin.service.AdminService;
-import project.comebackhomebe.domain.dog.dogInfo.dto.response.DogInfoResponse;
+import project.comebackhomebe.domain.dog.dogInfo.dto.response.DogDiscoverInfoResponse;
 import project.comebackhomebe.domain.member.dto.MemberInfo;
 
 import java.util.List;
@@ -29,7 +29,7 @@ public class ApiV1AdminController {
 
     // 견종
     @GetMapping("/dogs")
-    public ResponseEntity<List<DogInfoResponse>> getDogs(@Valid Pageable pageable) {
+    public ResponseEntity<List<DogDiscoverInfoResponse>> getDogs(@Valid Pageable pageable) {
         return ResponseEntity.ok(adminService.getDogInfo(pageable));
     }
 

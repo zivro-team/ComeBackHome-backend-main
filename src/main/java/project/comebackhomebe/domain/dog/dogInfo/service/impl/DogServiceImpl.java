@@ -13,7 +13,8 @@ import project.comebackhomebe.domain.dog.dogImage.dto.request.DogImageRequest;
 import project.comebackhomebe.domain.dog.dogImage.entity.DogImage;
 import project.comebackhomebe.domain.dog.dogInfo.dto.request.DogDiscoverInfoRequest;
 import project.comebackhomebe.domain.dog.dogInfo.dto.request.DogLostInfoRequest;
-import project.comebackhomebe.domain.dog.dogInfo.dto.response.DogInfoResponse;
+import project.comebackhomebe.domain.dog.dogInfo.dto.response.DogDiscoverInfoResponse;
+import project.comebackhomebe.domain.dog.dogInfo.dto.response.DogLostInfoResponse;
 import project.comebackhomebe.domain.dog.dogInfo.entity.Dog;
 import project.comebackhomebe.domain.dog.dogInfo.entity.Type;
 import project.comebackhomebe.domain.dog.dogInfo.repository.DogRepository;
@@ -40,7 +41,7 @@ public class DogServiceImpl implements DogService {
     private final NotificationService notificationService;
 
     @Override
-    public DogInfoResponse createLostInfo(DogLostInfoRequest infoRequest, List<DogImageRequest> imageRequest, DogHealthRequest healthRequest, HttpServletRequest request) throws IOException, FirebaseMessagingException {
+    public DogLostInfoResponse createLostInfo(DogLostInfoRequest infoRequest, List<DogImageRequest> imageRequest, DogHealthRequest healthRequest, HttpServletRequest request) throws IOException, FirebaseMessagingException {
         String token = jwtService.resolveAccessToken(request);
 
         String verifyKey = jwtUtil.getVerifyKey(token);
@@ -67,11 +68,11 @@ public class DogServiceImpl implements DogService {
 
         dogRepository.save(dog);
 
-        return DogInfoResponse.of(dog);
+        return DogLostInfoResponse.of(dog);
     }
 
     @Override
-    public DogInfoResponse createDiscoverInfo(DogDiscoverInfoRequest infoRequest, List<DogImageRequest> imageRequest, DogHealthRequest healthRequest, HttpServletRequest request) throws IOException, FirebaseMessagingException {
+    public DogDiscoverInfoResponse createDiscoverInfo(DogDiscoverInfoRequest infoRequest, List<DogImageRequest> imageRequest, DogHealthRequest healthRequest, HttpServletRequest request) throws IOException, FirebaseMessagingException {
         String token = jwtService.resolveAccessToken(request);
 
         String verifyKey = jwtUtil.getVerifyKey(token);
@@ -97,43 +98,43 @@ public class DogServiceImpl implements DogService {
 
         dogRepository.save(dog);
 
-        return DogInfoResponse.of(dog);
+        return DogDiscoverInfoResponse.of(dog);
     }
 
     @Override
-    public DogInfoResponse getInfo(Long id) throws IOException {
+    public DogDiscoverInfoResponse getInfo(Long id) throws IOException {
         Dog dog = dogRepository.getByIdOrElseThrow(id);
 
-        return DogInfoResponse.of(dog);
+        return DogDiscoverInfoResponse.of(dog);
     }
 
     @Override
-    public DogInfoResponse foundInfo(Long id) throws IOException {
+    public DogDiscoverInfoResponse foundInfo(Long id) throws IOException {
         Dog dog = dogRepository.getByIdOrElseThrow(id);
 
         Dog updateDog = Dog.foundDogInfo(id, dog);
 
         dogRepository.save(updateDog);
 
-        return DogInfoResponse.of(updateDog);
+        return DogDiscoverInfoResponse.of(updateDog);
     }
 
     @Override
-    public List<DogInfoResponse> getListByBreed(String breed, Pageable pageable) {
+    public List<DogDiscoverInfoResponse> getListByBreed(String breed, Pageable pageable) {
         Slice<Dog> dogs = dogRepositoryCustom.getDogInfoByBreed(breed, pageable);
 
         List<Dog> infoResponses = dogs.getContent();
 
-        return DogInfoResponse.listOf(infoResponses);
+        return DogDiscoverInfoResponse.listOf(infoResponses);
     }
 
     @Override
-    public List<DogInfoResponse> getListByType(Type type, Pageable pageable) {
+    public List<DogDiscoverInfoResponse> getListByType(Type type, Pageable pageable) {
         Slice<Dog> dogs = dogRepositoryCustom.getDogInfoByType(type, pageable);
 
         List<Dog> infoResponses = dogs.getContent();
 
-        return DogInfoResponse.listOf(infoResponses);
+        return DogDiscoverInfoResponse.listOf(infoResponses);
     }
 
     @Override
@@ -142,12 +143,21 @@ public class DogServiceImpl implements DogService {
     }
 
     @Override
-    public List<DogInfoResponse> getList(Pageable pageable) {
-        Slice<Dog> dogs = dogRepositoryCustom.getAllDogInfo(pageable);
+    public List<DogDiscoverInfoResponse> getDiscoverList(Pageable pageable) {
+        Slice<Dog> dogs = dogRepositoryCustom.getDogInfoByType(Type.DISCOVER, pageable);
 
         List<Dog> infoResponses = dogs.getContent();
 
-        return DogInfoResponse.listOf(infoResponses);
+        return DogDiscoverInfoResponse.listOf(infoResponses);
+    }
+
+    @Override
+    public List<DogLostInfoResponse> getLostList(Pageable pageable) {
+        Slice<Dog> dogs = dogRepositoryCustom.getDogInfoByType(Type.LOST, pageable);
+
+        List<Dog> infoResponses = dogs.getContent();
+
+        return DogLostInfoResponse.listOf(infoResponses);
     }
 
 }

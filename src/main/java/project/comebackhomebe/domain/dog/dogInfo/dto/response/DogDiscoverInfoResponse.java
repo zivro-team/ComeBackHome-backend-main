@@ -12,7 +12,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Schema(title = "InfoResponse : 강아지 정보 반환 데이터")
-public record DogInfoResponse(
+public record DogDiscoverInfoResponse(
+        @Schema(description = "형태 타입", example = "LOST, DISCOVER")
+        Long id,
         @Schema(description = "형태 타입", example = "LOST, DISCOVER")
         Type type,
         @Schema(description = "강아지 현재 상태 (찾는 중)")
@@ -28,8 +30,9 @@ public record DogInfoResponse(
         @Schema(description = "강아지 건강 상태 정보")
         DogHealthResponse healthResponses
 ) {
-    public static DogInfoResponse of(Dog dog) {
-        return new DogInfoResponse(
+    public static DogDiscoverInfoResponse of(Dog dog) {
+        return new DogDiscoverInfoResponse(
+                dog.getId(),
                 dog.getType(),
                 dog.getStatus(),
                 dog.getGender(),
@@ -40,9 +43,9 @@ public record DogInfoResponse(
         );
     }
 
-    public static List<DogInfoResponse> listOf(List<Dog> dogs) {
+    public static List<DogDiscoverInfoResponse> listOf(List<Dog> dogs) {
         return dogs.stream()
-                .map(DogInfoResponse::of)
+                .map(DogDiscoverInfoResponse::of)
                 .collect(Collectors.toList());
     }
 }
