@@ -11,8 +11,10 @@ services:
     volumes:
       - ./build/libs:/build/libs
       - ./path/to/your/service-account-key.json:/path/to/your/service-account-key.json  # 서비스 계정 키 파일 매핑
+      - ./path/to/wait-for-it.sh:/wait-for-it.sh    # wait-for-it.sh 마운트
     depends_on:
       - elasticsearch
+    entrypoint: ["/wait-for-it.sh", "elasticsearch:9200", "--", "java", "-jar", "-Dspring.profiles.active=prod", "-Duser.timezone=Asia/Seoul", "/app/app.jar"]
     networks:
       - app-network
 
