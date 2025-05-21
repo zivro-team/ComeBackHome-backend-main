@@ -1,29 +1,18 @@
 package project.comebackhomebe.domain.notification.entity;
 
-import com.google.firebase.messaging.Message;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
+
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.checkerframework.checker.units.qual.N;
-import project.comebackhomebe.domain.notification.dto.request.NotificationRequest;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
 
-@Entity
+@Document(indexName = "notification")
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
 public class Notification {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private Long following_user_id; // 알림을 받는 사용자, 기능 구현 이후 디벨롭
+    private String id;
 
     private String token; // 안드로이드에서 제공받는 토큰
 
@@ -31,23 +20,11 @@ public class Notification {
 
     private String message; // 해당 메시지
 
-    public static Notification from(NotificationRequest request) {
+    public static Notification from(String token, String title, String message) {
         return Notification.builder()
-                .following_user_id(request.user_id())
-                .token(request.token())
-                .title(request.title())
-                .message(request.message())
-                .build();
-    }
-
-    // FCM Message 객체 반환
-    public Message getFcmMessage() {
-        return Message.builder()
-                .setNotification(com.google.firebase.messaging.Notification.builder()
-                        .setTitle(title)
-                        .setBody(message)
-                        .build())
-                .setToken(token)
+                .token(token)
+                .title(title)
+                .message(message)
                 .build();
     }
 }

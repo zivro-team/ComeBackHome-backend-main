@@ -3,22 +3,15 @@ package project.comebackhomebe.domain.notification.service.impl;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import project.comebackhomebe.domain.dog.dogInfo.entity.Dog;
-import project.comebackhomebe.domain.dog.dogInfo.repository.DogRepository;
-import project.comebackhomebe.domain.dog.dogInfo.repository.DogRepositoryCustom;
-import project.comebackhomebe.domain.member.repository.MemberRepository;
 import project.comebackhomebe.domain.member.repository.MemberRepositoryCustom;
-import project.comebackhomebe.domain.notification.dto.request.NotificationRequest;
-import project.comebackhomebe.domain.notification.dto.response.NotificationResponse;
 import project.comebackhomebe.domain.notification.entity.Notification;
 import project.comebackhomebe.domain.notification.repository.NotificationRepository;
 import project.comebackhomebe.domain.notification.service.NotificationService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +20,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class NotificationServiceImpl implements NotificationService {
 
+    private final NotificationRepository notificationRepository;
     private final MemberRepositoryCustom memberRepositoryCustom;
 
     @Override
@@ -41,7 +35,10 @@ public class NotificationServiceImpl implements NotificationService {
 
         String response = FirebaseMessaging.getInstance().send(message);
 
-        // 성공 로그 남기기
+        Notification notification = Notification.from(token, title, body);
+
+        notificationRepository.save(notification);
+
         log.info("FCM 메시지 전송 성공, response: {}", response);
     }
 
@@ -49,7 +46,7 @@ public class NotificationServiceImpl implements NotificationService {
     public void registerNewDogFromBreed(String breed) throws FirebaseMessagingException {
         List<String> tokens = memberRepositoryCustom.getFcmTokensByBreed(breed);
 
-        for (String token : tokens){
+        for (String token : tokens) {
             sendMessage(
                     token,
                     breed + "종의 강아지가 발견되었습니다!",
@@ -61,7 +58,7 @@ public class NotificationServiceImpl implements NotificationService {
     public void findDogByBoundary(String area) throws FirebaseMessagingException {
         List<String> tokens = memberRepositoryCustom.getFcmTokensByArea(area);
 
-        for (String token : tokens){
+        for (String token : tokens) {
             sendMessage(
                     token,
                     area + "에서 강아지가 발견되었습니다!",
@@ -71,7 +68,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void matchDogByAi (List<Dog> dogs) throws FirebaseMessagingException {
+    public void matchDogByAi(List<Dog> dogs) throws FirebaseMessagingException {
 
         List<Long> dogIds = dogs.stream()
                 .map(Dog::getId)
@@ -79,7 +76,7 @@ public class NotificationServiceImpl implements NotificationService {
 
         List<String> tokens = memberRepositoryCustom.getFcmTokensByDog(dogIds);
 
-        for (String token : tokens){
+        for (String token : tokens) {
             sendMessage(
                     token,
                     "AI 분석 결과 사용자의 강아지와 유사한 강아지가 있습니다!",
