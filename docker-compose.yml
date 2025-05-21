@@ -1,18 +1,16 @@
 services:
   backend:
-    image: asia-northeast3-docker.pkg.dev/comebackhome-454307/backend-main/backend-main:latest
     container_name: backend-container
     restart: unless-stopped
     ports:
       - "8085:8085"
     environment:
       SPRING_PROFILES_ACTIVE: "prod, secret"
-      GOOGLE_APPLICATION_CREDENTIALS: /path/to/your/service-account-key.json  # GCS 인증
+      GOOGLE_APPLICATION_CREDENTIALS: /path/to/your/service-account-key.json
     volumes:
-      - ./build/libs:/build/libs
-      - ./path/to/your/service-account-key.json:/path/to/your/service-account-key.json  # 서비스 계정 키 파일 매핑
-      - ./wait-for-it.sh:/wait-for-it.sh    # wait-for-it.sh 마운트
-    entrypoint: ["/wait-for-it.sh", "elasticsearch:9200", "--", "java", "-jar", "-Dspring.profiles.active=prod", "-Duser.timezone=Asia/Seoul", "/build/libs/Comebackhome-be-0.0.1-SNAPSHOT.jar"]
+      - ./path/to/your/service-account-key.json:/path/to/your/service-account-key.json
+      - ./wait-for-it.sh:/wait-for-it.sh
+    entrypoint: ["/wait-for-it.sh", "elasticsearch:9200", "--", "java", "-jar", "-Dspring.profiles.active=prod", "-Duser.timezone=Asia/Seoul", "/app/app.jar"]
     networks:
       - app-network
 
