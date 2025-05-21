@@ -14,7 +14,7 @@ services:
       - ./path/to/wait-for-it.sh:/wait-for-it.sh    # wait-for-it.sh 마운트
     depends_on:
       - elasticsearch
-    entrypoint: ["/wait-for-it.sh", "elasticsearch:9200", "--", "java", "-jar", "-Dspring.profiles.active=prod", "-Duser.timezone=Asia/Seoul", "/app/app.jar"]
+    entrypoint: ["/wait-for-it.sh", "elasticsearch:9200", "--", "java", "-jar", "-Dspring.profiles.active=prod", "-Duser.timezone=Asia/Seoul", "/build/libs/Comebackhome-be-0.0.1-SNAPSHOT.jar"]
     networks:
       - app-network
 
