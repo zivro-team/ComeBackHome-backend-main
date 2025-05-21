@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import project.comebackhomebe.admin.service.AdminService;
-import project.comebackhomebe.domain.dog.dogInfo.dto.response.DogInfoResponse;
+import project.comebackhomebe.domain.dog.dogInfo.dto.response.DogDiscoverInfoResponse;
 import project.comebackhomebe.domain.dog.dogInfo.entity.Dog;
 import project.comebackhomebe.domain.dog.dogInfo.repository.DogRepositoryCustom;
 import project.comebackhomebe.domain.member.dto.MemberInfo;
@@ -32,11 +32,11 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<DogInfoResponse> getDogInfo(Pageable pageable) {
+    public List<DogDiscoverInfoResponse> getDogInfo(Pageable pageable) {
         Page<Dog> dogPage = dogRepository.getDogInfo(pageable);
 
         List<Dog> dogs = dogPage.getContent();
 
-        return DogInfoResponse.listOf(dogs);
+        return DogDiscoverInfoResponse.listOf(dogs);
     }
 }
