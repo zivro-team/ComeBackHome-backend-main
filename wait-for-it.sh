@@ -29,7 +29,7 @@ wait_for() {
 wait_for_wrapper() {
   # In order to support SIGINT during timeout: http://unix.stackexchange.com/a/57692
   if [[ $WAITFORIT_TIMEOUT -gt 0 ]]; then
-    timeout "$WAITFORIT_TIMEOUT" bash -c wait_for
+    timeout "$WAITFORIT_TIMEOUT" bash -c "$(declare -f wait_for); wait_for"
     result=$?
     if [[ $result -eq 124 ]]; then
       echoerr "$WAITFORIT_cmdname: timeout occurred after waiting $WAITFORIT_TIMEOUT seconds for $WAITFORIT_HOST:$WAITFORIT_PORT"
