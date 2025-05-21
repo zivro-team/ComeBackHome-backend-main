@@ -1,10 +1,14 @@
 FROM openjdk:17-jdk
 
-# 작업 디렉토리 설정
 WORKDIR /app
 
-# 실행 가능 JAR 파일을 복사
+# JAR 복사
 COPY build/libs/Comebackhome-be-0.0.1-SNAPSHOT.jar app.jar
 
-# Spring Boot 실행
-ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prod", "-Duser.timezone=Asia/Seoul", "/app/app.jar"]
+# wait-for-it 복사 및 권한 부여
+COPY wait-for-it.sh /wait-for-it.sh
+RUN chmod +x /wait-for-it.sh
+
+# entrypoint는 wait-for-it으로 변경
+ENTRYPOINT ["/wait-for-it.sh"]
+CMD ["elasticsearch:9200", "--", "java", "-jar", "-Dspring.profiles.active=prod", "-Duser.timezone=Asia/Seoul", "/app/app.jar"]
