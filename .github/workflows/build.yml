@@ -62,5 +62,6 @@ jobs:
             docker pull asia-northeast3-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/backend-main/backend-main:latest
 
             echo "✅ Restart container with new image"
+            cd ~/ComeBackHome-backend-main
             docker-compose down
             docker-compose up -d --build
