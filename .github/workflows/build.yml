@@ -62,6 +62,5 @@ jobs:
             docker pull asia-northeast3-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/backend-main/backend-main:latest
 
             echo "✅ Restart container with new image"
-            docker stop backend-container || true
-            docker rm backend-container || true
-            docker run -d --name backend-container -p 8085:8085 asia-northeast3-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/backend-main/backend-main:latest
+            docker-compose down
+            docker-compose up -d --build
