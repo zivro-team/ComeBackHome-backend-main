@@ -2,7 +2,8 @@ name: Build and Deploy API Server
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   build-and-deploy:
@@ -18,20 +19,31 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Caching Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
       - name: Build with Gradle
         run: |
-          chmod +x gradlew
+          chmod +x gradlew 
           ./gradlew clean build -x test
 
       - name: Verify JAR File Exists
         run: |
           if [ ! -f build/libs/Comebackhome-be-0.0.1-SNAPSHOT.jar ]; then
-            echo "❌ JAR 파일이 없습니다!"
+            echo "❌ JAR 파일이 존재하지 않습니다."
             exit 1
           fi
+
           FILESIZE=$(stat -c%s "build/libs/Comebackhome-be-0.0.1-SNAPSHOT.jar")
           if [ "$FILESIZE" -lt 10000000 ]; then
-            echo "❌ JAR 파일 용량이 너무 작습니다. 빌드 실패 가능성 있음."
+            echo "❌ JAR 파일 용량이 너무 작습니다. 손상되었을 수 있습니다. (size: $FILESIZE)"
             exit 1
           fi
 
@@ -41,7 +53,8 @@ jobs:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
 
       - name: Configure Docker for GCP Artifact Registry
-        run: gcloud auth configure-docker asia-northeast3-docker.pkg.dev --quiet
+        run: |
+          gcloud auth configure-docker asia-northeast3-docker.pkg.dev --quiet
 
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v2
@@ -58,10 +71,15 @@ jobs:
           username: ${{ secrets.GCP_VM_USER }}
           key: ${{ secrets.GCP_SSH_KEY }}
           script: |
-            echo "✅ Pull latest Docker image"
-            docker pull asia-northeast3-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/backend-main/backend-main:latest
-
-            echo "✅ Restart container with new image"
-            cd ~/ComeBackHome-backend-main
-            docker-compose down
-            docker-compose up -d --build
+            DISK_USAGE=$(df --output=pcent / | tail -1 | tr -dc '0-9')
+            echo "Current disk usage: $DISK_USAGE%"
+          
+            if [ "$DISK_USAGE" -ge 90 ]; then
+              echo "Disk usage above 90%, running clean.sh..."
+              bash ~/clean.sh
+            fi
+          
+            echo "Running deploy.sh..."
+            bash ~/deploy.sh
+          script_stop: true
+          command_timeout: 15m
