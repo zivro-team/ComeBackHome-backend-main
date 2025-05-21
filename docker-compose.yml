@@ -11,6 +11,8 @@ services:
     volumes:
       - ./build/libs:/build/libs
       - ./path/to/your/service-account-key.json:/path/to/your/service-account-key.json  # 서비스 계정 키 파일 매핑
+    depends_on:
+      - elasticsearch
     networks:
       - app-network
 
