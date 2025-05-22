@@ -1,6 +1,7 @@
 services:
   backend:
     image: asia-northeast3-docker.pkg.dev/comebackhome-454307/backend-main/backend-main:latest
+    restart: unless-stopped
     container_name: backend-container
     ports:
       - "8085:8085"
@@ -16,6 +17,7 @@ services:
 
   redis-service:
     image: redis:alpine
+    restart: unless-stopped
     command: redis-server /usr/local/etc/redis/redis.conf --requirepass 1234
     container_name: redis-refresh-token
     ports:
@@ -28,6 +30,7 @@ services:
 
   mongo:
     image: mongo
+    restart: unless-stopped
     container_name: mongo
     ports:
       - "27017:27017"
@@ -41,6 +44,7 @@ services:
 
   mongo-express:
     image: mongo-express
+    restart: unless-stopped
     container_name: mongo_express
     ports:
       - "8081:8081"
@@ -56,22 +60,9 @@ services:
     networks:
       - app-network
 
-  prometheus:
-    image: prom/prometheus:v2.35.0
-    container_name: prometheus
-    volumes:
-      - ./data/prometheus/config:/etc/prometheus
-    command:
-      - "--config.file=/etc/prometheus/prometheus.yml"
-    ports:
-      - "9090:9090"
-    networks:
-      - app-network
-#    links:
-#      - node-exporter:node-exporter
-
   grafana:
     image: grafana/grafana-oss:10.2.3
+    restart: unless-stopped
     pull_policy: always
     container_name: grafana
     user: root
@@ -93,6 +84,7 @@ services:
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.12.0
+    restart: unless-stopped
     container_name: elasticsearch
     environment:
       - discovery.type=single-node
@@ -113,6 +105,7 @@ services:
 
   filebeat:
     container_name: filebeat
+    restart: unless-stopped
     image: docker.elastic.co/beats/filebeat:7.14.1
     volumes:
       - ./filebeat/filebeat-prod.yml:/usr/share/filebeat/filebeat-prod.yml
