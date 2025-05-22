@@ -1,0 +1,11 @@
+filebeat.inputs:
+  - type: log
+    enabled: true
+    paths:
+      - ./logs/data/*.log
+      - ./logs/error/*.log
+
+output.elasticsearch:
+  hosts: ["https://cbh.kro.kr/elasticsearch"]
+  protocol: "https"
+  ssl.verification_mode: "none"
