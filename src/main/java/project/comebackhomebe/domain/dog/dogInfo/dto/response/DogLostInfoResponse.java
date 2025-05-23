@@ -29,6 +29,8 @@ public record DogLostInfoResponse(
         String breed,
         @Schema(description = "강아지 크기")
         String height,
+        @Schema(description = "강아지 위치")
+        String area,
         @Schema(description = "강아지 이미지들")
         List<DogImageResponse> imageResponses,
         @Schema(description = "강아지 건강 상태 정보")
@@ -44,6 +46,7 @@ public record DogLostInfoResponse(
                 dog.getWeight(),
                 dog.getBreed(),
                 dog.getHeight(),
+                dog.getArea(),
                 DogImageResponse.listOf(dog.getImageUrls()),
                 DogHealthResponse.of(dog.getHealth())
         );

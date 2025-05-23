@@ -39,7 +39,7 @@ public class Dog extends BaseTimeEntity {
     private String breed; // 종
 
     @Column(nullable = false)
-    private String middle_breed; // 중분류 종
+    private String middleBreed; // 중분류 종
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -54,6 +54,7 @@ public class Dog extends BaseTimeEntity {
     @Column(nullable = false)
     private String area; // 도로명 위치
 
+    @Builder.Default
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "dog") // EAGER 시 오류
     @ToString.Exclude
     private List<DogImage> imageUrls = new ArrayList<>();
@@ -65,12 +66,13 @@ public class Dog extends BaseTimeEntity {
     @JoinColumn(name = "member_id", updatable = false)
     private Member member;
 
-    public static Dog createDiscoverDogInfo(String area, String breed, Gender gender, String height, List<DogImage> images, DogHealth health, Member member) {
+    public static Dog createDiscoverDogInfo(String area, String breed, String middleBreed, Gender gender, String height, List<DogImage> images, DogHealth health, Member member) {
         Dog dog = Dog.builder()
                 .type(Type.DISCOVER)
                 .status(Status.FIND)
                 .area(area)
                 .breed(breed)
+                .middleBreed(middleBreed)
                 .gender(gender)
                 .height(height)
                 .member(member)
@@ -85,13 +87,14 @@ public class Dog extends BaseTimeEntity {
         return dog;
     }
 
-    public static Dog createLostDogInfo(String area, String name, String breed, Gender gender, String height, int weight, List<DogImage> images, DogHealth health, Member member) {
+    public static Dog createLostDogInfo(String area, String name, String breed, String middleBreed, Gender gender, String height, int weight, List<DogImage> images, DogHealth health, Member member) {
         Dog dog = Dog.builder()
                 .type(Type.LOST)
                 .status(Status.FIND)
                 .area(area)
                 .name(name)
                 .breed(breed)
+                .middleBreed(middleBreed)
                 .gender(gender)
                 .height(height)
                 .weight(weight)
@@ -113,6 +116,7 @@ public class Dog extends BaseTimeEntity {
                 .type(dog.type)
                 .status(Status.FOUND)
                 .breed(dog.breed)
+                .middleBreed(dog.middleBreed)
                 .gender(dog.gender)
                 .height(dog.height)
                 .imageUrls(dog.imageUrls)

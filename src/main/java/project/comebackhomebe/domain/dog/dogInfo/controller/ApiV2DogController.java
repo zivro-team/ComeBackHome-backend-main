@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.comebackhomebe.domain.dog.dogInfo.dto.request.DogDiscoverAllRequest;
 import project.comebackhomebe.domain.dog.dogInfo.dto.request.DogLostAllRequest;
+import project.comebackhomebe.domain.dog.dogInfo.dto.response.DogCommonResponse;
 import project.comebackhomebe.domain.dog.dogInfo.dto.response.DogDiscoverInfoResponse;
 import project.comebackhomebe.domain.dog.dogInfo.dto.response.DogLostInfoResponse;
 import project.comebackhomebe.domain.dog.dogInfo.entity.Type;
@@ -61,7 +62,7 @@ public class ApiV2DogController {
     @RateLimited
     @GetMapping("/{id}")
     @Operation(summary = "특정 강아지 정보 가져오기", description = "특정 강아지 정보를 가져올때 사용하는 API")
-    public ResponseEntity<DogDiscoverInfoResponse> getDogInfo(@PathVariable("id") Long id) throws IOException {
+    public ResponseEntity<DogCommonResponse> getDogInfo(@PathVariable("id") Long id) throws IOException {
         return ResponseEntity.ok(dogService.getInfo(id));
     }
 

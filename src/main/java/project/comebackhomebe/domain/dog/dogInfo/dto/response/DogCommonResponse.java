@@ -11,8 +11,7 @@ import project.comebackhomebe.domain.dog.dogInfo.entity.Type;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Schema(title = "InfoResponse : 강아지 정보 반환 데이터")
-public record DogDiscoverInfoResponse(
+public record DogCommonResponse(
         @Schema(description = "형태 타입", example = "LOST, DISCOVER")
         Long id,
         @Schema(description = "형태 타입", example = "LOST, DISCOVER")
@@ -21,6 +20,10 @@ public record DogDiscoverInfoResponse(
         Status status,
         @Schema(description = "강아지 성별")
         Gender gender,
+        @Schema(description = "강아지 이름")
+        String name,
+        @Schema(description = "강아지 무게")
+        int weight,
         @Schema(description = "강아지 종")
         String breed,
         @Schema(description = "강아지 크기")
@@ -32,12 +35,14 @@ public record DogDiscoverInfoResponse(
         @Schema(description = "강아지 건강 상태 정보")
         DogHealthResponse healthResponses
 ) {
-    public static DogDiscoverInfoResponse of(Dog dog) {
-        return new DogDiscoverInfoResponse(
+    public static DogCommonResponse of(Dog dog) {
+        return new DogCommonResponse(
                 dog.getId(),
                 dog.getType(),
                 dog.getStatus(),
                 dog.getGender(),
+                dog.getName(),
+                dog.getWeight(),
                 dog.getBreed(),
                 dog.getHeight(),
                 dog.getArea(),
@@ -46,9 +51,9 @@ public record DogDiscoverInfoResponse(
         );
     }
 
-    public static List<DogDiscoverInfoResponse> listOf(List<Dog> dogs) {
+    public static List<DogCommonResponse> listOf(List<Dog> dogs) {
         return dogs.stream()
-                .map(DogDiscoverInfoResponse::of)
+                .map(DogCommonResponse::of)
                 .collect(Collectors.toList());
     }
 }

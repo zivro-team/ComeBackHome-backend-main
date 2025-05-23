@@ -10,6 +10,8 @@ public record DogDiscoverInfoRequest(
         String area,
         @Schema(description = "강아지 종")
         String breed,
+        @Schema(description = "강아지 계열")
+        String breedType,
         @Schema(description = "강아지 크기")
         String height,
         @Schema(description = "강아지 성별")

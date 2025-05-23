@@ -13,6 +13,7 @@ import project.comebackhomebe.domain.dog.dogImage.dto.request.DogImageRequest;
 import project.comebackhomebe.domain.dog.dogImage.entity.DogImage;
 import project.comebackhomebe.domain.dog.dogInfo.dto.request.DogDiscoverInfoRequest;
 import project.comebackhomebe.domain.dog.dogInfo.dto.request.DogLostInfoRequest;
+import project.comebackhomebe.domain.dog.dogInfo.dto.response.DogCommonResponse;
 import project.comebackhomebe.domain.dog.dogInfo.dto.response.DogDiscoverInfoResponse;
 import project.comebackhomebe.domain.dog.dogInfo.dto.response.DogLostInfoResponse;
 import project.comebackhomebe.domain.dog.dogInfo.entity.Dog;
@@ -56,6 +57,7 @@ public class DogServiceImpl implements DogService {
                 infoRequest.area(),
                 infoRequest.name(),
                 infoRequest.breed(),
+                infoRequest.breedType(),
                 infoRequest.gender(),
                 infoRequest.height(),
                 infoRequest.weight(),
@@ -86,6 +88,7 @@ public class DogServiceImpl implements DogService {
         Dog dog = Dog.createDiscoverDogInfo(
                 infoRequest.area(),
                 infoRequest.breed(),
+                infoRequest.breedType(),
                 infoRequest.gender(),
                 infoRequest.height(),
                 images,
@@ -102,10 +105,10 @@ public class DogServiceImpl implements DogService {
     }
 
     @Override
-    public DogDiscoverInfoResponse getInfo(Long id) throws IOException {
+    public DogCommonResponse getInfo(Long id) throws IOException {
         Dog dog = dogRepository.getByIdOrElseThrow(id);
-
-        return DogDiscoverInfoResponse.of(dog);
+        
+        return DogCommonResponse.of(dog);
     }
 
     @Override
