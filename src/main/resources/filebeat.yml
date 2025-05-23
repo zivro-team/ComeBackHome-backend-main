@@ -6,6 +6,6 @@ filebeat.inputs:
       - ./logs/error/*.log
 
 output.elasticsearch:
-  hosts: ["https://cbh.kro.kr/elasticsearch"]
+  hosts: ["https://cbh.kro.kr/elasticsearch/"]
   protocol: "https"
-  ssl.verification_mode: "none"
+  ssl.verification_mode: "full"
