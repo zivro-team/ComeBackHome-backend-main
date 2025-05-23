@@ -2,8 +2,8 @@ filebeat.inputs:
   - type: log
     enabled: true
     paths:
-      - ./logs/data/*.log
-      - ./logs/error/*.log
+      - /usr/share/filebeat/logs/data/*.log
+      - /usr/share/filebeat/logs/error/*.log
 
 output.elasticsearch:
   hosts: ["https://cbh.kro.kr/elasticsearch/"]
