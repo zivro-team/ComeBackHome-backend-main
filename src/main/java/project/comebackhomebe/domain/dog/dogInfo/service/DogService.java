@@ -7,6 +7,7 @@ import project.comebackhomebe.domain.dog.dogHealth.dto.request.DogHealthRequest;
 import project.comebackhomebe.domain.dog.dogImage.dto.request.DogImageRequest;
 import project.comebackhomebe.domain.dog.dogInfo.dto.request.DogDiscoverInfoRequest;
 import project.comebackhomebe.domain.dog.dogInfo.dto.request.DogLostInfoRequest;
+import project.comebackhomebe.domain.dog.dogInfo.dto.response.DogCommonResponse;
 import project.comebackhomebe.domain.dog.dogInfo.dto.response.DogDiscoverInfoResponse;
 import project.comebackhomebe.domain.dog.dogInfo.dto.response.DogLostInfoResponse;
 import project.comebackhomebe.domain.dog.dogInfo.entity.Type;
@@ -22,7 +23,7 @@ public interface DogService {
     DogDiscoverInfoResponse createDiscoverInfo(DogDiscoverInfoRequest infoRequest, List<DogImageRequest> imageRequest, DogHealthRequest healthRequest, HttpServletRequest request) throws IOException, FirebaseMessagingException;
 
     // 정보 가져오기
-    DogDiscoverInfoResponse getInfo(Long id) throws IOException;
+    DogCommonResponse getInfo(Long id) throws IOException;
 
     // 전체 정보 가져오기
     List<DogDiscoverInfoResponse> getDiscoverList(Pageable pageable);
