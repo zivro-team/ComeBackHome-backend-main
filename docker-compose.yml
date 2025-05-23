@@ -108,7 +108,7 @@ services:
     restart: unless-stopped
     image: docker.elastic.co/beats/filebeat:7.14.1
     volumes:
-      - ./src/main/resource/filebeat.yml:/usr/share/filebeat/filebeat.yml
+      - ./src/main/resources/filebeat.yml:/usr/share/filebeat/filebeat.yml
       - ./logs:/usr/share/filebeat/logs
     depends_on:
       - elasticsearch
