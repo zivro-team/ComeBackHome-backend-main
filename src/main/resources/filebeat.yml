@@ -6,6 +6,10 @@ filebeat.inputs:
       - /usr/share/filebeat/logs/error/*.log
 
 output.elasticsearch:
-  hosts: ["https://cbh.kro.kr/elasticsearch/"]
-  protocol: "https"
-  ssl.verification_mode: "full"
+  hosts: ["cbh.kro.kr/elasticsearch"]
+  protocol: "https"  # 별도로 프로토콜 지정
+  ssl.verification_mode: "none"
+
+# 디버깅용 로그 활성화
+logging.level: info
+logging.to_stderr: true  # 파일 대신 콘솔로 출력

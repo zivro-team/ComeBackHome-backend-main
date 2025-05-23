@@ -110,8 +110,6 @@ services:
     volumes:
       - ./src/main/resources/filebeat.yml:/usr/share/filebeat/filebeat.yml
       - ./logs:/usr/share/filebeat/logs
-    depends_on:
-      - elasticsearch
     networks:
       - app-network
 
