@@ -25,7 +25,7 @@ public class DogHealth {
 
     private String feature;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dog_id")
     private Dog dog;
 
