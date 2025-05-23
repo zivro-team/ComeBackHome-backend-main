@@ -6,8 +6,7 @@ filebeat.inputs:
       - /usr/share/filebeat/logs/error/*.log
 
 output.elasticsearch:
-  hosts: ["cbh.kro.kr/elasticsearch"]
-  protocol: "https"  # 별도로 프로토콜 지정
+  hosts: ["http://localhost:9200"]
   ssl.verification_mode: "none"
 
 # 디버깅용 로그 활성화
