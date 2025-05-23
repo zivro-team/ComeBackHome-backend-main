@@ -50,9 +50,6 @@ dependencies {
 
     // JWT 인증을 사용할 경우 (선택 사항)
     implementation 'com.auth0:java-jwt:4.4.0'
-//    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
-//    implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
-//    implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
     implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
     implementation 'io.jsonwebtoken:jjwt-impl:0.12.3'
     implementation 'io.jsonwebtoken:jjwt-jackson:0.12.3'
@@ -121,9 +118,6 @@ dependencies {
     // Slack
     implementation 'com.github.maricn:logback-slack-appender:1.6.1'
     implementation 'com.slack.api:slack-api-client:1.30.0'
-
-    // Micrometer - Prometheus 메트릭 레지스트리
-    implementation 'io.micrometer:micrometer-registry-prometheus'
 }
 
 tasks.named('test') {
