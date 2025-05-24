@@ -31,6 +31,8 @@ springdoc:
 
 slack:
   webhook-uri: https://hooks.slack.com/services/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
+  channel: "로그보내기"
+  username : "임현성"
 
 management:
   endpoints:
@@ -38,3 +40,6 @@ management:
       exposure:
         include:
           - prometheus
+logging:
+  file:
+    path: ./logs
