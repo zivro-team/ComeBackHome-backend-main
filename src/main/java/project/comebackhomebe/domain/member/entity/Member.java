@@ -59,11 +59,12 @@ public class Member {
 
     public static Member fcmTokenFrom(Member member, String fcmToken) {
         return Member.builder()
-                .verifyKey(member.verifyKey)
-                .username(member.username)
-                .email(member.email)
-                .role(member.role)
-                .status(member.status)
+                .id(member.getId())
+                .verifyKey(member.getVerifyKey())
+                .username(member.getUsername())
+                .email(member.getEmail())
+                .role(member.getRole())
+                .status(member.getStatus())
                 .fcmToken(fcmToken)
                 .build();
     }

@@ -26,6 +26,8 @@ public class FCMService {
 
         Member.fcmTokenFrom(member, fcmToken);
 
+        memberRepository.save(member);
+
         return "토큰이 성공적으로 저장되었습니다";
     }
 }
