@@ -29,6 +29,14 @@ spring:
       host: redis-refresh-token
       port: 6379
       password: 1234
+      
+    mongo:
+      username: root
+      password: root
+      host: 192.168.0.3
+      port: 27017
+      database: chat_app
+      authentication-database: admin
 
     mongo:
       username: root
