@@ -24,8 +24,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
     public ChatMessageInfo save(ChatMessageInfo chatMessageInfo) {
         var chatId = chatRoomService.getChatRoomId(
                         chatMessageInfo.senderId(),
-                        chatMessageInfo.receiverId(),
-                        true)
+                        chatMessageInfo.receiverId())
                 .orElseThrow();
 
         ChatMessage chatMessage = ChatMessage.from(chatMessageInfo, chatId);
@@ -41,8 +40,8 @@ public class ChatMessageServiceImpl implements ChatMessageService {
     public List<ChatMessageInfo> findChatMessage(String senderId, String receiverId) {
         var chatId = chatRoomService.getChatRoomId(
                 senderId,
-                receiverId,
-                false);
+                receiverId
+        );
 
         List<ChatMessage> messages = chatId.map(chatMessageRepository::findByChatId)
                 .orElse(new ArrayList<>());

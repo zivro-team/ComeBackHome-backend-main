@@ -30,6 +30,14 @@ spring:
       port: 6379
       password: 1234
 
+    mongo:
+      username: root
+      password: root
+      host: mongo
+      port: 27017
+      database: chat_app
+      authentication-database: admin
+
   cloud:
     gcp:
       storage:
