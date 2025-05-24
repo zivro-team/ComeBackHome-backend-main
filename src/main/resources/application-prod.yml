@@ -33,7 +33,7 @@ spring:
     mongo:
       username: root
       password: root
-      host: mongo
+      host: 192.168.0.3
       port: 27017
       database: chat_app
       authentication-database: admin
