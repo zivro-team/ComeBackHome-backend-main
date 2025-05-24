@@ -27,7 +27,7 @@ public class DogImage {
     private Dog dog;
 
     public static DogImage from(DogImageRequest imageRequest) {
-        return DogImage.builder().imageUrl(String.valueOf(imageRequest)).build();
+        return DogImage.builder().imageUrl(imageRequest.imageUrl()).build();
     }
 
     public static List<DogImage> listFrom(List<DogImageRequest> imageRequests) {
