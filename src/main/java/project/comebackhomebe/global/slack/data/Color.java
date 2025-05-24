@@ -1,4 +1,4 @@
-package project.comebackhomebe.global.exception.slack.data;
+package project.comebackhomebe.global.slack.data;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
