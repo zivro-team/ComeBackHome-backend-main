@@ -31,11 +31,12 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public String resolveAccessToken(HttpServletRequest request) {
-        String bearerToken = getAuthorizationHeader(request);
-        if (bearerToken == null) {
-            return null;
+        String bearerToken = request.getHeader("Authorization");
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            log.info("[resolveToken]  bearer 토큰 추출 : {}", bearerToken.substring(7).trim());
+            return bearerToken.substring(7).trim(); // "Bearer " 이후의 토큰 값만 가져옴
         }
-        return parseBearerToken(bearerToken);
+        return null;
     }
 
     /**
@@ -48,13 +49,6 @@ public class JwtServiceImpl implements JwtService {
             return header.substring(7).trim();
         }
         return null;
-    }
-
-    /**
-     * Bearer 토큰에서 실제 액세스 토큰 부분을 추출합니다.
-     */
-    private String parseBearerToken(String bearerToken) {
-        return bearerToken.substring(7); // "Bearer " 이후의 토큰 값
     }
 
     @Override

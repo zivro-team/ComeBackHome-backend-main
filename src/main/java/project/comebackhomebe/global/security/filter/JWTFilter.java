@@ -30,6 +30,7 @@ public class JWTFilter extends OncePerRequestFilter {
 
         // 토큰 추출
         String accessToken = jwtService.resolveAccessToken(request);
+        log.info(accessToken);
 
         // 토큰이 없으면 다음 필터로 진행
         if (accessToken == null) {
@@ -64,6 +65,7 @@ public class JWTFilter extends OncePerRequestFilter {
         }
 
         Authentication authentication = jwtUtil.getAuthentication(accessToken);
+        log.info("[JWTFilter] Authentication: {}", authentication);
 
         // 토큰 유효할 경우 User의 권한을 발급
         if (authentication != null) {

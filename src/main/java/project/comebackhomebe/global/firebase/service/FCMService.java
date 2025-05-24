@@ -1,9 +1,11 @@
 package project.comebackhomebe.global.firebase.service;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import project.comebackhomebe.domain.member.entity.Member;
 import project.comebackhomebe.domain.member.repository.MemberRepository;
+import project.comebackhomebe.global.security.jwt.JwtService;
 import project.comebackhomebe.global.security.jwt.JwtUtil;
 
 @Service
@@ -12,8 +14,11 @@ public class FCMService {
 
     private final MemberRepository memberRepository;
     private final JwtUtil jwtUtil;
+    private final JwtService jwtService;
 
-    public String getToken(String accessToken, String fcmToken) {
+    public String getToken(HttpServletRequest request, String fcmToken) {
+
+        String accessToken = jwtService.resolveAccessToken(request);
 
         String verifyKey = jwtUtil.getVerifyKey(accessToken);
 

@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,7 @@ public class ApiV1NotificationController {
             @Parameter(name = "token", description = "FCM 토큰", example = "123asd")
     })
     public ResponseEntity<String> getToken(@Valid @RequestBody FCMTokenRequest tokenRequest,
-                                           @RequestHeader("Authorization") String accessToken) {
-        return ResponseEntity.ok(fcmService.getToken(accessToken, tokenRequest.token()));
+                                           HttpServletRequest request) {
+        return ResponseEntity.ok(fcmService.getToken(request, tokenRequest.token()));
     }
 }
