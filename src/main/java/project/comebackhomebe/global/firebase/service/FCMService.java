@@ -24,9 +24,9 @@ public class FCMService {
 
         Member member = memberRepository.findByVerifyKey(verifyKey);
 
-        Member.fcmTokenFrom(member, fcmToken);
+        Member newMember = Member.fcmTokenFrom(member, fcmToken);
 
-        memberRepository.save(member);
+        memberRepository.save(newMember);
 
         return "토큰이 성공적으로 저장되었습니다";
     }
