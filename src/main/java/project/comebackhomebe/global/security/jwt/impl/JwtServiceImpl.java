@@ -43,10 +43,11 @@ public class JwtServiceImpl implements JwtService {
      */
     private String getAuthorizationHeader(HttpServletRequest request) {
         String header = request.getHeader("Authorization");
-        if (header == null) {
-            return null;
+        if (header != null && header.startsWith("Bearer ")) {
+            // Bearer 제거 + trim
+            return header.substring(7).trim();
         }
-        return header;
+        return null;
     }
 
     /**
