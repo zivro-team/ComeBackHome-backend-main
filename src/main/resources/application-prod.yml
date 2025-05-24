@@ -38,14 +38,6 @@ spring:
       database: chat_app
       authentication-database: admin
 
-    mongo:
-      username: root
-      password: root
-      host: mongo
-      port: 27017
-      database: chat_app
-      authentication-database: admin
-
   cloud:
     gcp:
       storage:
