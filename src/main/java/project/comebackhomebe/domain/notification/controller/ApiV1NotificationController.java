@@ -13,8 +13,6 @@ import project.comebackhomebe.global.CustomRateLimiter.RateLimited;
 import project.comebackhomebe.global.firebase.dto.FCMTokenRequest;
 import project.comebackhomebe.global.firebase.service.FCMService;
 
-// TODO: 알림 테스트용 API 만들기
-
 @RestController
 @RequestMapping("/api/v1/notification")
 @RequiredArgsConstructor
