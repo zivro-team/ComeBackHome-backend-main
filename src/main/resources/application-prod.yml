@@ -31,7 +31,8 @@ spring:
       password: 1234
       
     mongodb:
-      uri: mongodb://root:root@mongo:27017/chat_app
+      uri: mongodb://root:root@mongo:27017/chat_app?authSource=admin
+
 
   cloud:
     gcp:
