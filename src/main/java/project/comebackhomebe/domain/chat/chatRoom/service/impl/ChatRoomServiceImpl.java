@@ -56,7 +56,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         String receiverId = getReceiverId(dogId).toString();
         log.info("[createChatRoom] receiverId : " + receiverId);
 
-        var chatId = String.format(senderId, receiverId); // 공용으로 사용되는 chatRoomID
+        var chatId = String.format("%s%s", senderId, receiverId); // 공용으로 사용되는 chatRoomID
         log.info("[createChatRoom] chatId : " + chatId);
 
         ChatRoom senderRecipient = ChatRoom.from(chatId, senderId, receiverId); // 채팅방에 고유값이야

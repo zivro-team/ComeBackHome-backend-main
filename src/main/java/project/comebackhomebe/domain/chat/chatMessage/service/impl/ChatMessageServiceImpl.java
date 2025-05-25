@@ -1,6 +1,7 @@
 package project.comebackhomebe.domain.chat.chatMessage.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import project.comebackhomebe.domain.chat.chatMessage.dto.ChatMessageInfo;
@@ -14,6 +15,8 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j  // 이 어노테이션 추가
+
 public class ChatMessageServiceImpl implements ChatMessageService {
 
     private final ChatMessageRepository chatMessageRepository;
@@ -22,10 +25,19 @@ public class ChatMessageServiceImpl implements ChatMessageService {
 
     @Override
     public ChatMessageInfo save(ChatMessageInfo chatMessageInfo) {
+        log.info("=== ChatMessage 저장 시작 ===");
+        log.info("입력 데이터: {}", chatMessageInfo);
+
         var chatId = chatRoomService.getChatRoomId(
                         chatMessageInfo.senderId(),
                         chatMessageInfo.receiverId())
-                .orElseThrow();
+                .orElseThrow(() -> {
+                    log.error("ChatRoom을 찾을 수 없습니다. senderId: {}, receiverId: {}",
+                            chatMessageInfo.senderId(), chatMessageInfo.receiverId());
+                    return new RuntimeException("ChatRoom not found");
+                });
+
+        log.info("찾은 chatId: {}", chatId);
 
         ChatMessage chatMessage = ChatMessage.from(chatMessageInfo, chatId);
 
@@ -51,12 +63,23 @@ public class ChatMessageServiceImpl implements ChatMessageService {
 
     @Override
     public void processMessage(ChatMessageInfo chatMessageinfo) {
-        ChatMessageInfo saveMsg = save(chatMessageinfo);
+        log.info("=== processMessage 시작 ===");
+        log.info("처리할 메시지: {}", chatMessageinfo);
 
-        messagingTemplate.convertAndSendToUser(
-                chatMessageinfo.receiverId(),
-                "/queue/messages",
-                saveMsg
-        );
+        try {
+            ChatMessageInfo saveMsg = save(chatMessageinfo);
+            log.info("저장 성공: {}", saveMsg);
+
+            messagingTemplate.convertAndSendToUser(
+                    chatMessageinfo.receiverId(),
+                    "/queue/messages",
+                    saveMsg
+            );
+            log.info("메시지 전송 완료");
+        } catch (Exception e) {
+            log.error("메시지 처리 중 오류 발생", e);
+            throw e;
+        }
+        log.info("=== processMessage 완료 ===");
     }
 }
