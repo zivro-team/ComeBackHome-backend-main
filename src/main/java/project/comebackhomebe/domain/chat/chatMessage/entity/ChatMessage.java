@@ -12,7 +12,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Document(collation = "chat_message")
+@Document(collection = "chat_message")
 public class ChatMessage {
 
     @Id
