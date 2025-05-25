@@ -18,7 +18,6 @@ public class ChatController {
      * @param chatMessageinfo : sender, receiver, content
      */
     @MessageMapping("/chat")
-
     public void processMessage(@Payload ChatMessageInfo chatMessageinfo) {
         chatMessageService.processMessage(chatMessageinfo);
     }
