@@ -26,7 +26,6 @@ public class ChatRestController {
      * @return
      */
     @GetMapping("/messages/{senderId}/{receiverId}")
-
     public ResponseEntity<List<ChatMessageInfo>> findChatMessage(
             @PathVariable("senderId") String senderId,
             @PathVariable("receiverId") String receiverId
