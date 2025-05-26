@@ -126,6 +126,39 @@ services:
     networks:
       - app-network
 
+  mysql-exporter:
+    image: prom/mysqld-exporter:latest
+    ports:
+      - "9104:9104"
+    environment:
+      - DATA_SOURCE_NAME=root:cbh123@@tcp(34.122.128.155:3306)/
+    command:
+      - '--mysqld.address=34.122.128.155:3306'
+      - '--mysqld.username=root'
+
+  mongodb-exporter:
+    image: percona/mongodb_exporter:0.20
+    ports:
+      - "9216:9216"
+    environment:
+      - MONGODB_URI=mongodb://root:root@mongo:27017/chat_app?authSource=admin
+    command:
+      - '--mongodb.uri=mongodb://root:root@mongo:27017/chat_app?authSource=admin'
+      - '--mongodb.direct-connect'
+    depends_on:
+      - mongo
+    networks:
+      - app-network
+
+  redis-exporter:
+    image: oliver006/redis_exporter:latest
+    ports:
+      - "9121:9121"
+    environment:
+      - REDIS_ADDR=redis-refresh-token:6379
+    command:
+      - '--redis.addr=redis-refresh-token:6379'
+
 
 networks:
   app-network:
