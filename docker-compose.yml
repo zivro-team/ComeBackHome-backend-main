@@ -136,6 +136,8 @@ services:
     command:
       - '--mysqld.address=34.122.128.155:3306'
       - '--mysqld.username=root'
+    networks:
+      - app-network
 
   mongodb-exporter:
     container_name: mongodb-exporter
@@ -161,6 +163,10 @@ services:
       - REDIS_ADDR=redis-refresh-token:6379
     command:
       - '--redis.addr=redis-refresh-token:6379'
+    depends_on:
+      - redis-service
+    networks:
+      - app-network
 
 
 networks:
