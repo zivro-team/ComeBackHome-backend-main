@@ -136,12 +136,13 @@ services:
     command:
       - '--mysqld.address=34.122.128.155:3306'
       - '--mysqld.username=root'
+      - '--mysqld.password=cbh123@'
     networks:
       - app-network
 
   mongodb-exporter:
     container_name: mongodb-exporter
-    image: percona/mongodb_exporter:0.20
+    image: percona/mongodb_exporter:0.41
     ports:
       - "9216:9216"
     environment:
@@ -161,8 +162,10 @@ services:
       - "9121:9121"
     environment:
       - REDIS_ADDR=redis-refresh-token:6379
+      - REDIS_PASSWORD=1234
     command:
       - '--redis.addr=redis-refresh-token:6379'
+      - '--redis.password=1234'
     depends_on:
       - redis-service
     networks:
