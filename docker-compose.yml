@@ -127,6 +127,7 @@ services:
       - app-network
 
   mysql-exporter:
+    container_name: mysql-exporter
     image: prom/mysqld-exporter:latest
     ports:
       - "9104:9104"
@@ -137,6 +138,7 @@ services:
       - '--mysqld.username=root'
 
   mongodb-exporter:
+    container_name: mongodb-exporter
     image: percona/mongodb_exporter:0.20
     ports:
       - "9216:9216"
@@ -151,6 +153,7 @@ services:
       - app-network
 
   redis-exporter:
+    container_name: redis-exporter
     image: oliver006/redis_exporter:latest
     ports:
       - "9121:9121"
