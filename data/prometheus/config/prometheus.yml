@@ -1,8 +1,12 @@
+### Job_name 에 하나씩 넣는거임
+### Prometheus 랑 같은 네트워크에 있는 docker 이름으로
+
+
 scrape_configs:
   - job_name: 'prometheus'
     scrape_interval: 5s
     static_configs:
-      - targets: ['prometheus:9090', 'backend-container:8085', 'node-exporter:9100', 'nginx-exporter:9113']
+      - targets: ['prometheus:9090', 'backend-container:8085', 'mongodb-exporter:9216', 'redis-exporter:9121', 'mysql-exporter:9104']
 
   - job_name: 'Spring Boot Application input'
     metrics_path: '/actuator/prometheus'
@@ -11,3 +15,15 @@ scrape_configs:
       - targets: ['backend-container:8085']
         labels:
           application: "ComebackhomeBeApplication"
+
+  - job_name: 'mongodb'
+    static_configs:
+      - targets: [ 'mongodb-exporter:9216' ]  # 또는 'localhost:9216'
+
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['redis-exporter:9121']  # Redis Exporter 포트
+
+  - job_name: 'mysql'
+    static_configs:
+      - targets: ['mysql-exporter:9104']  # MySQL Exporter 포트
