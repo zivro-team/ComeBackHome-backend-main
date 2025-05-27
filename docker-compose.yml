@@ -131,8 +131,8 @@ services:
     image: prom/mysqld-exporter:latest
     ports:
       - "9104:9104"
-    volumes:
-      - ./myconf/.my.cnf:/root/.my.cnf:ro
+    environment:
+      - DATA_SOURCE_NAME=exporter:1234@tcp(34.122.128.155:3306)/
     command:
       - "--web.listen-address=:9104"
       - "--log.level=debug"
