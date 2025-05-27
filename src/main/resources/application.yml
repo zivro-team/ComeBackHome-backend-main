@@ -17,6 +17,9 @@ spring:
       org.springframework.transaction.interceptor: TRACE
       org.springdoc: DEBUG
       org.springframework: DEBUG
+      org.springframework.messaging: DEBUG
+      org.springframework.web.socket: DEBUG
+      org.springframework.messaging.simp: DEBUG
 
 springdoc:
   packages-to-scan: project.comebackhomebe.domain
