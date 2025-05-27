@@ -70,17 +70,23 @@ public class ChatMessageServiceImpl implements ChatMessageService {
             ChatMessageInfo saveMsg = save(chatMessageinfo);
             log.info("저장 성공: {}", saveMsg);
 
-//            messagingTemplate.convertAndSendToUser(
-//                    chatMessageinfo.receiverId(),
-//                    "/queue/messages",
-//                    saveMsg
-//            );
+            messagingTemplate.convertAndSendToUser(
+                    chatMessageinfo.receiverId(),
+                    "/queue/messages",
+                    saveMsg
+            );
 
-            messagingTemplate.convertAndSend(
-                    "/topic/chatMessage/"
-                            + chatMessageinfo.senderId()
-                            + chatMessageinfo.receiverId(),
-                    saveMsg);
+            messagingTemplate.convertAndSendToUser(
+                    chatMessageinfo.senderId(),
+                    "/queue/messages",
+                    saveMsg
+            );
+
+//            messagingTemplate.convertAndSend(
+//                    "/topic/chatMessage/"
+//                            + chatMessageinfo.senderId()
+//                            + chatMessageinfo.receiverId(),
+//                    saveMsg);
 
             log.info("메시지 전송 완료");
         } catch (Exception e) {
