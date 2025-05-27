@@ -143,7 +143,7 @@ services:
 
   mysql-exporter:
     image: quay.io/prometheus/mysqld-exporter
-    container_name: mysqld-exporter
+    container_name: mysql-exporter
     ports:
       - "9104:9104"
     command:
@@ -181,6 +181,37 @@ services:
       - redis-service
     networks:
       - app-network
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    restart: unless-stopped
+    ports:
+      - "9100:9100"
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--path.rootfs=/rootfs'
+    networks:
+      - app-network
+
+  nginx-exporter:
+    image: nginx/nginx-prometheus-exporter:0.11.0
+    container_name: nginx-exporter
+    restart: unless-stopped
+    ports:
+      - "9113:9113"
+    command:
+      - '--nginx.scrape-uri=http://nginx/nginx_status'
+    depends_on:
+      - nginx
+    networks:
+      - app-network
+
 
 
 networks:
