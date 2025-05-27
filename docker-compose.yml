@@ -199,21 +199,6 @@ services:
     networks:
       - app-network
 
-  nginx-exporter:
-    image: nginx/nginx-prometheus-exporter:0.11.0
-    container_name: nginx-exporter
-    restart: unless-stopped
-    ports:
-      - "9113:9113"
-    command:
-      - '--nginx.scrape-uri=http://nginx/nginx_status'
-    depends_on:
-      - nginx
-    networks:
-      - app-network
-
-
-
 networks:
   app-network:
     driver: bridge
