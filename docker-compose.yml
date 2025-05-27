@@ -136,6 +136,7 @@ services:
     command:
       - "--web.listen-address=:9104"
       - "--log.level=debug"
+      - "--config.my-cnf="  # 빈 값으로 설정해서 .my.cnf 사용 안함
     networks:
       - app-network
 
