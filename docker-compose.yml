@@ -162,7 +162,8 @@ services:
       - REDIS_PASSWORD=1234
     command:
       - '--redis.addr=redis-refresh-token:6379'
-      - '--redis.password=1234'
+    depends_on:
+      - redis-service
     networks:
       - app-network
 
