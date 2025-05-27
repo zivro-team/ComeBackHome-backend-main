@@ -126,6 +126,21 @@ services:
     networks:
       - app-network
 
+  metricbeat:
+    image: docker.elastic.co/beats/metricbeat:7.14.1
+    container_name: metricbeat
+    user: root
+    volumes:
+      - ./src/main/resources/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml:ro
+      - /proc:/hostfs/proc:ro
+      - /sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro
+      - /:/hostfs:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    depends_on:
+      - elasticsearch
+
+  ### DB EXPORTER ###
+
   mysql-exporter:
     image: quay.io/prometheus/mysqld-exporter
     container_name: mysqld-exporter
