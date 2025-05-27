@@ -17,17 +17,14 @@ scrape_configs:
           application: "ComebackhomeBeApplication"
 
   - job_name: 'mongodb'
-    metrics_path: '/actuator/prometheus'
     static_configs:
       - targets: [ 'mongodb-exporter:9216' ]  # Mongo Exporter 포트
 
   - job_name: 'redis'
-    metrics_path: '/actuator/prometheus'
     static_configs:
       - targets: ['redis-exporter:9121']  # Redis Exporter 포트
 
   - job_name: 'mysql'
-    metrics_path: '/actuator/prometheus'
     static_configs:
       - targets: ['mysql-exporter:9104']  # MySQL Exporter 포트
 

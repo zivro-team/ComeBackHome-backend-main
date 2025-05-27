@@ -133,9 +133,6 @@ services:
       - "9104:9104"
     environment:
       - DATA_SOURCE_NAME=exporter:1234@tcp(34.122.128.155:3306)/
-    command:
-      - '--mysqld.address=34.122.128.155:3306'
-      - '--mysqld.username=exporter'
     networks:
       - app-network
 
@@ -145,10 +142,14 @@ services:
     ports:
       - "9216:9216"
     environment:
-      - MONGODB_URI=mongodb://exporter:exporter@mongo:27017
+      - MONGODB_URI=mongodb://exporter:exporter@mongo:27017/chat_app
     command:
+      - "--mongodb.uri=mongodb://exporter:exporter@mongo:27017/chat_app"
       - "--collect-all"
       - "--compatible-mode"
+      - "--web.listen-address=:9216"
+    depends_on:
+      - mongo
     networks:
       - app-network
 
@@ -157,11 +158,9 @@ services:
     image: oliver006/redis_exporter:latest
     ports:
       - "9121:9121"
-    environment:
-      - REDIS_ADDR=redis-refresh-token:6379
-      - REDIS_PASSWORD=1234
     command:
-      - '--redis.addr=redis-refresh-token:6379'
+      - '--redis.addr=redis://redis-refresh-token:6379'
+      - '--redis.password=1234'
     depends_on:
       - redis-service
     networks:
