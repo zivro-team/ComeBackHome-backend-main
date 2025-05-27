@@ -126,7 +126,7 @@ services:
     networks:
       - app-network
 
-  mysqld-exporter:
+  mysql-exporter:
     image: quay.io/prometheus/mysqld-exporter
     container_name: mysqld-exporter
     ports:
