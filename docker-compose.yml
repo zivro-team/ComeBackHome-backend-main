@@ -132,11 +132,10 @@ services:
     ports:
       - "9104:9104"
     environment:
-      - DATA_SOURCE_NAME=root:cbh123@@tcp(34.122.128.155:3306)/
+      - DATA_SOURCE_NAME=exporter:1234@tcp(34.122.128.155:3306)/
     command:
       - '--mysqld.address=34.122.128.155:3306'
-      - '--mysqld.username=root'
-      - '--mysqld.password=cbh123@'
+      - '--mysqld.username=exporter'
     networks:
       - app-network
 
@@ -148,7 +147,7 @@ services:
     environment:
       - MONGODB_URI=mongodb://root:root@mongo:27017/chat_app?authSource=admin
     command:
-      - '--mongodb.uri=mongodb://root:root@mongo:27017/chat_app?authSource=admin'
+      - '--mongodb.uri=mongodb://exporter:exporter@mongo:27017/chat_app?authSource=admin'
       - '--mongodb.direct-connect'
     depends_on:
       - mongo
