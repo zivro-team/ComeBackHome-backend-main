@@ -132,11 +132,10 @@ services:
     ports:
       - "9104:9104"
     environment:
-      - DATA_SOURCE_NAME=root:cbh123@@tcp(34.122.128.155:3306)/
+      - DATA_SOURCE_NAME=exporter:1234@tcp(34.122.128.155:3306)/
     command:
       - '--mysqld.address=34.122.128.155:3306'
-      - '--mysqld.username=root'
-      - '--mysqld.password=cbh123@'
+      - '--mysqld.username=exporter'
     networks:
       - app-network
 
@@ -146,12 +145,10 @@ services:
     ports:
       - "9216:9216"
     environment:
-      - MONGODB_URI=mongodb://root:root@mongo:27017/chat_app?authSource=admin
+      - MONGODB_URI=mongodb://exporter:exporter@mongo:27017
     command:
-      - '--mongodb.uri=mongodb://root:root@mongo:27017/chat_app?authSource=admin'
-      - '--mongodb.direct-connect'
-    depends_on:
-      - mongo
+      - "--collect-all"
+      - "--compatible-mode"
     networks:
       - app-network
 
@@ -165,7 +162,6 @@ services:
       - REDIS_PASSWORD=1234
     command:
       - '--redis.addr=redis-refresh-token:6379'
-      - '--redis.password=1234'
     depends_on:
       - redis-service
     networks:
