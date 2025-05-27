@@ -129,6 +129,8 @@ services:
   mysqld-exporter:
     image: quay.io/prometheus/mysqld-exporter
     container_name: mysqld-exporter
+    ports:
+      - "9104:9104"
     command:
       - "--mysqld.username=exporter:1234"
       - "--mysqld.address=34.122.128.155:3306"
