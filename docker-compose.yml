@@ -145,12 +145,10 @@ services:
     ports:
       - "9216:9216"
     environment:
-      - MONGODB_URI=mongodb://root:root@mongo:27017/chat_app?authSource=admin
+      - MONGODB_URI=mongodb://exporter:exporter@mongo:27017
     command:
-      - '--mongodb.uri=mongodb://exporter:exporter@mongo:27017/chat_app?authSource=admin'
-      - '--mongodb.direct-connect'
-    depends_on:
-      - mongo
+      - "--collect-all"
+      - "--compatible-mode"
     networks:
       - app-network
 
@@ -165,8 +163,6 @@ services:
     command:
       - '--redis.addr=redis-refresh-token:6379'
       - '--redis.password=1234'
-    depends_on:
-      - redis-service
     networks:
       - app-network
 
