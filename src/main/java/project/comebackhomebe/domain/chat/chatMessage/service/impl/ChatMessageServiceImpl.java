@@ -15,14 +15,18 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-@Slf4j  // 이 어노테이션 추가
-
+@Slf4j
 public class ChatMessageServiceImpl implements ChatMessageService {
 
     private final ChatMessageRepository chatMessageRepository;
     private final ChatRoomService chatRoomService;
     private final SimpMessagingTemplate messagingTemplate;
 
+    /**
+     * 채팅 내역 저장
+     * @param chatMessageInfo
+     * @return
+     */
     @Override
     public ChatMessageInfo save(ChatMessageInfo chatMessageInfo) {
         log.info("=== ChatMessage 저장 시작 ===");
@@ -48,6 +52,12 @@ public class ChatMessageServiceImpl implements ChatMessageService {
         return ChatMessageInfo.of(chatMessage);
     }
 
+    /**
+     * 채팅방에 있는 모든 채팅 리스트 가져오기
+     * @param senderId
+     * @param receiverId
+     * @return
+     */
     @Override
     public List<ChatMessageInfo> findChatMessage(String senderId, String receiverId) {
         var chatId = chatRoomService.getChatRoomId(
@@ -61,6 +71,12 @@ public class ChatMessageServiceImpl implements ChatMessageService {
         return ChatMessageInfo.listOf(messages);
     }
 
+    /**
+     * 메세지처리
+     * convertAndSendToUser : User에게 직접 메세지 보내기
+     * convertAndSend : 해당 채팅방에 메시지 보내기
+     * @param chatMessageinfo
+     */
     @Override
     public void processMessage(ChatMessageInfo chatMessageinfo) {
         log.info("=== processMessage 시작 ===");
