@@ -34,18 +34,35 @@ public class ApiV2MemberController {
     private final BlacklistService blacklistService;
     private final RefreshTokenService refreshTokenService;
 
+    /**
+     * 로그인 API 입니다.
+     * 소셜로그인 정보가 등록되어 있지 않은 경우 자동으로 회원가입해줍니다.
+     *
+     * @param provider : kakao
+     * @param request
+     * @param response
+     * @return
+     * @throws IOException
+     */
     @RateLimited
     @PostMapping("/{provider}")
     @Operation(summary = "로그인 API", description = "provider = 소셜 이름")
     @Parameters({
             @Parameter(name = "JSON", description = "소셜 반환 값", example = "{}")
     })
-    public ResponseEntity<OAuth2Response> login(@PathVariable("provider") String provider,
-                                                HttpServletRequest request,
-                                                HttpServletResponse response) throws IOException {
+    public ResponseEntity<OAuth2Response> signIn(@PathVariable("provider") String provider,
+                                                 HttpServletRequest request,
+                                                 HttpServletResponse response) throws IOException {
         return ResponseEntity.ok(memberService.getOAuth2Data(provider, request, response));
     }
 
+    /**
+     * AccessToken 만료 시 RefreshToken 으로
+     * 새로운 AccessToken 을 발급해줍니다.
+     *
+     * @param request  : AccessToken, RefreshToken
+     * @param response : newAccessToken
+     */
     @RateLimited
     @PostMapping("/reissue")
     @Operation(summary = "액세스 재발급 API", description = "액세스토큰을 재발급해줍니다.")
@@ -56,6 +73,14 @@ public class ApiV2MemberController {
         reissueService.reissueAccessToken(request, response);
     }
 
+    /**
+     * 로그아웃 API 입니다.
+     * 로그아웃 시 리프레쉬 토큰을 삭제하고
+     * 블랙리스트에 토큰을 담어 해당 접근을 차단합니다.
+     *
+     * @param request  : accessToken
+     * @param response
+     */
     @RateLimited
     @DeleteMapping("/logout")
     @Operation(summary = "logout API", description = "로그아웃 후 액세스 토큰은 블랙리스트, 리프레쉬 토큰 삭제합니다.")
@@ -68,12 +93,24 @@ public class ApiV2MemberController {
         blacklistService.createBlacklist(request);
     }
 
+    /**
+     * 웹 소켓 시 사용 예정
+     *
+     * @param memberInfo
+     * @return
+     */
     @MessageMapping("/user.addUser")
     @SendTo("/user/topic")
     public MemberInfo addUser(@Payload MemberInfo memberInfo) {
         return null;
     }
 
+    /**
+     * 웹 소켓 시 사용 예정
+     *
+     * @param memberInfo
+     * @return
+     */
     @MessageMapping("/user.disConnectUser")
     @SendTo("/user/topic")
     public MemberInfo disConnect(@Payload MemberInfo memberInfo) {
