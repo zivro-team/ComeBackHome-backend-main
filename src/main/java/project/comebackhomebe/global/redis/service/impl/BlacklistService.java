@@ -17,6 +17,11 @@ public class BlacklistService {
     private final JwtService jwtService;
     private final JwtUtil jwtUtil;
 
+    /**
+     * 로그아웃 한 사용자 액세스 토큰은 블랙리스트에 넣어
+     * 접근을 할 수 없게 만듭니다.
+     * @param request
+     */
     public void createBlacklist(HttpServletRequest request) {
         String accessToken = jwtService.resolveAccessToken(request);
 
