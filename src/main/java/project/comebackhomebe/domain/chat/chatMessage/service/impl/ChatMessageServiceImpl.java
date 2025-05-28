@@ -86,14 +86,17 @@ public class ChatMessageServiceImpl implements ChatMessageService {
             ChatMessageInfo saveMsg = save(chatMessageinfo);
             log.info("저장 성공: {}", saveMsg);
 
+            String receiverIdStr = String.valueOf(chatMessageinfo.receiverId());
+            String senderIdStr = String.valueOf(chatMessageinfo.senderId());
+
             messagingTemplate.convertAndSendToUser(
-                    chatMessageinfo.receiverId(),
+                    receiverIdStr,
                     "/queue/messages",
                     saveMsg
             );
 
             messagingTemplate.convertAndSendToUser(
-                    chatMessageinfo.senderId(),
+                    senderIdStr,
                     "/queue/messages",
                     saveMsg
             );
