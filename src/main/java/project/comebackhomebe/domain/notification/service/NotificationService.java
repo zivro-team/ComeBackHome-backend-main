@@ -2,8 +2,6 @@ package project.comebackhomebe.domain.notification.service;
 
 import com.google.firebase.messaging.FirebaseMessagingException;
 import project.comebackhomebe.domain.dog.dogInfo.entity.Dog;
-import project.comebackhomebe.domain.notification.dto.request.NotificationRequest;
-import project.comebackhomebe.domain.notification.dto.response.NotificationResponse;
 
 import java.util.List;
 

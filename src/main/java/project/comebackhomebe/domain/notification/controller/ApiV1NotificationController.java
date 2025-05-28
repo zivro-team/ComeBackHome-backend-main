@@ -8,7 +8,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import project.comebackhomebe.global.CustomRateLimiter.RateLimited;
 import project.comebackhomebe.global.firebase.dto.FCMTokenRequest;
 import project.comebackhomebe.global.firebase.service.FCMService;
@@ -20,6 +23,13 @@ import project.comebackhomebe.global.firebase.service.FCMService;
 public class ApiV1NotificationController {
     private final FCMService fcmService;
 
+    /**
+     * 사용자의 FCM 토큰을 가져오기
+     *
+     * @param tokenRequest : 토큰
+     * @param request      : 액세스토큰
+     * @return
+     */
     @RateLimited
     @PostMapping("/token")
     @Operation(summary = "토큰 받아오기", description = "FCM 토큰을 서버한테 넘겨줍니다.")

@@ -23,25 +23,14 @@ public class NotificationServiceImpl implements NotificationService {
     private final NotificationRepository notificationRepository;
     private final MemberRepositoryCustom memberRepositoryCustom;
 
-    @Override
-    public void sendMessage(String token, String title, String body) throws FirebaseMessagingException {
-        Message message = Message.builder()
-                .setToken(token)
-                .setNotification(com.google.firebase.messaging.Notification.builder()
-                        .setTitle(title)
-                        .setBody(body)
-                        .build())
-                .build();
-
-        String response = FirebaseMessaging.getInstance().send(message);
-
-        Notification notification = Notification.from(token, title, body);
-
-        notificationRepository.save(notification);
-
-        log.info("FCM 메시지 전송 성공, response: {}", response);
-    }
-
+    /**
+     * 새롭게 등록된 강아지의 종을 추출하여
+     * 이미 등록되어 있는 DB에 접근하여
+     * 해당 강아지의 종을 등록한 사용자에게 알림을 보냄
+     *
+     * @param breed : 강아지 종
+     * @throws FirebaseMessagingException
+     */
     @Override
     public void registerNewDogFromBreed(String breed) throws FirebaseMessagingException {
         List<String> tokens = memberRepositoryCustom.getFcmTokensByBreed(breed);
@@ -54,6 +43,14 @@ public class NotificationServiceImpl implements NotificationService {
         }
     }
 
+    /**
+     * 새롭게 등록된 강아지의 지역을 추출하여
+     * 이미 등록되어 있는 DB에 접근하여
+     * 해당 강아지의 지역을 등록한 사용자에게 알림을 보냄
+     *
+     * @param area : 지역
+     * @throws FirebaseMessagingException
+     */
     @Override
     public void findDogByBoundary(String area) throws FirebaseMessagingException {
         List<String> tokens = memberRepositoryCustom.getFcmTokensByArea(area);
@@ -67,6 +64,14 @@ public class NotificationServiceImpl implements NotificationService {
 
     }
 
+    /**
+     * AI 유사도 분석을 통해
+     * 유사도가 비슷한 강아지 3마리를 찾고
+     * 해당 신고를 한 사용자에게 알림을 보냄
+     *
+     * @param dogs : 유사도 비슷 강아지들
+     * @throws FirebaseMessagingException
+     */
     @Override
     public void matchDogByAi(List<Dog> dogs) throws FirebaseMessagingException {
 
@@ -84,5 +89,31 @@ public class NotificationServiceImpl implements NotificationService {
         }
     }
 
+    /**
+     * 알림을 보내는 로직
+     * FCM에 있는 메시지로 빌더 만들고
+     * Firebase로 메시지 보내기
+     * 알림 엔티티에 저장하기
+     *
+     * @param token : fcmToken
+     * @param title : 알림 제목
+     * @param body  : 알림 내용
+     * @throws FirebaseMessagingException
+     */
+    @Override
+    public void sendMessage(String token, String title, String body) throws FirebaseMessagingException {
+        Message message = Message.builder()
+                .setToken(token)
+                .setNotification(com.google.firebase.messaging.Notification.builder()
+                        .setTitle(title)
+                        .setBody(body)
+                        .build())
+                .build();
 
+        FirebaseMessaging.getInstance().send(message);
+
+        Notification notification = Notification.from(token, title, body);
+
+        notificationRepository.save(notification);
+    }
 }
