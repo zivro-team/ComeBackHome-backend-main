@@ -27,49 +27,67 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     private final MemberRepository memberRepository;
     private final DogRepository dogRepository;
 
+    /**
+     * 사용자의 액세스토큰을 추출하여 ID를 찾고
+     * 채팅방을 List 형식으로 보여줌
+     * @param request
+     * @return
+     */
     @Override
     public List<ChatRoomInfo> getListChatRoom(HttpServletRequest request) {
         String senderId = getSenderId(request).toString();
-        log.info("[getListChatRoom] senderId: {}", senderId);
 
         List<ChatRoom> chatRooms = chatRoomRepository.findBySenderId(senderId);
-        log.info("[getListChatRoom] chatRooms: {}", chatRooms);
 
         return ChatRoomInfo.listOf(chatRooms);
     }
 
+    /**
+     * 보내는 사람과 받는 사람 각각의 ID를 받아
+     * chatId로 채팅방을 찾음
+     * @param senderId
+     * @param receiverId
+     * @return 채팅방 ID
+     */
     @Override
     public Optional<String> getChatRoomId(String senderId, String receiverId) {
-        return getChatRoom(senderId, receiverId)
+        return chatRoomRepository.findBySenderIdAndReceiverId(senderId, receiverId)
                 .map(ChatRoom::getChatId);
     }
 
-    private Optional<ChatRoom> getChatRoom(String senderId, String receiverId) {
-        return chatRoomRepository.findBySenderIdAndReceiverId(senderId, receiverId);
-    }
-
+    /**
+     * 채팅방 생성
+     * 액세스 토큰에서 사용자 정보를 추출하고
+     * 해당 검증키로 사용자 ID를 가져옴
+     * 강아지 게시글에서 강아지 ID를 받아온 다음
+     * 등록한 사용자의 ID를 가져옴
+     * 이후 각 사용자의 맞게 채팅방을 생성
+     * @param request
+     * @param dogId
+     * @return
+     */
     @Override
     public ChatRoomInfo createChatRooms(HttpServletRequest request, Long dogId) {
         String senderId = getSenderId(request).toString();
-        log.info("[createChatRoom] senderId : " + senderId);
 
         String receiverId = getReceiverId(dogId).toString();
-        log.info("[createChatRoom] receiverId : " + receiverId);
 
-        var chatId = String.format("%s%s", senderId, receiverId); // 공용으로 사용되는 chatRoomID
-        log.info("[createChatRoom] chatId : " + chatId);
+        var chatId = String.format("%s%s", senderId, receiverId);
 
-        ChatRoom senderRecipient = ChatRoom.from(chatId, senderId, receiverId); // 채팅방에 고유값이야
+        ChatRoom senderRecipient = ChatRoom.from(chatId, senderId, receiverId);
         chatRoomRepository.save(senderRecipient);
-        log.info("[createChatRoom] senderRoom : " + senderRecipient);
 
         ChatRoom recipientSender = ChatRoom.from(chatId, receiverId, senderId);
         chatRoomRepository.save(recipientSender);
-        log.info("[createChatRoom] recipientRoom : " + recipientSender);
 
         return ChatRoomInfo.of(senderRecipient);
     }
 
+    /**
+     * 액세스 토큰에서 멤버 ID 추출
+     * @param request
+     * @return
+     */
     @Override
     public Long getSenderId(HttpServletRequest request) {
         return memberRepository.findIdByVerifyKey(
@@ -79,6 +97,11 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         );
     }
 
+    /**
+     * 강아지 게시글에서 멤버 ID 추출
+     * @param dogId
+     * @return
+     */
     @Override
     public Long getReceiverId(Long dogId) {
         return dogRepository.findMemberIdByDogId(dogId);
