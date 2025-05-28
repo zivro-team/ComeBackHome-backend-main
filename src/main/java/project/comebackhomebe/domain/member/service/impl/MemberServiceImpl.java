@@ -26,7 +26,6 @@ import java.io.IOException;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-@Transactional
 public class MemberServiceImpl implements MemberService {
     private final RefreshTokenService refreshTokenService;
     private final JwtService jwtService;
