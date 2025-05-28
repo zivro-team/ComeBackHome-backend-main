@@ -17,12 +17,26 @@ import java.io.Serializable;
 @RedisHash(value = "Token", timeToLive = 60 * 60 * 24 * 14)
 public class RefreshToken implements Serializable {
 
-
-    private String verifyKey; // 회원 ID
-
+    /**
+     * 리프레쉬 토큰 기준으로 데이터를 저장합니다.
+     * 예시 : Token eljljdjsla.ewqjelk.dnkddmk
+     */
     @Id
     private String refreshToken; // Refresh 토큰
 
+    /**
+     * 사용자 고유 정보
+     * 예시 : kakao 1234
+     */
+    private String verifyKey; // 회원 ID
+
+    /**
+     * RefreshToken 빌더 형식입니다.
+     *
+     * @param verifyKey
+     * @param refreshToken
+     * @return
+     */
     public static RefreshToken from(String verifyKey, String refreshToken) {
         return RefreshToken.builder()
                 .verifyKey(verifyKey)
@@ -30,10 +44,4 @@ public class RefreshToken implements Serializable {
                 .build();
     }
 
-    public static RefreshToken update(RefreshToken refreshToken, String newRefreshToken) {
-        return RefreshToken.builder()
-                .verifyKey(refreshToken.verifyKey)
-                .refreshToken(newRefreshToken)
-                .build();
-    }
 }

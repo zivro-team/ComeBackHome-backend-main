@@ -95,7 +95,6 @@ public class ReissueService {
 
     public void saveRefreshToken(String id, String refreshToken) {
         RefreshToken token = RefreshToken.from(id, refreshToken);
-        log.info("Saving refresh token: {}", token);
 
         refreshTokenRepository.save(token);
     }

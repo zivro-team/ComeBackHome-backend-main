@@ -2,7 +2,6 @@ package project.comebackhomebe.domain.member.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import project.comebackhomebe.domain.dog.dogInfo.entity.Dog;
 import project.comebackhomebe.domain.member.entity.Member;
 
 import java.util.List;

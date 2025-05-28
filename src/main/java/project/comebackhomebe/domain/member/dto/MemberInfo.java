@@ -19,6 +19,12 @@ public record MemberInfo(
         Role role
 
 ) {
+    /**
+     * Entity -> DTO 연결 코드
+     *
+     * @param member : membero
+     * @return
+     */
     public static MemberInfo of(Member member) {
         return new MemberInfo(
                 member.getVerifyKey(),
@@ -28,6 +34,15 @@ public record MemberInfo(
         );
     }
 
+    /**
+     * 일반 값 -> DTO 연결 코드
+     *
+     * @param verifyKey
+     * @param username
+     * @param email
+     * @param role
+     * @return
+     */
     public static MemberInfo to(String verifyKey, String username, String email, Role role) {
         return new MemberInfo(
                 verifyKey,
@@ -37,6 +52,13 @@ public record MemberInfo(
         );
     }
 
+    /**
+     * 다수의 멤버를 List 형식으로 변환
+     * List<Memebr> -> List<MemberInfo>
+     *
+     * @param members : List<Member>
+     * @return
+     */
     public static List<MemberInfo> listOf(List<Member> members) {
         return members.stream()
                 .map(MemberInfo::of)
