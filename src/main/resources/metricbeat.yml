@@ -3,7 +3,7 @@ metricbeat.config.modules:
   reload.enabled: false
 
 output.elasticsearch:
-  hosts: ["elasticsearch:9200"]
+  hosts: ["http://cbh.kro.kr:9200"]
 
 processors:
   - add_host_metadata: ~
@@ -13,4 +13,4 @@ processors:
 
 monitoring.enabled: true
 monitoring.elasticsearch:
-  hosts: ["elasticsearch:9200"]
+  hosts: ["http://cbh.kro.kr:9200"]
