@@ -102,5 +102,5 @@ public class MemberServiceImpl implements MemberService {
         log.info("Access Token: {}", accessToken);
         log.info("Refresh Token: {}", refreshToken);
     }
-    
+
 }
