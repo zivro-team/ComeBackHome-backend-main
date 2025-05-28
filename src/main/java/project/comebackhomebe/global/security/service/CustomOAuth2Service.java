@@ -24,7 +24,6 @@ public class CustomOAuth2Service extends DefaultOAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest request) throws OAuth2AuthenticationException {
         // OAuth2User 값 받아오기
         OAuth2User oAuth2User = super.loadUser(request);
-        log.info("loadUser : {}", oAuth2User.getAttributes());
 
         String registrationId = request.getClientRegistration().getRegistrationId();
 
