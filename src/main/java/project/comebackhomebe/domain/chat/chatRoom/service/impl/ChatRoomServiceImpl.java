@@ -50,9 +50,16 @@ public class ChatRoomServiceImpl implements ChatRoomService {
      * @return 채팅방 ID
      */
     @Override
-    public Optional<String> getChatRoomId(String senderId, String receiverId) {
+    public Optional<String> getChatRoomId(String senderId, String receiverId, boolean createNewRoomIfNotExists) {
         return chatRoomRepository.findBySenderIdAndReceiverId(senderId, receiverId)
-                .map(ChatRoom::getChatId);
+                .map(ChatRoom::getChatId)
+                .or(() -> {
+                    if (createNewRoomIfNotExists) {
+                        var chatId = String.format("%s%s", senderId, receiverId);
+                        return Optional.of(chatId);
+                    }
+                    return Optional.empty();
+                });
     }
 
     /**

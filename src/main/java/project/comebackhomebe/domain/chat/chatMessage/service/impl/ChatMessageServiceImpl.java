@@ -34,7 +34,8 @@ public class ChatMessageServiceImpl implements ChatMessageService {
 
         var chatId = chatRoomService.getChatRoomId(
                         chatMessageInfo.senderId(),
-                        chatMessageInfo.receiverId())
+                        chatMessageInfo.receiverId(),
+                        true)
                 .orElseThrow(() -> {
                     log.error("ChatRoom을 찾을 수 없습니다. senderId: {}, receiverId: {}",
                             chatMessageInfo.senderId(), chatMessageInfo.receiverId());
@@ -62,7 +63,8 @@ public class ChatMessageServiceImpl implements ChatMessageService {
     public List<ChatMessageInfo> findChatMessage(String senderId, String receiverId) {
         var chatId = chatRoomService.getChatRoomId(
                 senderId,
-                receiverId
+                receiverId,
+                false
         );
 
         List<ChatMessage> messages = chatId.map(chatMessageRepository::findByChatId)
