@@ -147,7 +147,7 @@ services:
     ports:
       - "9104:9104"
     command:
-      - "--mysqld.username=exporter:.4[Pl{t\"\_l\5Y/LA"
+      - "--mysqld.username=exporter:.4[Pl{t\"_l\\5Y/LA"
       - "--mysqld.address=34.44.154.211:3306"
     networks:
       - app-network
