@@ -148,7 +148,7 @@ services:
       - "9104:9104"
     command:
       - "--mysqld.username=exporter:1234"
-      - "--mysqld.address=34.122.128.155:3306"
+      - "--mysqld.address=34.44.154.211:3306"
     networks:
       - app-network
 

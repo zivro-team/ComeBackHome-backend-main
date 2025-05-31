@@ -4,9 +4,9 @@ spring:
       on-profile: prod
 
   datasource:
-    url: jdbc:mysql://34.122.128.155:3306/comebackhome?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
-    username: root
-    password: cbh123@
+    url: jdbc:mysql://34.44.154.211:3306/comebackhome?useSSL=false
+    username: comebackhome
+    password: .4[Pl{t"_l\5Y/LA
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   elasticsearch:
