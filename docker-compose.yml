@@ -146,8 +146,9 @@ services:
     container_name: mysql-exporter
     ports:
       - "9104:9104"
-    volumes:
-      - ./exporter-mycnf/.my.cnf:/root/.my.cnf:ro
+    command:
+      - "--mysqld.username=exporter:1234"
+      - "--mysqld.address=34.44.154.211:3306"
     networks:
       - app-network
 
