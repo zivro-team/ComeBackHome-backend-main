@@ -64,7 +64,7 @@ public class ServicePerformanceAspect {
     }
 
     // 레디스 로그
-    @Around("execution(* project.comebackhomebe.global.redis.*Repository.*(..))")
+    @Around("execution(* project.comebackhomebe.global.redis.repository.*Repository.*(..))")
     public Object logRedisPerformance(ProceedingJoinPoint joinPoint) throws Throwable {
         String methodName = joinPoint.getSignature().getName();
         Object[] args = joinPoint.getArgs();
