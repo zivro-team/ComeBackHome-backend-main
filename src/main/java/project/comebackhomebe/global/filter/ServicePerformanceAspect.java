@@ -62,4 +62,24 @@ public class ServicePerformanceAspect {
             }
         }
     }
+
+    // 레디스 로그
+    @Around("execution(* project.comebackhomebe.global.redis.*Repository.*(..))")
+    public Object logRedisPerformance(ProceedingJoinPoint joinPoint) throws Throwable {
+        String methodName = joinPoint.getSignature().getName();
+        Object[] args = joinPoint.getArgs();
+
+        long startTime = System.currentTimeMillis();
+
+        try {
+            return joinPoint.proceed();
+        } finally {
+            long duration = System.currentTimeMillis() - startTime;
+            log.info("Redis 연산: {} - 소요 시간: {}ms", methodName, duration);
+
+            if (duration > 50) {
+                log.warn("Redis 느린 연산 감지: {} - {}ms", methodName, duration);
+            }
+        }
+    }
 }
