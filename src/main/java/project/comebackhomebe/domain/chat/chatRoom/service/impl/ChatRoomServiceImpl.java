@@ -81,13 +81,19 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
         var chatId = String.format("%s%s", senderId, receiverId);
 
-        ChatRoom senderRecipient = ChatRoom.from(chatId, senderId, receiverId);
-        chatRoomRepository.save(senderRecipient);
+        Optional<ChatRoom> existingRoom = chatRoomRepository.findBySenderIdAndReceiverId(senderId, receiverId);
+        if (existingRoom.isEmpty()) {
+            ChatRoom senderRecipient = ChatRoom.from(chatId, senderId, receiverId);
+            chatRoomRepository.save(senderRecipient);
 
-        ChatRoom recipientSender = ChatRoom.from(chatId, receiverId, senderId);
-        chatRoomRepository.save(recipientSender);
+            ChatRoom recipientSender = ChatRoom.from(chatId, receiverId, senderId);
+            chatRoomRepository.save(recipientSender);
 
-        return ChatRoomInfo.of(senderRecipient);
+            return ChatRoomInfo.of(senderRecipient);
+        } else {
+            return ChatRoomInfo.of(existingRoom.get());
+        }
+
     }
 
     /**
