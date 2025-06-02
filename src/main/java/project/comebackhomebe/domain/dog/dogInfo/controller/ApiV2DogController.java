@@ -29,8 +29,6 @@ public class ApiV2DogController {
 
     private final DogService dogService;
 
-    //TODO: 강아지 id 저장 안돼요
-
     // 정보 생성
     @RateLimited
     @PostMapping("/lost")

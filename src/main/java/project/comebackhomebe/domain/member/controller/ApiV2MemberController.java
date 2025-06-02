@@ -91,6 +91,7 @@ public class ApiV2MemberController {
     public void logout(HttpServletRequest request, HttpServletResponse response) {
         refreshTokenService.deleteRefreshToken(request, response);
         blacklistService.createBlacklist(request);
+        // TODO : 비동기처리 해보기
     }
 
     /**
