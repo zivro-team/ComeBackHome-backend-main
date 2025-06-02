@@ -147,7 +147,6 @@ services:
     ports:
       - "9104:9104"
     command:
-      - DATA_SOURCE_NAME=exporter:1234@(34.44.154.211:3306)/
       - "--mysqld.username=exporter:1234"
       - "--mysqld.address=34.44.154.211:3306"
     networks:
