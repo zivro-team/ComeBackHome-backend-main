@@ -34,7 +34,6 @@ public class JWTFilter extends OncePerRequestFilter {
 
         // 토큰이 없으면 다음 필터로 진행
         if (accessToken == null) {
-            log.warn("[JWTFilter] No valid token found, proceeding without authentication.");
             filterChain.doFilter(request, response);
             return;
         }
@@ -51,21 +50,16 @@ public class JWTFilter extends OncePerRequestFilter {
             log.warn("[JwtFilter] Token is Expired, proceeding reissue.");
 
             response.setStatus(401);
-
-            filterChain.doFilter(request, response);
             return;
         }
 
         // 여기서 refresh 와 access 나눠야함
         String category = jwtUtil.getCategory(accessToken);
         if (category == null || category.equals("refresh")) {
-            log.warn("[JWTFilter] 이건 리프레쉬 토큰입니다.");
-            filterChain.doFilter(request, response);
             return;
         }
 
         Authentication authentication = jwtUtil.getAuthentication(accessToken);
-        log.info("[JWTFilter] Authentication: {}", authentication);
 
         // 토큰 유효할 경우 User의 권한을 발급
         if (authentication != null) {
