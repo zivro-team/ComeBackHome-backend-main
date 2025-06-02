@@ -6,7 +6,7 @@ scrape_configs:
   - job_name: 'prometheus'
     scrape_interval: 5s
     static_configs:
-      - targets: ['prometheus:9090', 'backend-container:8085', 'mongodb-exporter:9216', 'redis-exporter:9121','mysql-exporter:9104', 'node-exporter:9100', 'nginx-exporter:9113']
+      - targets: ['prometheus:9090', 'backend-container:8085', 'mongodb-exporter:9216', 'redis-exporter:9121','mysqld-exporter:9104', 'node-exporter:9100', 'nginx-exporter:9113']
 
   - job_name: 'Spring Boot Application input'
     metrics_path: '/actuator/prometheus'
@@ -26,7 +26,7 @@ scrape_configs:
 
   - job_name: 'mysql'
     static_configs:
-      - targets: ['mysql-exporter:9104']  # MySQL Exporter 포트
+      - targets: ['mysqld-exporter:9104']  # MySQL Exporter 포트
 
   - job_name: 'node-exporter'
     static_configs:

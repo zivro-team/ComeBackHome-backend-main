@@ -141,9 +141,9 @@ services:
 
   ### DB EXPORTER ###
 
-  mysql-exporter:
+  mysqld-exporter:
     image: quay.io/prometheus/mysqld-exporter
-    container_name: mysql-exporter
+    container_name: mysqld-exporter
     ports:
       - "9104:9104"
     command:
