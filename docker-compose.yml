@@ -143,12 +143,11 @@ services:
 
   mysql-exporter:
     image: quay.io/prometheus/mysqld-exporter
-    container_name: mysqld-exporter
+    container_name: mysql-exporter
     ports:
       - "9104:9104"
-    command:
-      - "--mysqld.username=exporter:1234"
-      - "--mysqld.address=34.44.154.211:3306"
+    volumes:
+      - ./exporter-mycnf/.my.cnf:/root/.my.cnf:ro
     networks:
       - app-network
 
