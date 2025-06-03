@@ -91,7 +91,7 @@ public class MemberServiceImpl implements MemberService {
         String email = oAuth2Info.getEmail();
         Role role = oAuth2Info.getRole();
 
-        String accessToken = jwtService.generateAccessToken("access", verifyKey, username, email, role, 10 * 60 * 1000L);
+        String accessToken = jwtService.generateAccessToken("access", verifyKey, username, email, role, 30 * 60 * 1000L);
         String refreshToken = jwtService.generateRefreshToken(60 * 60 * 1000L);
 
         response.setHeader("Authorization", accessToken);
