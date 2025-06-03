@@ -44,7 +44,6 @@ public class ApiV2MemberController {
      * @return
      * @throws IOException
      */
-    @RateLimited
     @PostMapping("/{provider}")
     @Operation(summary = "로그인 API", description = "provider = 소셜 이름")
     @Parameters({
@@ -63,7 +62,6 @@ public class ApiV2MemberController {
      * @param request  : AccessToken, RefreshToken
      * @param response : newAccessToken
      */
-    @RateLimited
     @PostMapping("/reissue")
     @Operation(summary = "액세스 재발급 API", description = "액세스토큰을 재발급해줍니다.")
     @Parameters({
@@ -81,7 +79,6 @@ public class ApiV2MemberController {
      * @param request  : accessToken
      * @param response
      */
-    @RateLimited
     @DeleteMapping("/logout")
     @Operation(summary = "logout API", description = "로그아웃 후 액세스 토큰은 블랙리스트, 리프레쉬 토큰 삭제합니다.")
     @Parameters({

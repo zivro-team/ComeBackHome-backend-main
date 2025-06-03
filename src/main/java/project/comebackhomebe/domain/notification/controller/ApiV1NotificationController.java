@@ -30,7 +30,6 @@ public class ApiV1NotificationController {
      * @param request      : 액세스토큰
      * @return
      */
-    @RateLimited
     @PostMapping("/token")
     @Operation(summary = "토큰 받아오기", description = "FCM 토큰을 서버한테 넘겨줍니다.")
     @Parameters({
