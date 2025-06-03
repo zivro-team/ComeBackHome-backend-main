@@ -33,18 +33,14 @@ public class JWTFilter extends OncePerRequestFilter {
         log.info(accessToken);
 
         String requestURI = request.getRequestURI();
-        if (requestURI.startsWith("/actuator/")) {
+        // Prometheus 메트릭 요청은 JWT 검증 제외
+        if (requestURI.equals("/metrics") || requestURI.startsWith("/actuator/")) {
             filterChain.doFilter(request, response);
             return;
         }
-
         // 토큰이 없으면 다음 필터로 진행
         if (accessToken == null) {
             filterChain.doFilter(request, response);
-            log.info("Request: {} {}, User-Agent: {}",
-                    request.getMethod(),
-                    request.getRequestURI(),
-                    request.getHeader("User-Agent"));
             return;
         }
 
