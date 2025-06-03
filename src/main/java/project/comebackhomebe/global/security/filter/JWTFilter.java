@@ -30,7 +30,6 @@ public class JWTFilter extends OncePerRequestFilter {
 
         // 토큰 추출
         String accessToken = jwtService.resolveAccessToken(request);
-        log.info(accessToken);
 
         String requestURI = request.getRequestURI();
         // Prometheus 메트릭 요청은 JWT 검증 제외
@@ -40,7 +39,13 @@ public class JWTFilter extends OncePerRequestFilter {
         }
         // 토큰이 없으면 다음 필터로 진행
         if (accessToken == null) {
+            log.info("Request: {} {}, User-Agent: {}",
+                    request.getMethod(),
+                    request.getRequestURI(),
+                    request.getHeader("User-Agent"));
+
             filterChain.doFilter(request, response);
+
             return;
         }
 
