@@ -32,6 +32,12 @@ public class JWTFilter extends OncePerRequestFilter {
         String accessToken = jwtService.resolveAccessToken(request);
         log.info(accessToken);
 
+        String requestURI = request.getRequestURI();
+        if (requestURI.startsWith("/actuator/")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         // 토큰이 없으면 다음 필터로 진행
         if (accessToken == null) {
             filterChain.doFilter(request, response);
