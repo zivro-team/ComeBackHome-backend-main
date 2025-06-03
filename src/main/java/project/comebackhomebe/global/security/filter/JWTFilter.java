@@ -35,6 +35,10 @@ public class JWTFilter extends OncePerRequestFilter {
         // 토큰이 없으면 다음 필터로 진행
         if (accessToken == null) {
             filterChain.doFilter(request, response);
+            log.info("Request: {} {}, User-Agent: {}",
+                    request.getMethod(),
+                    request.getRequestURI(),
+                    request.getHeader("User-Agent"));
             return;
         }
 
