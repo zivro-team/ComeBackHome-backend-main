@@ -67,7 +67,7 @@ public class DogRepositoryCustomImpl implements DogRepositoryCustom {
         List<Dog> dogs = jpaQueryFactory
                 .selectFrom(dog)
                 .orderBy(dog.createdDate.desc())
-                .where(dog.breed.eq(breed))
+                .where(dog.middleBreed.eq(breed))
                 .offset(pageable.getOffset())  // 페이지 시작 위치
                 .limit(pageable.getPageSize()) // 한 페이지에 표시할 개수
                 .fetch();
