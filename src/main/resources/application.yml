@@ -73,6 +73,10 @@ management:
         exclude:
           - threaddump
           - heapdump
+  # 헬스에서 디스크 정보를 삭제
+  health:
+    diskspace:
+      enabled: false
 
   httpexchanges:
     recording:
