@@ -5,6 +5,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import project.comebackhomebe.domain.member.entity.Member;
+import project.comebackhomebe.domain.member.entity.UserStatus;
+
+import java.util.List;
 
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
@@ -25,4 +28,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
      */
     @Query("SELECT id FROM Member WHERE verifyKey = :verifyKey")
     Long findIdByVerifyKey(@Param("verifyKey") String verifyKey);
+
+    Long countByUserStatus(UserStatus userStatus);
 }

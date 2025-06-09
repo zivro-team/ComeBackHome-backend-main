@@ -94,3 +94,8 @@ info:
 logging:
   file:
     path: ./logs
+
+
+external:
+  api:
+    uri: "https://cbh-ai.kro.kr"

@@ -7,9 +7,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.comebackhomebe.domain.dog.dogInfo.entity.Status;
 import project.comebackhomebe.domain.member.dto.OAuth2Info;
+import project.comebackhomebe.domain.member.entity.Member;
 import project.comebackhomebe.domain.member.entity.Role;
+import project.comebackhomebe.domain.member.entity.UserStatus;
 import project.comebackhomebe.domain.member.exception.MemberException;
+import project.comebackhomebe.domain.member.repository.MemberRepository;
 import project.comebackhomebe.domain.member.service.MemberService;
 import project.comebackhomebe.global.exception.ErrorCode;
 import project.comebackhomebe.global.redis.service.RefreshTokenService;
@@ -22,6 +26,7 @@ import project.comebackhomebe.global.security.service.SocialMemberService;
 import project.comebackhomebe.global.security.service.TokenResponseUtil;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +37,7 @@ public class MemberServiceImpl implements MemberService {
     private final ObjectMapper objectMapper;
     private final SocialMemberService socialMemberService;
     private final TokenResponseUtil tokenResponseUtil;
+    private final MemberRepository memberRepository;
 
     /**
      * 인가서버에서 각 소셜에 맞는 데이터를 반환
@@ -55,6 +61,16 @@ public class MemberServiceImpl implements MemberService {
         pushToken(oAuth2Info, response);
 
         return oAuth2Response;
+    }
+
+    @Override
+    public Long getActiveUserCount() {
+       return memberRepository.countByUserStatus(UserStatus.ONLINE);
+    }
+
+    @Override
+    public Long getTotalUserCount() {
+        return memberRepository.count();
     }
 
     /**

@@ -13,4 +13,10 @@ public interface MemberService {
 
     // v2 OAuth2 소셜 정보 가져오기
     OAuth2Response getOAuth2Data(String provider, HttpServletRequest request, HttpServletResponse response) throws IOException;
+
+    // 활성중인 멤버 수 가져옴
+    Long getActiveUserCount();
+
+    // 전체 멤버 수 가져옴
+    Long getTotalUserCount();
 }
