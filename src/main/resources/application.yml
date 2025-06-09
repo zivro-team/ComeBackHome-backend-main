@@ -38,11 +38,55 @@ slack:
   username : "임현성"
 
 management:
+  ## 액추에이터 info 상세 내역
+  info:
+    os:
+      enabled: true
+    java:
+      enabled: true
+    env:
+      enabled: true
+
+  ## 액추에이터 표시할 값들 설정
+  endpoint:
+    shutdown:
+      enabled: true
+
+    caches:
+      enabled: false
+
+    ## health 상세 내역 활성화
+    health:
+      show-details: always
+
+  ## 액추에이터 web, jmx 설정
   endpoints:
     web:
       exposure:
-        include:
-          - prometheus
+        include: "*"  # 모든 활성화된 엔드포인트 포함
+        exclude: # 개발 환경에서는 모두 노출을 시키지만 배포 환경에서는 예민 정보들을 exclude에 설정한다.
+          - threaddump
+          - heapdump
+    jmx:
+      exposure:
+        include: "*"
+        exclude:
+          - threaddump
+          - heapdump
+
+  httpexchanges:
+    recording:
+      enabled: true
+
+## 애플리케이션 info 설정
+info:
+  organization:
+    name: hyeonseong
+  contact:
+    email: admin@admin.kr
+    phoneNumber: 010-xxxx-xxxx
+
+
 logging:
   file:
     path: ./logs
