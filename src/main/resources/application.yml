@@ -58,6 +58,26 @@ management:
     ## health 상세 내역 활성화
     health:
       show-details: always
+      cache:
+        time-to-live: 30s
+      # 헬스 체크 그룹 설정
+      group:
+        # 로드밸런서용 간단한 체크
+        simple:
+          include: ping
+          show-details: never
+        # 상세 모니터링용
+        detailed:
+          include: db,redis,diskSpace,externalApi
+          show-details: when-authorized
+        # 인프라 관련
+        infrastructure:
+          include: db,redis,diskSpace,mail
+          show-details: when-authorized
+        # 비즈니스 로직 관련
+        business:
+          include: customBusiness,externalApi,paymentSystem
+          show-details: when-authorized
 
   ## 액추에이터 web, jmx 설정
   endpoints:
@@ -67,6 +87,7 @@ management:
         exclude: # 개발 환경에서는 모두 노출을 시키지만 배포 환경에서는 예민 정보들을 exclude에 설정한다.
           - threaddump
           - heapdump
+#      base-path: /monitoring
     jmx:
       exposure:
         include: "*"
@@ -77,6 +98,7 @@ management:
   health:
     diskspace:
       enabled: false
+
 
   httpexchanges:
     recording:
