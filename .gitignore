@@ -41,3 +41,6 @@ SocialClientRegistration.class
 
 ## yaml 파일 ##
 /src/main/resources/yaml/application-secret.yml
+
+*.json
+*.yml
